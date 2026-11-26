@@ -658,13 +658,35 @@ status.textContent="Error: "+err.message;
 async function deleteClient(dni){
 const client=getClients().find(c=>String(c.dni)===String(dni));
 if(!client)return;
+const loans=allLoans.filter(l=>String(l.clientDni)===String(dni));
+
 if(!client.id||client.legacy){
-alert("Este cliente aparece solo por créditos históricos y no tiene ficha propia en clientes.");
+if(!loans.length)return;
+if(!confirm(`Este cliente no tiene ficha propia en clientes, pero tiene ${loans.length} préstamo(s) registrado(s) con DNI ${client.dni}. ¿Querés eliminar esos préstamos?`))return;
+try{
+await Promise.all(loans.map(l=>deleteDoc(doc(db,"loans",l.id))));
+if(String(profileDni)===String(dni)){
+profileDni=null;
+$("profile-panel").classList.add("hidden");
+}
+}catch(err){
+alert("No se pudieron eliminar los préstamos: "+err.message);
+}
 return;
 }
+
 if(!confirm(`¿Eliminar a ${client.name} (DNI ${client.dni}) de la lista de clientes?`))return;
+
+let deleteLoansToo=false;
+if(loans.length){
+deleteLoansToo=confirm(`Este cliente tiene ${loans.length} préstamo(s) registrado(s). ¿Querés borrar también sus préstamos? (Aceptar = borrar cliente y préstamos · Cancelar = borrar solo el cliente)`);
+}
+
 try{
 await deleteDoc(doc(db,"clients",client.id));
+if(deleteLoansToo){
+await Promise.all(loans.map(l=>deleteDoc(doc(db,"loans",l.id))));
+}
 if(String(profileDni)===String(dni)){
 profileDni=null;
 $("profile-panel").classList.add("hidden");
@@ -1007,6 +1029,23 @@ return out;
 
 function monthlyTotal(year,month){
 return monthlyPayments(year,month).reduce((s,p)=>s+Number(p.c.amount||0),0);
+}
+
+function renderFutureMonths(){
+const now=new Date();
+let html="";
+for(let i=0;i<12;i++){
+const d=new Date(now.getFullYear(),now.getMonth()+i,1);
+const total=monthlyTotal(d.getFullYear(),d.getMonth());
+const count=monthlyPayments(d.getFullYear(),d.getMonth()).length;
+html+=`
+<div class="month-card">
+<small>${d.toLocaleDateString("es-AR",{month:"long",year:"numeric"})}</small>
+<strong class="money">${fmtMoney(total)}</strong>
+<small>${count} cuotas pendientes</small>
+</div>`;
+}
+$("future-months").innerHTML=html;
 }
 
 function renderCalendar(){
