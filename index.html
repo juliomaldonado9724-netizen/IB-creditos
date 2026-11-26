@@ -33,13 +33,21 @@ label{display:block;color:var(--muted);font-size:.84rem;margin-bottom:6px}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
 .brand{display:flex;align-items:center;gap:11px}
 .brand-icon{width:43px;height:43px;background:var(--green);color:#052e16;border-radius:12px;display:grid;place-items:center;font-weight:900;font-size:19px}
+.brand-trigger{background:transparent;padding:0;border-radius:12px;display:grid;place-items:center;color:#052e16}
+.brand-trigger:hover .brand-icon{filter:brightness(1.06)}
+.brand-trigger:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 .brand h1{font-size:1.15rem;margin:0}
 .brand small{display:block;margin-top:2px}
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px}
-.nav{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}
-.nav button{background:transparent;color:var(--muted);border:1px solid transparent}
+.drawer-backdrop{position:fixed;inset:0;background:#000a;z-index:90;opacity:0;pointer-events:none;transition:opacity .2s ease}
+.drawer-backdrop.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;left:0;bottom:0;width:min(290px,84vw);background:var(--surface);border-right:1px solid var(--border);z-index:95;padding:18px;display:flex;flex-direction:column;gap:14px;transform:translateX(-100%);transition:transform .24s ease;overflow-y:auto}
+.drawer.open{transform:translateX(0)}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.nav{display:flex;flex-direction:column;gap:6px}
+.nav button{background:transparent;color:var(--muted);border:1px solid transparent;text-align:left;width:100%;display:flex;align-items:center;justify-content:space-between;padding:11px 13px}
 .nav button.active{background:var(--green2);color:#bbf7d0;border-color:#166534}
-.nav button:hover{background:var(--card)}
+.nav button:hover{background:var(--card);color:var(--text)}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px;min-width:0}
@@ -100,8 +108,6 @@ details summary{cursor:pointer;color:#86efac;padding:9px 0}
 .container{padding:11px}
 .panel{padding:13px}
 .topbar{align-items:flex-start}
-.nav{display:grid;grid-template-columns:repeat(3,1fr)}
-.nav button{padding:10px 5px;font-size:.78rem}
 .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .stat{padding:11px}
 .stat .value{font-size:1.12rem}
@@ -140,21 +146,33 @@ body{background:white;color:black}
 <div id="app-section" class="hidden">
 <header class="topbar">
 <div class="brand">
-<div class="brand-icon">IB</div>
-<div><h1>IB Créditos</h1><small id="user-info">Panel de gestión</small></div>
+<button type="button" class="brand-trigger no-print" id="menu-toggle" aria-label="Abrir menú de secciones" aria-expanded="false" aria-controls="nav-drawer" title="Abrir menú">
+<span class="brand-icon">IB</span>
+</button>
+<div><h1>IB Créditos</h1><small id="current-section-label">Inicio · <span id="user-info">Panel de gestión</span></small></div>
 </div>
 <button class="secondary no-print" id="logout-btn">Salir</button>
 </header>
 
-<nav class="nav no-print">
+<div id="nav-backdrop" class="drawer-backdrop no-print"></div>
+<aside id="nav-drawer" class="drawer no-print" aria-label="Menú de secciones">
+<div class="drawer-head">
+<div>
+<strong>IB Créditos</strong>
+<div class="muted">Apartados</div>
+</div>
+<button type="button" class="secondary" id="close-drawer">Cerrar</button>
+</div>
+<nav class="nav">
 <button class="active" data-page="home">Inicio</button>
 <button data-page="clients">Clientes</button>
 <button data-page="collections">Cobros</button>
 <button data-page="statistics">Estadísticas</button>
 <button data-page="commissions">Comisiones</button>
 <button data-page="cash">Caja disponible</button>
-<button data-page="notifications">Avisos <span id="notification-count"></span></button>
+<button data-page="notifications"><span>Avisos</span><span id="notification-count"></span></button>
 </nav>
+</aside>
 
 <section id="page-home" class="section active">
 <div class="row" style="margin-bottom:14px">
@@ -261,7 +279,7 @@ body{background:white;color:black}
 <div class="row">
 <div>
 <h2>Comisiones del empleado</h2>
-<p class="muted">Comisión del 5% del total del préstamo (capital + intereses), habilitada al pagar la primera cuota.</p>
+<p class="muted">Comisión del 5% del total del préstamo (capital + intereses), habilitada al pagar la primera cuota en préstamos con comisión.</p>
 </div>
 </div>
 <div class="stats">
@@ -355,6 +373,7 @@ body{background:white;color:black}
 <div><label>Capital prestado ($) *</label><input id="capital" type="number" min="0.01" step="0.01" required></div>
 <div><label>Cantidad de cuotas *</label><input id="months" type="number" min="1" max="120" value="1" required></div>
 <div><label>Interés total (%) *</label><input id="interest-rate" type="number" min="0" max="10000" step="0.01" value="40" required></div>
+<div><label>Comisión del empleado *</label><select id="loan-commission-mode" required><option value="enabled" selected>Con comisión (5%)</option><option value="disabled">Sin comisión</option></select></div>
 <div><label>Nombre del garante</label><input id="guarantor-name"></div>
 <div><label>DNI del garante</label><input id="guarantor-dni"></div>
 <div><label>Foto DNI</label><input id="dni-photo" type="file" accept="image/*"></div>
@@ -438,6 +457,17 @@ let profileDni=null;
 let currentWaText="";
 let notificationTimer=null;
 let lastNotificationCheck="";
+let currentUserEmail="Panel de gestión";
+
+const PAGE_TITLES={
+home:"Inicio",
+clients:"Clientes",
+collections:"Cobros",
+statistics:"Estadísticas",
+commissions:"Comisiones",
+cash:"Caja disponible",
+notifications:"Avisos"
+};
 
 const $=id=>document.getElementById(id);
 const fmtMoney=n=>Number(n||0).toLocaleString("es-AR",{style:"currency",currency:"ARS",minimumFractionDigits:2,maximumFractionDigits:2});
@@ -469,10 +499,30 @@ const d=parseDate(value);
 return d?d.toLocaleDateString("es-AR"):"Sin fecha";
 }
 
+function setDrawerOpen(open){
+const drawer=$("nav-drawer");
+const backdrop=$("nav-backdrop");
+const toggle=$("menu-toggle");
+if(!drawer||!backdrop||!toggle)return;
+drawer.classList.toggle("open",open);
+backdrop.classList.toggle("open",open);
+toggle.setAttribute("aria-expanded",open?"true":"false");
+}
+
+function updateSectionHeader(page){
+const label=$("current-section-label");
+if(!label)return;
+const pageName=PAGE_TITLES[page]||"Inicio";
+label.innerHTML=`${esc(pageName)} · <span id="user-info">${esc(currentUserEmail)}</span>`;
+}
+
 function navigate(page){
+if(!PAGE_TITLES[page])page="home";
 document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
 $("page-"+page).classList.add("active");
 document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+updateSectionHeader(page);
+setDrawerOpen(false);
 if(page==="collections")renderCalendar();
 if(page==="statistics")renderStatistics();
 if(page==="commissions")renderCommissions();
@@ -480,6 +530,16 @@ if(page==="cash")renderCash();
 if(page==="notifications")renderNotifications();
 }
 window.navigate=navigate;
+
+$("menu-toggle").addEventListener("click",()=>{
+const isOpen=$("nav-drawer").classList.contains("open");
+setDrawerOpen(!isOpen);
+});
+$("close-drawer").addEventListener("click",()=>setDrawerOpen(false));
+$("nav-backdrop").addEventListener("click",()=>setDrawerOpen(false));
+document.addEventListener("keydown",e=>{
+if(e.key==="Escape")setDrawerOpen(false);
+});
 
 document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.page)));
 
@@ -507,14 +567,17 @@ $("logout-btn").onclick=()=>signOut(auth);
 
 onAuthStateChanged(auth,user=>{
 if(user){
+currentUserEmail=user.email||"Panel de gestión";
 $("auth-section").classList.add("hidden");
 $("app-section").classList.remove("hidden");
-$("user-info").textContent=user.email;
+updateSectionHeader("home");
 $("start-date").valueAsDate=new Date();
 subscribeData();
 subscribeCash();
 startNotificationChecks();
 }else{
+currentUserEmail="Panel de gestión";
+setDrawerOpen(false);
 $("auth-section").classList.remove("hidden");
 $("app-section").classList.add("hidden");
 if(unsubscribeClients)unsubscribeClients();
@@ -689,14 +752,18 @@ return{capital:c,months:m,rate:r,interest,total,installment};
 function updatePreview(){
 const x=calculateLoan($("capital").value,$("months").value,$("interest-rate").value);
 if(!x){$("calc-preview").textContent="Ingresá valores válidos.";return}
+const hasCommission=$("loan-commission-mode").value==="enabled";
+const commissionPreview=hasCommission?fmtMoney(Math.round(x.total*5)/100):"Sin comisión ($0,00)";
 $("calc-preview").innerHTML=`
 Capital: <strong>${fmtMoney(x.capital)}</strong><br>
 Interés total (${x.rate}%): <strong>${fmtMoney(x.interest)}</strong><br>
 Total a devolver: <strong class="green-text">${fmtMoney(x.total)}</strong><br>
-${x.months} cuotas de aproximadamente: <strong>${fmtMoney(x.installment)}</strong>
+${x.months} cuotas de aproximadamente: <strong>${fmtMoney(x.installment)}</strong><br>
+Comisión del empleado: <strong>${commissionPreview}</strong>
 `;
 }
-["capital","months","interest-rate"].forEach(id=>$(id).addEventListener("input",updatePreview));
+["capital","months","interest-rate","loan-commission-mode"].forEach(id=>$(id).addEventListener("input",updatePreview));
+$("loan-commission-mode").addEventListener("change",updatePreview);
 
 function dueDate(loan,c,index){
 if(c.dueDate)return c.dueDate;
@@ -768,6 +835,8 @@ if(!client||!calc)throw new Error("Revisá los datos del préstamo.");
 const start=parseDate($("start-date").value);
 if(!start)throw new Error("Fecha de inicio inválida.");
 
+const hasCommission=$("loan-commission-mode").value==="enabled";
+
 const[dniPhoto,promissoryPhoto]=await Promise.all([
 compressImage($("dni-photo").files[0]),
 compressImage($("promissory-photo").files[0])
@@ -797,8 +866,9 @@ installmentAmount:calc.installment,
 installments:list,
 dniPhoto,
 promissoryPhoto,
-commissionRate:5,
-commissionStatus:"not_earned",
+hasCommission,
+commissionRate:hasCommission?5:0,
+commissionStatus:hasCommission?"not_earned":"none",
 commissionAmount:0,
 createdBy:auth.currentUser?.email||"",
 createdAt:Date.now()
@@ -808,6 +878,7 @@ $("loan-form").reset();
 $("start-date").valueAsDate=new Date();
 $("months").value="1";
 $("interest-rate").value="40";
+$("loan-commission-mode").value="enabled";
 $("selected-client-info").classList.add("hidden");
 updatePreview();
 status.textContent="Préstamo guardado correctamente.";
@@ -827,9 +898,9 @@ if(!list[index]||list[index].paid)return;
 const updated=list.map((c,i)=>i===index?{...c,paid:true,paidAt:new Date().toISOString()}:c);
 const changes={installments:updated};
 
-// Comisión del 5% sobre el total pactado (capital + intereses).
-// Se habilita al registrar el pago de la primera cuota.
-if(index===0&&loan.commissionStatus!=="paid"){
+// Comisión del 5% sobre el total pactado (capital + intereses),
+// habilitada al registrar la primera cuota solo si el préstamo tiene comisión.
+if(index===0&&loanHasCommission(loan)&&loan.commissionStatus!=="paid"){
 const totalLoan=Number(loan.totalAmount||(
 Number(loan.capital||0)+Number(loan.interestTotal||0)
 ));
@@ -876,7 +947,7 @@ const balance=loanBalance(l);
 return`
 <div class="item">
 <div class="row"><strong>Crédito · ${fmtDate(l.startDate)}</strong><span class="badge ${status==="paid"?"ok":status==="late"?"bad":"warn"}">${status==="paid"?"Pagado":status==="late"?"Con mora":"Activo"}</span></div>
-<p class="muted">Capital: ${fmtMoney(l.capital)} · Interés: ${l.interestRate??"—"}%</p>
+<p class="muted">Capital: ${fmtMoney(l.capital)} · Interés: ${l.interestRate??"—"}% · ${loanHasCommission(l)?"Con comisión (5%)":"Sin comisión"}</p>
 <p>Total: <strong>${fmtMoney(l.totalAmount)}</strong> · Saldo: <strong>${fmtMoney(balance)}</strong></p>
 <p class="muted">Cuotas: ${list.filter(c=>c.paid).length}/${list.length}</p>
 <details>
@@ -1073,9 +1144,14 @@ function overdueAmount(){
 return allLoans.reduce((s,l)=>s+installments(l).filter(isLate).reduce((a,c)=>a+Number(c.amount||0),0),0);
 }
 
-// COMISIONES: 5% SOBRE CAPITAL + INTERESES
+// COMISIONES: 5% SOBRE CAPITAL + INTERESES (SI EL PRÉSTAMO TIENE COMISIÓN)
+function loanHasCommission(loan){
+if(loan?.hasCommission===false||loan?.commissionStatus==="none")return false;
+return true;
+}
+
 function commissionEligible(loan){
-return Boolean(loan.installments?.[0]?.paid);
+return loanHasCommission(loan)&&Boolean(loan.installments?.[0]?.paid);
 }
 
 function commissionBase(loan){
@@ -1085,11 +1161,12 @@ Number(loan.capital||0)+Number(loan.interestTotal||0)
 }
 
 function commissionAmount(loan){
+if(!loanHasCommission(loan))return 0;
 return Number(loan.commissionAmount??(Math.round(commissionBase(loan)*5)/100));
 }
 
 function commissionIsPaid(loan){
-return loan.commissionStatus==="paid";
+return loanHasCommission(loan)&&loan.commissionStatus==="paid";
 }
 
 function renderCommissions(){
