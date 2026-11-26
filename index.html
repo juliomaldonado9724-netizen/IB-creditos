@@ -168,12 +168,49 @@ padding:5px 12px;
 border-radius:999px
 }
 
+/* Desglose Transferencia y Efectivo */
+.cash-channels-grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:14px;
+margin-top:22px
+}
+.cash-channel-card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:14px;
+padding:16px 18px;
+min-width:0
+}
+.cash-channel-head{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:8px;
+margin-bottom:6px
+}
+.cash-channel-title{
+font-size:.82rem;
+font-weight:650;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:.04em
+}
+.cash-channel-amount{
+font-size:clamp(1.25rem,3.2vw,1.65rem);
+font-weight:750;
+color:var(--text);
+letter-spacing:-.02em;
+font-variant-numeric:tabular-nums;
+overflow-wrap:anywhere
+}
+
 /* Botones de operaciones lado a lado */
 .cash-ops-grid{
 display:grid;
 grid-template-columns:repeat(2,minmax(0,1fr));
 gap:14px;
-margin-top:26px
+margin-top:16px
 }
 .cash-op-box{
 background:var(--card);
@@ -269,7 +306,7 @@ border-radius:8px
 .section.active{display:block}
 .row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
-.badge{display:inline-block;border-radius:999px;padding:4px 10px;font-size:.75rem;font-weight:600;background:var(--blue-soft);color:var(--blue)}
+.badge{display:inline-block;border-radius:999px;padding:3px 9px;font-size:.73rem;font-weight:600;background:var(--blue-soft);color:var(--blue)}
 .badge.ok{background:var(--green-soft);color:var(--green-strong)}
 .badge.warn{background:var(--orange-soft);color:var(--orange)}
 .badge.bad{background:var(--red-soft);color:var(--red)}
@@ -334,7 +371,9 @@ details summary{cursor:pointer;color:var(--green-strong);font-weight:600;padding
 .container{padding:14px 12px 40px}
 .panel{padding:18px;border-radius:16px}
 .cash-hero-card{padding:22px 18px}
-.cash-ops-grid{grid-template-columns:1fr;gap:10px;margin-top:20px}
+.cash-channels-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}
+.cash-channel-card{padding:13px 14px}
+.cash-ops-grid{grid-template-columns:1fr;gap:10px;margin-top:12px}
 .cash-op-box{padding:14px 16px;min-height:66px}
 .movement-row{align-items:flex-start;flex-direction:column;gap:8px}
 .movement-right{width:100%;justify-content:space-between}
@@ -412,9 +451,26 @@ body{background:white;color:black}
 <!-- INICIO: CAJA DISPONIBLE COMO PANTALLA PRINCIPAL -->
 <section id="page-home" class="section active">
 <div class="panel cash-hero-card">
-<div class="cash-eyebrow">CAJA DISPONIBLE</div>
+<div class="cash-eyebrow">CAJA DISPONIBLE · TOTAL</div>
 <div class="cash-balance-amount" id="cash-balance">$0,00</div>
-<div class="cash-shared-pill">Saldo compartido</div>
+<div class="cash-shared-pill">Saldo compartido · Transferencia + Efectivo</div>
+
+<div class="cash-channels-grid">
+<div class="cash-channel-card">
+<div class="cash-channel-head">
+<span class="cash-channel-title">Transferencia</span>
+<span class="badge">Digital</span>
+</div>
+<div class="cash-channel-amount" id="cash-transfer-balance">$0,00</div>
+</div>
+<div class="cash-channel-card">
+<div class="cash-channel-head">
+<span class="cash-channel-title">Efectivo</span>
+<span class="badge warn">Físico</span>
+</div>
+<div class="cash-channel-amount" id="cash-cash-balance">$0,00</div>
+</div>
+</div>
 
 <div class="cash-ops-grid no-print">
 <div class="cash-op-box">
@@ -632,6 +688,13 @@ body{background:white;color:black}
 <form id="cash-form" style="margin-top:14px">
 <input type="hidden" id="cash-edit-id">
 <input type="hidden" id="cash-is-initial" value="false">
+
+<label>Medio / Caja</label>
+<select id="cash-channel" required>
+<option value="transfer">Transferencia</option>
+<option value="cash">Efectivo</option>
+</select>
+<br><br>
 
 <label>Tipo de operación</label>
 <select id="cash-type" required>
@@ -1538,15 +1601,27 @@ alert("No se pudo actualizar la comisión: "+err.message);
 });
 }
 
-// CAJA DISPONIBLE (COLECCIÓN cash_movements, INDEPENDIENTE DE PRÉSTAMOS Y COBROS)
+// CAJA DISPONIBLE: TRANSFERENCIA + EFECTIVO = TOTAL (INDEPENDIENTE DE PRÉSTAMOS Y COBROS)
+function movementChannel(m){
+return m?.channel==="cash"?"cash":"transfer";
+}
+
+function channelLabel(channel){
+return channel==="cash"?"Efectivo":"Transferencia";
+}
+
 function movementEffect(m){
 return m?.type==="expense"?-Number(m.amount||0):Number(m.amount||0);
 }
 
-function cashBalance(excludeId=null){
+function channelBalance(channel,excludeId=null){
 return cashMovements
-.filter(m=>!excludeId||m.id!==excludeId)
+.filter(m=>(!excludeId||m.id!==excludeId)&&movementChannel(m)===channel)
 .reduce((total,m)=>total+movementEffect(m),0);
+}
+
+function cashBalance(excludeId=null){
+return channelBalance("transfer",excludeId)+channelBalance("cash",excludeId);
 }
 
 function movementDateValue(m){
@@ -1563,13 +1638,20 @@ renderCash();
 },error=>{
 console.error("Error de caja:",error);
 $("cash-balance").textContent=fmtMoney(0);
+$("cash-transfer-balance").textContent=fmtMoney(0);
+$("cash-cash-balance").textContent=fmtMoney(0);
 $("cash-movements-list").innerHTML='<div class="empty">No se pudieron cargar los movimientos de caja.</div>';
 });
 }
 
 function renderCash(){
-const balance=cashBalance();
-$("cash-balance").textContent=fmtMoney(balance);
+const transferBal=channelBalance("transfer");
+const cashBal=channelBalance("cash");
+const totalBal=transferBal+cashBal;
+
+$("cash-balance").textContent=fmtMoney(totalBal);
+$("cash-transfer-balance").textContent=fmtMoney(transferBal);
+$("cash-cash-balance").textContent=fmtMoney(cashBal);
 
 if(!cashMovements.length){
 $("cash-movements-list").innerHTML='<div class="empty">Todavía no hay movimientos registrados.</div>';
@@ -1578,6 +1660,7 @@ return;
 
 $("cash-movements-list").innerHTML=cashMovements.map(m=>{
 const isExpense=m.type==="expense";
+const ch=movementChannel(m);
 const dateLabel=formatRelativeDate(movementDateValue(m));
 const actorLabel=formatActorName(m.createdBy);
 const history=Array.isArray(m.editHistory)?m.editHistory:[];
@@ -1587,13 +1670,14 @@ return`
 <div class="movement-title">${esc(m.description||"Movimiento")}</div>
 <div class="movement-meta">
 <span>${esc(dateLabel)} · ${esc(actorLabel)}</span>
+<span class="badge ${ch==="cash"?"warn":""}">${esc(channelLabel(ch))}</span>
 ${m.isInitial?'<span class="badge ok">Saldo inicial</span>':""}
 ${history.length?`<button type="button" class="link-action" data-toggle-history="${m.id}">Historial (${history.length})</button>`:""}
 </div>
 <div class="hidden" id="cash-hist-${m.id}" style="margin-top:8px">
 ${history.slice().reverse().map(h=>`
 <div class="notice" style="margin-top:6px;padding:10px 12px">
-<div class="muted"><strong>${h.oldType==="expense"?"Egreso":"Ingreso"}</strong> · ${fmtMoney(h.oldAmount)} → <strong>${h.newType==="expense"?"Egreso":"Ingreso"}</strong> · ${fmtMoney(h.newAmount)}</div>
+<div class="muted"><strong>${esc(channelLabel(h.oldChannel||"transfer"))}</strong> · ${h.oldType==="expense"?"Egreso":"Ingreso"} · ${fmtMoney(h.oldAmount)} → <strong>${esc(channelLabel(h.newChannel||"transfer"))}</strong> · ${h.newType==="expense"?"Egreso":"Ingreso"} · ${fmtMoney(h.newAmount)}</div>
 <div class="muted">Motivo: "${esc(h.oldDescription)}" → "${esc(h.newDescription)}"</div>
 <div class="muted">Por ${esc(formatActorName(h.editedBy))} · ${h.editedAt?new Date(h.editedAt).toLocaleString("es-AR"):""}</div>
 </div>`).join("")}
@@ -1622,6 +1706,7 @@ function openCashModal(type){
 $("cash-form").reset();
 $("cash-edit-id").value="";
 $("cash-is-initial").value="false";
+$("cash-channel").value="transfer";
 $("cash-type").disabled=false;
 $("cash-type").value=type;
 $("cash-date").value=localDateString(new Date());
@@ -1641,6 +1726,7 @@ return;
 $("cash-form").reset();
 $("cash-edit-id").value="";
 $("cash-is-initial").value="true";
+$("cash-channel").value="transfer";
 $("cash-type").value="income";
 $("cash-type").disabled=true;
 $("cash-date").value=localDateString(new Date());
@@ -1655,6 +1741,7 @@ const m=cashMovements.find(x=>x.id===id);
 if(!m)return;
 $("cash-edit-id").value=id;
 $("cash-is-initial").value=m.isInitial?"true":"false";
+$("cash-channel").value=movementChannel(m);
 $("cash-type").value=m.type||"income";
 $("cash-type").disabled=Boolean(m.isInitial);
 $("cash-amount").value=Number(m.amount||0);
@@ -1669,6 +1756,7 @@ $("cash-form").addEventListener("submit",async e=>{
 e.preventDefault();
 const id=$("cash-edit-id").value;
 const isInitial=$("cash-is-initial").value==="true";
+const channel=$("cash-channel").value==="cash"?"cash":"transfer";
 const type=isInitial?"income":$("cash-type").value;
 const amount=Number($("cash-amount").value);
 const description=$("cash-description").value.trim();
@@ -1689,10 +1777,10 @@ status.textContent="Ingresá una descripción o motivo.";
 return;
 }
 
-const availableWithoutCurrent=cashBalance(id||null);
-const projectedBalance=availableWithoutCurrent+(type==="expense"?-amount:amount);
-if(projectedBalance<-0.0001){
-status.textContent=`El egreso supera el saldo disponible (${fmtMoney(availableWithoutCurrent)}).`;
+const channelAvailable=channelBalance(channel,id||null);
+const projectedChannelBalance=channelAvailable+(type==="expense"?-amount:amount);
+if(projectedChannelBalance<-0.0001){
+status.textContent=`El egreso supera el saldo disponible en ${channelLabel(channel)} (${fmtMoney(channelAvailable)}).`;
 return;
 }
 
@@ -1710,6 +1798,8 @@ if(!snap.exists())throw new Error("El movimiento ya no existe.");
 const old=snap.data();
 const history=Array.isArray(old.editHistory)?old.editHistory:[];
 history.push({
+oldChannel:movementChannel(old),
+newChannel:channel,
 oldType:old.type,
 oldAmount:Number(old.amount||0),
 oldDescription:old.description||"",
@@ -1722,6 +1812,7 @@ editedAt:now,
 editedBy:user
 });
 transaction.update(ref,{
+channel,
 type,
 amount,
 description,
@@ -1733,6 +1824,7 @@ updatedBy:user
 });
 }else{
 await addDoc(collection(db,"cash_movements"),{
+channel,
 type,
 amount,
 description,
