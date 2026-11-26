@@ -16,55 +16,37 @@
   --danger:#ef4444;
   --border:#334155;
 }
-* {box-sizing:border-box;font-family:system-ui,sans-serif}
-body {margin:0;background:var(--bg);color:var(--text);padding:16px}
-.container {max-width:1050px;margin:auto}
-.card {background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:16px}
-h1,h2,h3 {margin-top:0}
-.muted {color:var(--muted);font-size:.88rem}
-.grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-label {display:block;font-size:.85rem;color:var(--muted);margin-bottom:5px}
-input,select,textarea {
- width:100%;padding:11px;border-radius:8px;border:1px solid var(--border);
- background:var(--card2);color:var(--text);font-size:1rem
-}
-button {
- padding:10px 14px;border-radius:8px;border:none;cursor:pointer;
- font-weight:600;background:var(--accent);color:#052e16
-}
-button.secondary {background:#334155;color:white}
-button.danger {background:var(--danger);color:white}
-button:disabled {opacity:.5;cursor:not-allowed}
-.row {display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
-.hidden {display:none!important}
-.tabs {display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.tab {background:#334155;color:white}
-.tab.active {background:var(--accent);color:#052e16}
-.library-item,.loan-item {
- background:var(--card2);border:1px solid var(--border);
- border-radius:10px;padding:15px;margin-top:12px
-}
-.library-item h3 {margin-bottom:5px}
-.badge {display:inline-block;padding:4px 9px;border-radius:20px;background:#1e3a8a;color:#bfdbfe;font-size:.78rem}
-.badge.ok {background:#14532d;color:#bbf7d0}
-.stats {display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:15px 0}
-.stat {background:var(--card2);padding:13px;border-radius:9px}
-.stat strong {display:block;font-size:1.25rem;margin-top:5px}
-.resumen-box {background:var(--card2);border-left:4px solid var(--accent);padding:13px;border-radius:8px;margin:14px 0}
-.cuota-btn {padding:7px 10px;font-size:.83rem;margin:4px 4px 0 0}
-.thumbs {display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-.thumbs img {width:110px;height:80px;object-fit:cover;border-radius:8px}
-.client-detail {line-height:1.8}
-@media(max-width:600px) {
- body {padding:9px}
- .card {padding:13px}
- .tabs button {flex:1}
-}
-@media print {
- body {background:white;color:black;padding:0}
- .no-print {display:none!important}
- .card,.loan-item {background:white;color:black}
-}
+*{box-sizing:border-box;font-family:system-ui,sans-serif}
+body{margin:0;background:var(--bg);color:var(--text);padding:16px}
+.container{max-width:1050px;margin:auto}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:16px}
+h1,h2,h3{margin-top:0}
+.muted{color:var(--muted);font-size:.88rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:5px}
+input,select,textarea{width:100%;padding:11px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--text);font-size:1rem}
+button{padding:10px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:600;background:var(--accent);color:#052e16}
+button.secondary{background:#334155;color:white}
+button.danger{background:var(--danger);color:white}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.hidden{display:none!important}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tab{background:#334155;color:white}
+.tab.active{background:var(--accent);color:#052e16}
+.library-item,.loan-item{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:15px;margin-top:12px}
+.library-item h3{margin-bottom:5px}
+.badge{display:inline-block;padding:4px 9px;border-radius:20px;background:#1e3a8a;color:#bfdbfe;font-size:.78rem}
+.badge.ok{background:#14532d;color:#bbf7d0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:15px 0}
+.stat{background:var(--card2);padding:13px;border-radius:9px}
+.stat strong{display:block;font-size:1.25rem;margin-top:5px}
+.resumen-box{background:var(--card2);border-left:4px solid var(--accent);padding:13px;border-radius:8px;margin:14px 0;line-height:1.8}
+.cuota-btn{padding:7px 10px;font-size:.83rem;margin:4px 4px 0 0}
+.thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.thumbs img{width:110px;height:80px;object-fit:cover;border-radius:8px}
+.client-detail{line-height:1.8}
+@media(max-width:600px){body{padding:9px}.card{padding:13px}.tabs button{flex:1}}
+@media print{body{background:white;color:black;padding:0}.no-print{display:none!important}.card,.loan-item{background:white;color:black}}
 </style>
 </head>
 
@@ -129,7 +111,6 @@ button:disabled {opacity:.5;cursor:not-allowed}
 </div>
 
 <input id="client-search" placeholder="Buscar cliente por nombre o DNI...">
-
 <div id="clients-list"></div>
 </div>
 </section>
@@ -180,53 +161,61 @@ button:disabled {opacity:.5;cursor:not-allowed}
 <h2>Nuevo préstamo</h2>
 
 <form id="loan-form">
-
 <div class="grid">
+
 <div>
 <label>Seleccionar cliente *</label>
 <select id="loan-client" required>
 <option value="">Seleccionar cliente...</option>
 </select>
 </div>
+
 <div>
 <label>Fecha de inicio *</label>
 <input id="start-date" type="date" required>
 </div>
+
 <div>
 <label>Capital prestado ($) *</label>
-<input id="capital" type="number" min="1" step="0.01" required>
+<input id="capital" type="number" min="0.01" step="0.01" required>
 </div>
+
 <div>
-<label>Plazo *</label>
-<select id="months">
-<option value="1">1 mes (40% interés)</option>
-<option value="2">2 meses (25% mensual acumulado)</option>
-<option value="3">3 meses (25% mensual acumulado)</option>
-<option value="4">4 meses (25% mensual acumulado)</option>
-</select>
+<label>Cantidad de cuotas *</label>
+<input id="months" type="number" min="1" max="120" step="1" value="1" required>
 </div>
+
+<div>
+<label>Interés total (%) *</label>
+<input id="interest-rate" type="number" min="0" max="10000" step="0.01" value="40" required>
+</div>
+
 <div>
 <label>Nombre del garante</label>
 <input id="guarantor-name">
 </div>
+
 <div>
 <label>DNI del garante</label>
 <input id="guarantor-dni">
 </div>
+
 <div>
 <label>Foto DNI</label>
 <input id="dni-photo" type="file" accept="image/*">
 </div>
+
 <div>
 <label>Foto pagaré firmado</label>
 <input id="promissory-photo" type="file" accept="image/*">
 </div>
+
 </div>
 
 <div id="selected-client-info" class="resumen-box hidden"></div>
 
 <div id="calc-preview" class="resumen-box">
-Ingresá el capital para calcular el préstamo.
+Ingresá el capital, las cuotas y el interés para calcular el préstamo.
 </div>
 
 <button type="submit">Guardar préstamo</button>
@@ -259,17 +248,27 @@ Ingresá el capital para calcular el préstamo.
 
 <script type="module">
 
-import {initializeApp} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import{initializeApp}from"https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 
-import {
-getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import{
+getAuth,
+signInWithEmailAndPassword,
+signOut,
+onAuthStateChanged
+}from"https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
-import {
-getFirestore,collection,addDoc,updateDoc,doc,onSnapshot,query,orderBy,getDocs
-} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import{
+getFirestore,
+collection,
+addDoc,
+updateDoc,
+doc,
+onSnapshot,
+query,
+orderBy
+}from"https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
-const firebaseConfig = {
+const firebaseConfig={
 apiKey:"AIzaSyAJHmfSW2gu3wdjcPWJkQ2jTFNI90Odl9A",
 authDomain:"ib-creditos.firebaseapp.com",
 projectId:"ib-creditos",
@@ -297,14 +296,21 @@ maximumFractionDigits:2
 
 function esc(value){
 return String(value??"").replace(/[&<>"']/g,c=>({
-"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
 }[c]));
 }
+
+// NAVEGACIÓN
 
 function showTab(tab){
 ["library","new-client","new-loan","loans"].forEach(name=>{
 $(name+"-section").classList.toggle("hidden",name!==tab);
 });
+
 document.querySelectorAll(".tab").forEach(btn=>{
 btn.classList.toggle("active",btn.dataset.tab===tab);
 });
@@ -323,8 +329,13 @@ $("start-date").valueAsDate=new Date();
 $("login-form").addEventListener("submit",async e=>{
 e.preventDefault();
 $("auth-error").textContent="";
+
 try{
-await signInWithEmailAndPassword(auth,$("login-email").value.trim(),$("login-password").value);
+await signInWithEmailAndPassword(
+auth,
+$("login-email").value.trim(),
+$("login-password").value
+);
 }catch(err){
 $("auth-error").textContent="No se pudo iniciar sesión. Revisá tus datos.";
 }
@@ -341,12 +352,13 @@ subscribeData();
 }else{
 $("auth-section").classList.remove("hidden");
 $("app-section").classList.add("hidden");
+
 if(unsubscribeClients)unsubscribeClients();
 if(unsubscribeLoans)unsubscribeLoans();
 }
 });
 
-// SUSCRIPCIÓN A FIREBASE
+// FIREBASE
 
 function subscribeData(){
 
@@ -356,7 +368,10 @@ if(unsubscribeLoans)unsubscribeLoans();
 unsubscribeClients=onSnapshot(
 query(collection(db,"clients"),orderBy("createdAt","desc")),
 snapshot=>{
-allClients=snapshot.docs.map(d=>({id:d.id,...d.data()}));
+allClients=snapshot.docs.map(d=>({
+id:d.id,
+...d.data()
+}));
 renderClients();
 updateClientSelector();
 },
@@ -366,7 +381,10 @@ error=>console.error("Error clientes:",error)
 unsubscribeLoans=onSnapshot(
 query(collection(db,"loans"),orderBy("createdAt","desc")),
 snapshot=>{
-allLoans=snapshot.docs.map(d=>({id:d.id,...d.data()}));
+allLoans=snapshot.docs.map(d=>({
+id:d.id,
+...d.data()
+}));
 renderClients();
 renderLoans();
 },
@@ -384,12 +402,9 @@ allClients.forEach(c=>{
 map.set(String(c.dni),c);
 });
 
-// Compatibilidad con préstamos anteriores:
-// los clientes antiguos aparecen en la biblioteca
-// aunque todavía no estén en la colección clients.
-
 allLoans.forEach(l=>{
 const dni=String(l.clientDni||"");
+
 if(!dni)return;
 
 if(!map.has(dni)){
@@ -408,6 +423,8 @@ legacy:true
 
 return Array.from(map.values());
 }
+
+// REGISTRAR CLIENTE
 
 $("client-form").addEventListener("submit",async e=>{
 e.preventDefault();
@@ -428,7 +445,9 @@ createdBy:auth.currentUser?.email||""
 
 try{
 
-const existing=allClients.find(c=>String(c.dni)===client.dni);
+const existing=getClients().find(c=>
+String(c.dni)===client.dni
+);
 
 if(existing){
 status.textContent="Ya existe un cliente con ese DNI.";
@@ -447,6 +466,8 @@ status.textContent="Error al guardar: "+err.message;
 }
 });
 
+// BIBLIOTECA
+
 function renderClients(){
 
 const clients=getClients();
@@ -464,13 +485,16 @@ allLoans.some(l=>String(l.clientDni)===String(c.dni))
 ).length;
 
 if(!filtered.length){
-$("clients-list").innerHTML='<p class="muted">No se encontraron clientes.</p>';
+$("clients-list").innerHTML=
+'<p class="muted">No se encontraron clientes.</p>';
 return;
 }
 
 $("clients-list").innerHTML=filtered.map(c=>{
 
-const loans=allLoans.filter(l=>String(l.clientDni)===String(c.dni));
+const loans=allLoans.filter(l=>
+String(l.clientDni)===String(c.dni)
+);
 
 const balance=loans.reduce((sum,l)=>{
 return sum+(l.installments||[])
@@ -478,8 +502,9 @@ return sum+(l.installments||[])
 .reduce((s,x)=>s+Number(x.amount||0),0);
 },0);
 
-return `
+return`
 <div class="library-item">
+
 <div class="row">
 <div>
 <h3>${esc(c.name)}</h3>
@@ -500,8 +525,10 @@ ${c.notes?`<p class="muted">Observaciones: ${esc(c.notes)}</p>`:""}
 <button class="secondary" data-client-loans="${esc(c.dni)}">Ver préstamos</button>
 <button data-new-loan="${esc(c.dni)}">Nuevo préstamo</button>
 </div>
+
 </div>
 `;
+
 }).join("");
 
 $("clients-list").querySelectorAll("[data-client-loans]").forEach(btn=>{
@@ -564,6 +591,7 @@ return;
 }
 
 info.classList.remove("hidden");
+
 info.innerHTML=`
 <strong>Cliente seleccionado</strong><br>
 ${esc(client.name)}<br>
@@ -572,52 +600,76 @@ Teléfono: ${esc(client.phone||"No informado")}
 `;
 }
 
-// CÁLCULO DE PRÉSTAMOS
+// CÁLCULO FINANCIERO
 
-function calculateLoan(capital,months){
+// El porcentaje ingresado representa el INTERÉS TOTAL
+// del préstamo, no una tasa mensual.
+//
+// Ejemplo:
+// Capital: $100.000
+// Interés total: 50%
+// Total: $150.000
+// Cuotas: 3
+// Cuota 1: $50.000
+// Cuota 2: $50.000
+// Cuota 3: $50.000
+
+function calculateLoan(capital,months,interestRate){
 
 const cap=Number(capital);
 const m=Number(months);
+const rate=Number(interestRate);
 
-if(!Number.isFinite(cap)||cap<=0||!Number.isFinite(m)||m<=0)return null;
-
-let total=cap;
-
-if(m===1){
-total=cap*1.4;
-}else{
-for(let i=1;i<=m;i++)total*=1.25;
+if(
+!Number.isFinite(cap)||cap<=0||
+!Number.isInteger(m)||m<=0||m>120||
+!Number.isFinite(rate)||rate<0||rate>10000
+){
+return null;
 }
 
-total=Math.round(total*100)/100;
+const interest=Math.round(cap*rate)/100;
+const total=Math.round((cap+interest)*100)/100;
+const installment=Math.round((total/m)*100)/100;
 
 return{
 capital:Math.round(cap*100)/100,
 months:m,
+interestRate:rate,
+interest:Math.round(interest*100)/100,
 total,
-interest:Math.round((total-cap)*100)/100,
-installment:Math.round(total/m*100)/100
+installment
 };
 }
 
+// VISTA PREVIA
+
 function updatePreview(){
 
-const calc=calculateLoan($("capital").value,$("months").value);
+const calc=calculateLoan(
+$("capital").value,
+$("months").value,
+$("interest-rate").value
+);
 
 if(!calc){
-$("calc-preview").textContent="Ingresá un capital para calcular el préstamo.";
+$("calc-preview").textContent=
+"Ingresá un capital, cantidad de cuotas e interés válidos.";
 return;
 }
 
 $("calc-preview").innerHTML=`
-<strong>Interés total:</strong> $${fmtMoney(calc.interest)}<br>
+<strong>Capital:</strong> $${fmtMoney(calc.capital)}<br>
+<strong>Interés total:</strong> ${calc.interestRate}%<br>
+<strong>Importe del interés:</strong> $${fmtMoney(calc.interest)}<br>
 <strong>Total a devolver:</strong> $${fmtMoney(calc.total)}<br>
-<strong>${calc.months} cuota(s) de:</strong> $${fmtMoney(calc.installment)}
+<strong>${calc.months} cuotas de aproximadamente:</strong> $${fmtMoney(calc.installment)}
 `;
 }
 
 $("capital").addEventListener("input",updatePreview);
-$("months").addEventListener("change",updatePreview);
+$("months").addEventListener("input",updatePreview);
+$("interest-rate").addEventListener("input",updatePreview);
 
 // COMPRESIÓN DE IMÁGENES
 
@@ -630,16 +682,20 @@ if(!file)return resolve("");
 const reader=new FileReader();
 
 reader.onload=e=>{
+
 const img=new Image();
 
 img.onload=()=>{
+
 const scale=Math.min(1,maxWidth/img.width);
 const canvas=document.createElement("canvas");
 
 canvas.width=Math.max(1,Math.round(img.width*scale));
 canvas.height=Math.max(1,Math.round(img.height*scale));
 
-canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
+canvas.getContext("2d").drawImage(
+img,0,0,canvas.width,canvas.height
+);
 
 resolve(canvas.toDataURL("image/jpeg",quality));
 };
@@ -667,26 +723,45 @@ const client=getClients().find(c=>
 String(c.dni)===$("loan-client").value
 );
 
-const calc=calculateLoan($("capital").value,$("months").value);
+const calc=calculateLoan(
+$("capital").value,
+$("months").value,
+$("interest-rate").value
+);
 
 if(!client||!calc){
-status.textContent="Seleccioná un cliente e ingresá un capital válido.";
+status.textContent="Revisá el cliente, capital, cuotas e interés.";
 return;
 }
 
 try{
 
-const [dniPhoto,promissoryPhoto]=await Promise.all([
+const[dniPhoto,promissoryPhoto]=await Promise.all([
 compressImage($("dni-photo").files[0]),
 compressImage($("promissory-photo").files[0])
 ]);
 
-const installments=Array.from({length:calc.months},(_,i)=>({
+// Ajuste de redondeo:
+// la última cuota absorbe cualquier diferencia
+// para que la suma sea exactamente igual al total.
+
+const installments=Array.from(
+{length:calc.months},
+(_,i)=>({
+
 number:i+1,
-amount:calc.installment,
+
+amount:i===calc.months-1
+?Math.round(
+(calc.total-calc.installment*(calc.months-1))*100
+)/100
+:calc.installment,
+
 paid:false,
 paidAt:null
-}));
+
+})
+);
 
 const loanData={
 
@@ -698,7 +773,9 @@ guarantorName:$("guarantor-name").value.trim(),
 guarantorDni:$("guarantor-dni").value.trim(),
 
 startDate:$("start-date").value,
+
 months:calc.months,
+interestRate:calc.interestRate,
 
 capital:calc.capital,
 interestTotal:calc.interest,
@@ -719,7 +796,11 @@ await addDoc(collection(db,"loans"),loanData);
 
 $("loan-form").reset();
 $("start-date").valueAsDate=new Date();
+$("months").value="1";
+$("interest-rate").value="40";
+
 $("selected-client-info").classList.add("hidden");
+
 updatePreview();
 
 status.textContent="Préstamo guardado correctamente.";
@@ -746,7 +827,8 @@ String(l.clientDni||"").toLowerCase().includes(term)
 );
 
 if(!filtered.length){
-$("loans-list").innerHTML='<p class="muted">No hay préstamos para mostrar.</p>';
+$("loans-list").innerHTML=
+'<p class="muted">No hay préstamos para mostrar.</p>';
 return;
 }
 
@@ -762,7 +844,7 @@ const balance=installments.filter(c=>!c.paid)
 
 const allPaid=paid===total&&total>0;
 
-return `
+return`
 <div class="loan-item">
 
 <div class="row">
@@ -771,6 +853,7 @@ return `
 <div class="muted">DNI: ${esc(loan.clientDni)}</div>
 <div class="muted">Inicio: ${esc(loan.startDate)}</div>
 </div>
+
 <span class="badge ${allPaid?"ok":""}">
 ${allPaid?"Cancelado":paid+"/"+total+" cuotas"}
 </span>
@@ -778,14 +861,17 @@ ${allPaid?"Cancelado":paid+"/"+total+" cuotas"}
 
 <p>
 Capital: <strong>$${fmtMoney(loan.capital)}</strong><br>
+Interés: <strong>${loan.interestRate!==undefined?esc(loan.interestRate)+"%":"No registrado"}</strong><br>
 Total: <strong>$${fmtMoney(loan.totalAmount)}</strong><br>
 Saldo pendiente: <strong>$${fmtMoney(balance)}</strong>
 </p>
 
 <div>
 ${installments.map((c,i)=>`
-<button class="cuota-btn ${c.paid?"":"secondary"}"
-data-loan-id="${loan.id}" data-cuota-idx="${i}">
+<button
+class="cuota-btn ${c.paid?"":"secondary"}"
+data-loan-id="${loan.id}"
+data-cuota-idx="${i}">
 ${c.paid?"✓":"○"} Cuota ${c.number} ($${fmtMoney(c.amount)})
 </button>
 `).join("")}
@@ -798,7 +884,9 @@ ${loan.promissoryPhoto?`<img src="${loan.promissoryPhoto}" alt="Pagaré">`:""}
 </div>`:""}
 
 <div class="no-print" style="margin-top:12px">
-<button class="secondary" data-receipt-id="${loan.id}">Ver / Imprimir recibo</button>
+<button class="secondary" data-receipt-id="${loan.id}">
+Ver / Imprimir recibo
+</button>
 </div>
 
 </div>
@@ -816,15 +904,19 @@ if(!loan)return;
 const idx=Number(btn.dataset.cuotaIdx);
 
 const updated=loan.installments.map((c,i)=>
-i===idx?{
+i===idx
+?{
 ...c,
 paid:!c.paid,
 paidAt:!c.paid?new Date().toISOString():null
-}:c
+}
+:c
 );
 
 try{
-await updateDoc(doc(db,"loans",loan.id),{installments:updated});
+await updateDoc(doc(db,"loans",loan.id),{
+installments:updated
+});
 }catch(err){
 alert("No se pudo actualizar la cuota: "+err.message);
 }
@@ -847,6 +939,7 @@ const loan=allLoans.find(x=>x.id===id);
 if(!loan)return;
 
 const installments=loan.installments||[];
+
 const paid=installments.filter(c=>c.paid).length;
 
 const balance=installments.filter(c=>!c.paid)
@@ -861,11 +954,13 @@ $("receipt-content").innerHTML=`
 <p><strong>Cliente:</strong> ${esc(loan.clientName)}</p>
 <p><strong>DNI:</strong> ${esc(loan.clientDni)}</p>
 <p><strong>Garante:</strong> ${esc(loan.guarantorName||"No especificado")}</p>
-<p><strong>Plazo:</strong> ${loan.months} mes(es)</p>
 
 <hr>
 
 <p><strong>Capital:</strong> $${fmtMoney(loan.capital)}</p>
+<p><strong>Interés:</strong> ${loan.interestRate!==undefined?esc(loan.interestRate)+"%":"No registrado"}</p>
+<p><strong>Importe del interés:</strong> $${fmtMoney(loan.interestTotal)}</p>
+<p><strong>Plazo:</strong> ${loan.months} cuotas</p>
 <p><strong>Total pactado:</strong> $${fmtMoney(loan.totalAmount)}</p>
 <p><strong>Cuotas abonadas:</strong> ${paid}/${installments.length}</p>
 <p><strong>Saldo pendiente:</strong> $${fmtMoney(balance)}</p>
@@ -876,7 +971,10 @@ currentWaText=
 `*IB Créditos - Comprobante*\n`+
 `Cliente: ${loan.clientName}\n`+
 `DNI: ${loan.clientDni}\n`+
+`Capital: $${fmtMoney(loan.capital)}\n`+
+`Interés: ${loan.interestRate!==undefined?loan.interestRate+"%":"No registrado"}\n`+
 `Total: $${fmtMoney(loan.totalAmount)}\n`+
+`Cuotas: ${installments.length}\n`+
 `Cuotas pagas: ${paid}/${installments.length}\n`+
 `Saldo pendiente: $${fmtMoney(balance)}`;
 
@@ -889,13 +987,17 @@ $("receipt-modal").classList.add("hidden");
 });
 
 $("copy-wa-btn").addEventListener("click",async()=>{
+
 try{
 await navigator.clipboard.writeText(currentWaText);
 $("copy-wa-btn").textContent="¡Copiado!";
-setTimeout(()=>$("copy-wa-btn").textContent="Copiar WhatsApp",1800);
+setTimeout(()=>{
+$("copy-wa-btn").textContent="Copiar WhatsApp";
+},1800);
 }catch{
 alert(currentWaText);
 }
+
 });
 
 </script>
