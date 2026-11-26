@@ -295,8 +295,8 @@ document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",
 document.querySelectorAll(".modal-backdrop").forEach(el=>el.addEventListener("click",e=>{if(e.target===el)closeModal(el.id)}));
 $("login-form").addEventListener("submit",async e=>{
 e.preventDefault();$("auth-error").textContent="";
-try{await signInWithEmailAndPassword(auth,$("login-email").value.trim(),$("login-password").value);}
-catch(err){$("auth-error").textContent="No se pudo iniciar sesión. Revisá tus datos.";}
+try{await signInWithEmailAndPassword(auth,$("login-email").value.trim().toLowerCase(),$("login-password").value);}
+catch(err){$("auth-error").textContent="No se pudo iniciar sesión. Revisá tus datos. ("+(err.code||"auth")+")";}
 });
 $("logout-btn").onclick=()=>signOut(auth);
 onAuthStateChanged(auth,user=>{
@@ -661,36 +661,4 @@ await runTransaction(db,async transaction=>{
 const snap=await transaction.get(ref);
 if(!snap.exists())throw new Error("El movimiento ya no existe.");
 const old=snap.data(),history=Array.isArray(old.editHistory)?old.editHistory:[];
-const balanceWithoutThis=cashBalance()+(old.type==="expense"?Number(old.amount||0):-Number(old.amount||0));
-if(type==="expense"&&amount>balanceWithoutThis)throw new Error("El egreso supera el saldo disponible.");
-history.push({oldType:old.type,oldAmount:Number(old.amount||0),oldDescription:old.description||"",newType:type,newAmount:amount,newDescription:description,editedAt:now,editedBy:user});
-transaction.update(ref,{type,amount,description,editHistory:history,updatedAt:now,updatedBy:user});
-});
-}else{
-const isInitial=$("cash-type").disabled;
-if(type==="expense"&&amount>cashBalance())throw new Error("El egreso supera el saldo disponible.");
-if(isInitial&&cashMovements.some(m=>m.isInitial===true))throw new Error("Ya existe un saldo inicial.");
-await addDoc(collection(db,"cash_movements"),{type,amount,description,isInitial,createdAt:now,createdBy:user,updatedAt:null,updatedBy:null,editHistory:[]});
-}
-closeModal("cash-modal");$("cash-form").reset();
-}catch(err){console.error(err);status.textContent="Error al guardar: "+err.message;}
-finally{button.disabled=false;}
-});
-$("cash-search").addEventListener("input",renderCash);
-// RECIBOS
-let currentWaText="";
-function openReceipt(loan){
-const list=installments(loan),paid=list.filter(c=>c.paid).length;
-$("receipt-content").innerHTML=`<h2>IB Créditos — Comprobante</h2><p class="muted">Emitido: ${new Date().toLocaleString("es-AR")}</p><p><strong>Cliente:</strong> ${esc(loan.clientName)}</p><p><strong>DNI:</strong> ${esc(loan.clientDni)}</p><hr><p><strong>Capital:</strong> ${fmtMoney(loan.capital)}</p><p><strong>Interés:</strong> ${loan.interestRate??"—"}%</p><p><strong>Total pactado:</strong> ${fmtMoney(loan.totalAmount)}</p><p><strong>Cuotas pagadas:</strong> ${paid}/${list.length}</p><p><strong>Saldo pendiente:</strong> ${fmtMoney(loanBalance(loan))}</p>`;
-currentWaText=`*IB Créditos - Comprobante*\nCliente: ${loan.clientName}\nDNI: ${loan.clientDni}\nCapital: ${fmtMoney(loan.capital)}\nTotal: ${fmtMoney(loan.totalAmount)}\nCuotas pagadas: ${paid}/${list.length}\nSaldo pendiente: ${fmtMoney(loanBalance(loan))}`;
-openModal("receipt-modal");
-}
-$("copy-wa").onclick=async()=>{
-try{await navigator.clipboard.writeText(currentWaText);$("copy-wa").textContent="Copiado";setTimeout(()=>$("copy-wa").textContent="Copiar WhatsApp",1600);}
-catch{alert(currentWaText);}
-};
-$("start-date").valueAsDate=new Date();
-updatePreview();
-</script>
-</body>
-</html>
+const balanceWithoutThis=cashBalance()+(old.type==="expense"?Number(old.amount||0):-
