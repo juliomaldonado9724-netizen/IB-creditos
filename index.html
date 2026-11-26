@@ -4,28 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IB Créditos | Gestión</title>
-
 <style>
-:root{
---bg:#0b1220;--surface:#111c2e;--card:#172438;--card2:#0e192a;
---text:#f1f5f9;--muted:#91a1b7;--green:#22c55e;--green2:#14532d;
---red:#ef4444;--orange:#f59e0b;--blue:#60a5fa;--border:#26364b;
-}
+:root{--bg:#0b1220;--surface:#111c2e;--card:#172438;--card2:#0e192a;--text:#f1f5f9;--muted:#91a1b7;--green:#22c55e;--green2:#14532d;--red:#ef4444;--orange:#f59e0b;--blue:#60a5fa;--border:#26364b}
 *{box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
 body{margin:0;background:var(--bg);color:var(--text)}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer;border:0;border-radius:9px;padding:10px 14px;font-weight:650;background:var(--green);color:#052e16}
 button:disabled{opacity:.45;cursor:not-allowed}
-.secondary{background:#293b52;color:var(--text)}
-.danger{background:#7f1d1d;color:white}
-.warning{background:#78350f;color:#fde68a}
-.blue{background:#1e3a8a;color:#dbeafe}
-.hidden{display:none!important}
-.muted{color:var(--muted);font-size:.87rem}
-small{color:var(--muted)}
-h1,h2,h3,p{margin-top:0}
-h2{font-size:1.25rem}
-h3{font-size:1rem}
+.secondary{background:#293b52;color:var(--text)}.danger{background:#7f1d1d;color:white}.warning{background:#78350f;color:#fde68a}.blue{background:#1e3a8a;color:#dbeafe}
+.hidden{display:none!important}.muted{color:var(--muted);font-size:.87rem}small{color:var(--muted)}
+h1,h2,h3,p{margin-top:0}h2{font-size:1.25rem}h3{font-size:1rem}
 input,select,textarea{width:100%;padding:11px;background:var(--card2);border:1px solid var(--border);border-radius:9px;color:var(--text);outline:none;min-width:0}
 input:focus,select:focus,textarea:focus{border-color:var(--green)}
 label{display:block;color:var(--muted);font-size:.84rem;margin-bottom:6px}
@@ -33,8 +21,7 @@ label{display:block;color:var(--muted);font-size:.84rem;margin-bottom:6px}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
 .brand{display:flex;align-items:center;gap:11px}
 .brand-icon{width:43px;height:43px;background:var(--green);color:#052e16;border-radius:12px;display:grid;place-items:center;font-weight:900;font-size:19px}
-.brand h1{font-size:1.15rem;margin:0}
-.brand small{display:block;margin-top:2px}
+.brand h1{font-size:1.15rem;margin:0}.brand small{display:block;margin-top:2px}
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px}
 .nav{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}
 .nav button{background:transparent;color:var(--muted);border:1px solid transparent}
@@ -45,123 +32,68 @@ label{display:block;color:var(--muted);font-size:.84rem;margin-bottom:6px}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px;min-width:0}
 .stat .value{font-size:1.45rem;font-weight:750;margin-top:8px;overflow-wrap:anywhere}
 .stat .sub{font-size:.76rem;color:var(--muted);margin-top:5px}
-.stat.green{border-left:3px solid var(--green)}
-.stat.orange{border-left:3px solid var(--orange)}
-.stat.red{border-left:3px solid var(--red)}
-.stat.blue-border{border-left:3px solid var(--blue)}
-.section{display:none}
-.section.active{display:block}
+.stat.green{border-left:3px solid var(--green)}.stat.orange{border-left:3px solid var(--orange)}.stat.red{border-left:3px solid var(--red)}.stat.blue-border{border-left:3px solid var(--blue)}
+.section{display:none}.section.active{display:block}
 .row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px}
 .badge{display:inline-block;border-radius:30px;padding:4px 9px;font-size:.74rem;background:#263b56;color:#bfdbfe}
-.badge.ok{background:#14532d;color:#bbf7d0}
-.badge.warn{background:#78350f;color:#fde68a}
-.badge.bad{background:#7f1d1d;color:#fecaca}
+.badge.ok{background:#14532d;color:#bbf7d0}.badge.warn{background:#78350f;color:#fde68a}.badge.bad{background:#7f1d1d;color:#fecaca}
 .item{background:var(--card2);border:1px solid var(--border);padding:14px;border-radius:11px;margin-top:10px}
-.item p{margin:7px 0}
-.item-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
-.item-actions button{font-size:.82rem}
+.item p{margin:7px 0}.item-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.item-actions button{font-size:.82rem}
 .divider{border:0;border-top:1px solid var(--border);margin:17px 0}
-.search{margin:12px 0}
-.empty{text-align:center;color:var(--muted);padding:25px}
+.search{margin:12px 0}.empty{text-align:center;color:var(--muted);padding:25px}
 .money{font-weight:750;font-variant-numeric:tabular-nums}
-.green-text{color:#86efac}
-.red-text{color:#fca5a5}
-.orange-text{color:#fcd34d}
+.green-text{color:#86efac}.red-text{color:#fca5a5}.orange-text{color:#fcd34d}
 .calendar-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-top:14px}
 .weekday{text-align:center;color:var(--muted);font-size:.75rem;padding:7px 0}
 .day{min-height:85px;padding:7px;background:var(--card2);border:1px solid var(--border);border-radius:8px;cursor:pointer;min-width:0}
-.day.selected{border:2px solid var(--green)}
-.day.today{background:#1c3044}
-.day.empty{background:transparent;border:0;cursor:default}
-.day-total{font-size:.68rem;color:#86efac;margin-top:7px;overflow-wrap:anywhere}
-.day-count{font-size:.65rem;color:var(--muted)}
+.day.selected{border:2px solid var(--green)}.day.today{background:#1c3044}.day.empty{background:transparent;border:0;cursor:default}
+.day-total{font-size:.68rem;color:#86efac;margin-top:7px;overflow-wrap:anywhere}.day-count{font-size:.65rem;color:var(--muted)}
 .month-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:9px}
-.month-card{background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:12px}
-.month-card strong{display:block;margin-top:6px}
+.month-card{background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:12px}.month-card strong{display:block;margin-top:6px}
 .bar-chart{display:flex;align-items:flex-end;gap:8px;height:210px;padding:15px 4px 0;border-bottom:1px solid var(--border);overflow-x:auto}
 .bar-column{flex:1;min-width:38px;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:7px}
 .bar{width:70%;max-width:48px;background:var(--green);border-radius:6px 6px 0 0;min-height:2px}
-.bar-label{font-size:.68rem;color:var(--muted);white-space:nowrap}
-.bar-value{font-size:.65rem;color:var(--text);white-space:nowrap}
-.payment-row{padding:12px 0;border-bottom:1px solid var(--border)}
-.payment-row:last-child{border-bottom:0}
+.bar-label{font-size:.68rem;color:var(--muted);white-space:nowrap}.bar-value{font-size:.65rem;color:var(--text);white-space:nowrap}
+.payment-row{padding:12px 0;border-bottom:1px solid var(--border)}.payment-row:last-child{border-bottom:0}
 .notice{padding:13px;border:1px solid var(--border);border-radius:10px;background:var(--card2);margin-top:10px}
-.notice.warning-notice{border-left:3px solid var(--orange)}
-.notice.danger-notice{border-left:3px solid var(--red)}
+.notice.warning-notice{border-left:3px solid var(--orange)}.notice.danger-notice{border-left:3px solid var(--red)}
 .modal-backdrop{position:fixed;inset:0;background:#000b;z-index:100;display:flex;align-items:center;justify-content:center;padding:12px}
 .modal{width:100%;max-width:650px;max-height:92vh;overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:20px}
-.thumb{width:100px;height:75px;object-fit:cover;border-radius:7px;margin:5px}
-details summary{cursor:pointer;color:#86efac;padding:9px 0}
-.login{max-width:420px;margin:12vh auto}
-.footer-note{font-size:.75rem;color:var(--muted);line-height:1.5}
-@media(max-width:650px){
-.container{padding:11px}
-.panel{padding:13px}
-.topbar{align-items:flex-start}
-.nav{display:grid;grid-template-columns:repeat(3,1fr)}
-.nav button{padding:10px 5px;font-size:.78rem}
-.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.stat{padding:11px}
-.stat .value{font-size:1.12rem}
-.day{min-height:65px;padding:4px}
-.day-total{font-size:.59rem}
-.day-count{font-size:.56rem}
-}
-@media print{
-body{background:white;color:black}
-.no-print{display:none!important}
-.panel,.item{background:white;color:black}
-}
+.login{max-width:420px;margin:12vh auto}.footer-note{font-size:.75rem;color:var(--muted);line-height:1.5}
+@media(max-width:650px){.container{padding:11px}.panel{padding:13px}.topbar{align-items:flex-start}.nav{display:grid;grid-template-columns:repeat(3,1fr)}.nav button{padding:10px 5px;font-size:.76rem}.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.stat{padding:11px}.stat .value{font-size:1.12rem}.day{min-height:65px;padding:4px}.day-total{font-size:.59rem}.day-count{font-size:.56rem}}
+@media print{body{background:white;color:black}.no-print{display:none!important}.panel,.item{background:white;color:black}}
 </style>
 </head>
-
 <body>
 <div class="container">
-
 <div id="auth-section" class="panel login">
-<div class="brand" style="margin-bottom:22px">
-<div class="brand-icon">IB</div>
-<div><h1>IB Créditos</h1><small>Gestión financiera</small></div>
-</div>
+<div class="brand" style="margin-bottom:22px"><div class="brand-icon">IB</div><div><h1>IB Créditos</h1><small>Gestión financiera</small></div></div>
 <form id="login-form">
-<label>Correo electrónico</label>
-<input id="login-email" type="email" required autocomplete="username">
-<br><br>
-<label>Contraseña</label>
-<input id="login-password" type="password" required autocomplete="current-password">
-<br><br>
-<button style="width:100%">Ingresar</button>
-<p id="auth-error" class="red-text" style="margin-top:12px"></p>
+<label>Correo electrónico</label><input id="login-email" type="email" required autocomplete="username"><br><br>
+<label>Contraseña</label><input id="login-password" type="password" required autocomplete="current-password"><br><br>
+<button style="width:100%">Ingresar</button><p id="auth-error" class="red-text" style="margin-top:12px"></p>
 </form>
 </div>
-
 <div id="app-section" class="hidden">
 <header class="topbar">
-<div class="brand">
-<div class="brand-icon">IB</div>
-<div><h1>IB Créditos</h1><small id="user-info">Panel de gestión</small></div>
-</div>
+<div class="brand"><div class="brand-icon">IB</div><div><h1>IB Créditos</h1><small id="user-info">Panel de gestión</small></div></div>
 <button class="secondary no-print" id="logout-btn">Salir</button>
 </header>
-
 <nav class="nav no-print">
 <button class="active" data-page="home">Inicio</button>
 <button data-page="clients">Clientes</button>
 <button data-page="collections">Cobros</button>
 <button data-page="statistics">Estadísticas</button>
 <button data-page="commissions">Comisiones</button>
+<button data-page="cash">Caja disponible</button>
 <button data-page="notifications">Avisos <span id="notification-count"></span></button>
 </nav>
-
 <section id="page-home" class="section active">
 <div class="row" style="margin-bottom:14px">
 <div><h2 style="margin-bottom:4px">Resumen general</h2><p class="muted" id="today-label"></p></div>
-<div class="row no-print">
-<button id="open-client-form">+ Cliente</button>
-<button id="open-loan-form">+ Préstamo</button>
-</div>
+<div class="row no-print"><button id="open-client-form">+ Cliente</button><button id="open-loan-form">+ Préstamo</button></div>
 </div>
 <div class="stats">
 <div class="stat green"><div class="muted">Cartera pendiente</div><div class="value" id="home-balance">$0</div><div class="sub">Capital e intereses por cobrar</div></div>
@@ -169,25 +101,14 @@ body{background:white;color:black}
 <div class="stat orange"><div class="muted">Cuotas en mora</div><div class="value" id="home-overdue">$0</div><div class="sub" id="home-overdue-count">0 cuotas vencidas</div></div>
 <div class="stat"><div class="muted">Préstamos activos</div><div class="value" id="home-active">0</div><div class="sub">Créditos sin cancelar</div></div>
 </div>
-<div class="panel">
-<div class="row"><div><h3>Próximos cobros</h3><p class="muted">Cuotas que vencen hoy y mañana.</p></div><button class="secondary no-print" onclick="navigate('collections')">Ver todos</button></div>
-<div id="home-upcoming"></div>
-</div>
-<div class="panel">
-<div class="row"><div><h3>Notificaciones</h3><p class="muted">Avisos de vencimientos próximos.</p></div><button class="secondary no-print" onclick="navigate('notifications')">Ver avisos</button></div>
-<div id="home-notifications"></div>
-</div>
+<div class="panel"><div class="row"><div><h3>Próximos cobros</h3><p class="muted">Cuotas que vencen hoy y mañana.</p></div><button class="secondary no-print" onclick="navigate('collections')">Ver todos</button></div><div id="home-upcoming"></div></div>
+<div class="panel"><div class="row"><div><h3>Notificaciones</h3><p class="muted">Avisos de vencimientos próximos.</p></div><button class="secondary no-print" onclick="navigate('notifications')">Ver avisos</button></div><div id="home-notifications"></div></div>
 </section>
-
 <section id="page-clients" class="section">
 <div class="panel">
 <div class="row"><div><h2>Clientes</h2><p class="muted">Directorio e historial crediticio.</p></div><button id="open-client-form-2">+ Nuevo cliente</button></div>
-<div class="stats">
-<div class="stat"><div class="muted">Clientes</div><div class="value" id="client-count">0</div></div>
-<div class="stat"><div class="muted">Con créditos activos</div><div class="value" id="client-active-count">0</div></div>
-</div>
-<input class="search" id="client-search" placeholder="Buscar nombre o DNI...">
-<div id="clients-list"></div>
+<div class="stats"><div class="stat"><div class="muted">Clientes</div><div class="value" id="client-count">0</div></div><div class="stat"><div class="muted">Con créditos activos</div><div class="value" id="client-active-count">0</div></div></div>
+<input class="search" id="client-search" placeholder="Buscar nombre o DNI..."><div id="clients-list"></div>
 </div>
 <div id="profile-panel" class="panel hidden">
 <div class="row"><div><h2 id="profile-name">Cliente</h2><p class="muted" id="profile-dni"></p></div><button class="secondary" id="close-profile">Cerrar perfil</button></div>
@@ -198,39 +119,27 @@ body{background:white;color:black}
 <div class="stat"><div class="muted">Activos</div><div class="value" id="history-active">0</div></div>
 <div class="stat"><div class="muted">Con mora</div><div class="value" id="history-overdue">0</div></div>
 </div>
-<div class="row"><h3>Historial crediticio</h3><button id="profile-new-loan">+ Nuevo crédito</button></div>
-<div id="credit-history"></div>
+<div class="row"><h3>Historial crediticio</h3><button id="profile-new-loan">+ Nuevo crédito</button></div><div id="credit-history"></div>
 </div>
 </section>
-
 <section id="page-collections" class="section">
 <div class="panel">
-<h2>Calendario de cobros</h2>
-<p class="muted">Vencimientos, importes diarios y proyección de los próximos meses.</p>
+<h2>Calendario de cobros</h2><p class="muted">Vencimientos, importes diarios y proyección de los próximos meses.</p>
 <div class="stats">
 <div class="stat green"><div class="muted">Total del mes</div><div class="value" id="calendar-month-total">$0</div></div>
 <div class="stat blue-border"><div class="muted">Total del día</div><div class="value" id="calendar-day-total">$0</div></div>
 <div class="stat"><div class="muted">Cuotas pendientes del mes</div><div class="value" id="calendar-month-count">0</div></div>
 </div>
-<h3>Proyección de los próximos 12 meses</h3>
-<div class="month-list" id="future-months"></div>
+<h3>Proyección de los próximos 12 meses</h3><div class="month-list" id="future-months"></div>
 <hr class="divider">
-<div class="calendar-head">
-<button class="secondary" id="prev-month">‹ Anterior</button>
-<strong id="calendar-title"></strong>
-<button class="secondary" id="next-month">Siguiente ›</button>
-</div>
-<div class="calendar" id="calendar-grid"></div>
-<hr class="divider">
-<h3 id="selected-date-title">Detalle de cobros</h3>
-<div id="calendar-payments"></div>
+<div class="calendar-head"><button class="secondary" id="prev-month">‹ Anterior</button><strong id="calendar-title"></strong><button class="secondary" id="next-month">Siguiente ›</button></div>
+<div class="calendar" id="calendar-grid"></div><hr class="divider">
+<h3 id="selected-date-title">Detalle de cobros</h3><div id="calendar-payments"></div>
 </div>
 </section>
-
 <section id="page-statistics" class="section">
 <div class="panel">
-<h2>Estadísticas del negocio</h2>
-<p class="muted">Indicadores de cartera, cobranzas y rendimiento.</p>
+<h2>Estadísticas del negocio</h2><p class="muted">Indicadores de cartera, cobranzas y rendimiento.</p>
 <div class="stats">
 <div class="stat green"><div class="muted">Capital prestado histórico</div><div class="value" id="stat-capital">$0</div></div>
 <div class="stat"><div class="muted">Intereses pactados</div><div class="value" id="stat-interest">$0</div></div>
@@ -240,85 +149,67 @@ body{background:white;color:black}
 <div class="stat red"><div class="muted">Créditos con mora</div><div class="value" id="stat-late-loans">0</div></div>
 </div>
 </div>
-<div class="panel">
-<h3>Proyección de cobros por mes</h3>
-<p class="muted">Importes de cuotas pendientes según sus fechas de vencimiento.</p>
-<div id="annual-chart" class="bar-chart"></div>
-</div>
-<div class="panel">
-<h3>Resumen de los próximos 12 meses</h3>
-<div id="annual-table" class="month-list"></div>
-</div>
-<div class="panel">
-<h3>Indicadores de cartera</h3>
-<div id="portfolio-indicators"></div>
-</div>
+<div class="panel"><h3>Proyección de cobros por mes</h3><p class="muted">Importes de cuotas pendientes según sus fechas de vencimiento.</p><div id="annual-chart" class="bar-chart"></div></div>
+<div class="panel"><h3>Resumen de los próximos 12 meses</h3><div id="annual-table" class="month-list"></div></div>
+<div class="panel"><h3>Indicadores de cartera</h3><div id="portfolio-indicators"></div></div>
 </section>
-
 <section id="page-commissions" class="section">
 <div class="panel">
-<div class="row">
-<div>
 <h2>Comisiones del empleado</h2>
 <p class="muted">Comisión del 5% del total del préstamo (capital + intereses), habilitada al pagar la primera cuota.</p>
-</div>
-</div>
 <div class="stats">
 <div class="stat orange"><div class="muted">Comisiones pendientes</div><div class="value" id="commission-pending">$0</div></div>
 <div class="stat green"><div class="muted">Comisiones pagadas</div><div class="value" id="commission-paid">$0</div></div>
 <div class="stat"><div class="muted">Total generado</div><div class="value" id="commission-total">$0</div></div>
 </div>
-<h3>Comisiones pendientes de entrega</h3>
-<div id="commission-pending-list"></div>
-<hr class="divider">
-<h3>Historial de comisiones pagadas</h3>
-<div id="commission-paid-list"></div>
+<h3>Comisiones pendientes de entrega</h3><div id="commission-pending-list"></div>
+<hr class="divider"><h3>Historial de comisiones pagadas</h3><div id="commission-paid-list"></div>
 </div>
 </section>
-
+<section id="page-cash" class="section">
+<div class="panel">
+<div class="row"><div><h2>Caja disponible</h2><p class="muted">Dinero disponible para nuevos préstamos. Independiente de los cobros.</p></div><span class="badge ok">Saldo compartido</span></div>
+<div class="stat green" style="margin:15px 0"><div class="muted">Saldo disponible</div><div class="value" id="cash-balance">$0</div><div class="sub">Ingresos menos egresos registrados</div></div>
+<div class="grid">
+<button id="cash-in-button">+ Ingreso</button>
+<button class="danger" id="cash-out-button">− Egreso</button>
+<button class="secondary" id="cash-initial-button">Configurar saldo inicial</button>
+</div>
+<hr class="divider">
+<div class="stats">
+<div class="stat green"><div class="muted">Total ingresado</div><div class="value" id="cash-income">$0</div></div>
+<div class="stat red"><div class="muted">Total egresado</div><div class="value" id="cash-expenses">$0</div></div>
+</div>
+<div class="row"><h3>Historial de movimientos</h3></div>
+<input id="cash-search" class="search" placeholder="Buscar movimiento...">
+<div id="cash-movements-list"></div>
+</div>
+</section>
 <section id="page-notifications" class="section">
 <div class="panel">
-<div class="row">
-<div><h2>Centro de notificaciones</h2><p class="muted">Avisos un día antes del vencimiento de cada cuota.</p></div>
-<button class="secondary" id="enable-notifications">Activar avisos</button>
-</div>
-<div id="notification-permission" class="muted"></div>
-<hr class="divider">
-<h3>Cuotas que vencen mañana</h3>
-<div id="tomorrow-notifications"></div>
-<h3 style="margin-top:24px">Cuotas vencidas</h3>
-<div id="overdue-notifications"></div>
-<h3 style="margin-top:24px">Próximos vencimientos</h3>
-<div id="next-notifications"></div>
+<div class="row"><div><h2>Centro de notificaciones</h2><p class="muted">Avisos un día antes del vencimiento de cada cuota.</p></div><button class="secondary" id="enable-notifications">Activar avisos</button></div>
+<div id="notification-permission" class="muted"></div><hr class="divider">
+<h3>Cuotas que vencen mañana</h3><div id="tomorrow-notifications"></div>
+<h3 style="margin-top:24px">Cuotas vencidas</h3><div id="overdue-notifications"></div>
+<h3 style="margin-top:24px">Próximos vencimientos</h3><div id="next-notifications"></div>
 </div>
 </section>
 </div>
 </div>
-
-<div class="modal-backdrop hidden" id="client-modal">
-<div class="modal">
+<div class="modal-backdrop hidden" id="client-modal"><div class="modal">
 <div class="row"><h2>Nuevo cliente</h2><button class="secondary" data-close="client-modal">Cerrar</button></div>
-<form id="client-form">
-<div class="form-grid">
+<form id="client-form"><div class="form-grid">
 <div><label>Nombre y apellido *</label><input id="new-name" required></div>
 <div><label>DNI *</label><input id="new-dni" required></div>
 <div><label>Teléfono / WhatsApp</label><input id="new-phone"></div>
 <div><label>Dirección</label><input id="new-address"></div>
 <div><label>Localidad</label><input id="new-city"></div>
 <div><label>Observaciones</label><textarea id="new-notes" rows="2"></textarea></div>
-</div>
-<br>
-<button type="submit">Guardar cliente</button>
-<span id="client-status" class="muted"></span>
-</form>
-</div>
-</div>
-
-<div class="modal-backdrop hidden" id="loan-modal">
-<div class="modal">
+</div><br><button type="submit">Guardar cliente</button><span id="client-status" class="muted"></span></form>
+</div></div>
+<div class="modal-backdrop hidden" id="loan-modal"><div class="modal">
 <div class="row"><h2>Nuevo préstamo</h2><button class="secondary" data-close="loan-modal">Cerrar</button></div>
-<form id="loan-form">
-<div class="form-grid">
+<form id="loan-form"><div class="form-grid">
 <div><label>Cliente *</label><select id="loan-client" required><option value="">Seleccionar cliente...</option></select></div>
 <div><label>Fecha de inicio *</label><input id="start-date" type="date" required></div>
 <div><label>Capital prestado ($) *</label><input id="capital" type="number" min="0.01" step="0.01" required></div>
@@ -331,28 +222,36 @@ body{background:white;color:black}
 </div>
 <div id="selected-client-info" class="notice hidden"></div>
 <div id="calc-preview" class="notice" style="line-height:1.8;margin:15px 0">Ingresá los datos del crédito.</div>
-<button type="submit" id="save-loan">Guardar préstamo</button>
-<span id="form-status" class="muted"></span>
+<button type="submit" id="save-loan">Guardar préstamo</button><span id="form-status" class="muted"></span>
 </form>
-</div>
-</div>
-
-<div class="modal-backdrop hidden" id="receipt-modal">
-<div class="modal">
+</div></div>
+<div class="modal-backdrop hidden" id="cash-modal"><div class="modal">
+<div class="row"><h2 id="cash-modal-title">Movimiento de caja</h2><button class="secondary" data-close="cash-modal">Cerrar</button></div>
+<form id="cash-form">
+<input type="hidden" id="cash-edit-id">
+<label>Tipo de movimiento</label>
+<select id="cash-type" required><option value="income">Ingreso</option><option value="expense">Egreso</option></select>
+<br><br>
+<label>Importe ($)</label><input id="cash-amount" type="number" min="0.01" step="0.01" required>
+<br><br>
+<label>Descripción</label><input id="cash-description" maxlength="200" required placeholder="Ej. Aporte de capital">
+<br><br>
+<button type="submit" id="cash-save-button">Guardar movimiento</button>
+<span id="cash-status" class="muted"></span>
+</form>
+</div></div>
+<div class="modal-backdrop hidden" id="receipt-modal"><div class="modal">
 <div id="receipt-content"></div>
 <div class="row no-print" style="margin-top:15px">
 <button onclick="window.print()">Imprimir / PDF</button>
 <button class="secondary" id="copy-wa">Copiar WhatsApp</button>
 <button class="danger" data-close="receipt-modal">Cerrar</button>
 </div>
-</div>
-</div>
-
+</div></div>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import{getFirestore,collection,addDoc,updateDoc,doc,onSnapshot,query,orderBy}from"https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-
+import{getFirestore,collection,addDoc,updateDoc,doc,onSnapshot,query,orderBy,runTransaction}from"https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 const firebaseConfig={
 apiKey:"AIzaSyAJHmfSW2gu3wdjcPWJkQ2jTFNI90Odl9A",
 authDomain:"ib-creditos.firebaseapp.com",
@@ -361,52 +260,20 @@ storageBucket:"ib-creditos.firebasestorage.app",
 messagingSenderId:"732719293947",
 appId:"1:732719293947:web:b31b5ffa2486de8465175e"
 };
-
 const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
 const db=getFirestore(app);
-
-let allClients=[];
-let allLoans=[];
-let unsubscribeClients=null;
-let unsubscribeLoans=null;
-let calendarDate=new Date();
-let selectedDate=localDateString(new Date());
-let profileDni=null;
-let currentWaText="";
-let notificationTimer=null;
-let lastNotificationCheck="";
-
+let allClients=[],allLoans=[],cashMovements=[];
+let unsubscribeClients=null,unsubscribeLoans=null,unsubscribeCash=null;
+let calendarDate=new Date(),selectedDate=localDateString(new Date());
+let profileDni=null,currentWaText="",notificationTimer=null,lastNotificationCheck="";
 const $=id=>document.getElementById(id);
 const fmtMoney=n=>Number(n||0).toLocaleString("es-AR",{style:"currency",currency:"ARS",minimumFractionDigits:2,maximumFractionDigits:2});
-
-function esc(value){
-return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
-
-function localDateString(date){
-return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
-}
-
-function parseDate(value){
-if(!value)return null;
-const [y,m,d]=String(value).split("-").map(Number);
-return y&&m&&d?new Date(y,m-1,d):null;
-}
-
-function addMonths(date,months){
-const day=date.getDate();
-const result=new Date(date.getFullYear(),date.getMonth()+months,1);
-const last=new Date(result.getFullYear(),result.getMonth()+1,0).getDate();
-result.setDate(Math.min(day,last));
-return result;
-}
-
-function fmtDate(value){
-const d=parseDate(value);
-return d?d.toLocaleDateString("es-AR"):"Sin fecha";
-}
-
+function esc(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function localDateString(date){return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;}
+function parseDate(value){if(!value)return null;const[y,m,d]=String(value).split("-").map(Number);return y&&m&&d?new Date(y,m-1,d):null;}
+function addMonths(date,months){const day=date.getDate();const result=new Date(date.getFullYear(),date.getMonth()+months,1);const last=new Date(result.getFullYear(),result.getMonth()+1,0).getDate();result.setDate(Math.min(day,last));return result;}
+function fmtDate(value){const d=parseDate(value);return d?d.toLocaleDateString("es-AR"):"Sin fecha";}
 function navigate(page){
 document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
 $("page-"+page).classList.add("active");
@@ -415,774 +282,415 @@ if(page==="collections")renderCalendar();
 if(page==="statistics")renderStatistics();
 if(page==="commissions")renderCommissions();
 if(page==="notifications")renderNotifications();
+if(page==="cash")renderCash();
 }
 window.navigate=navigate;
-
 document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.page)));
-
-function openModal(id){$(id).classList.remove("hidden")}
-function closeModal(id){$(id).classList.add("hidden")}
-
+function openModal(id){$(id).classList.remove("hidden");}
+function closeModal(id){$(id).classList.add("hidden");}
 $("open-client-form").onclick=()=>openModal("client-modal");
 $("open-client-form-2").onclick=()=>openModal("client-modal");
 $("open-loan-form").onclick=()=>openModal("loan-modal");
-
 document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>closeModal(b.dataset.close)));
 document.querySelectorAll(".modal-backdrop").forEach(el=>el.addEventListener("click",e=>{if(e.target===el)closeModal(el.id)}));
-
 $("login-form").addEventListener("submit",async e=>{
-e.preventDefault();
-$("auth-error").textContent="";
-try{
-await signInWithEmailAndPassword(auth,$("login-email").value.trim(),$("login-password").value);
-}catch(err){
-$("auth-error").textContent="No se pudo iniciar sesión. Revisá tus datos.";
-}
+e.preventDefault();$("auth-error").textContent="";
+try{await signInWithEmailAndPassword(auth,$("login-email").value.trim(),$("login-password").value);}
+catch(err){$("auth-error").textContent="No se pudo iniciar sesión. Revisá tus datos.";}
 });
-
 $("logout-btn").onclick=()=>signOut(auth);
-
 onAuthStateChanged(auth,user=>{
 if(user){
-$("auth-section").classList.add("hidden");
-$("app-section").classList.remove("hidden");
-$("user-info").textContent=user.email;
-$("start-date").valueAsDate=new Date();
-subscribeData();
-startNotificationChecks();
+$("auth-section").classList.add("hidden");$("app-section").classList.remove("hidden");
+$("user-info").textContent=user.email;$("start-date").valueAsDate=new Date();
+subscribeData();subscribeCash();startNotificationChecks();
 }else{
-$("auth-section").classList.remove("hidden");
-$("app-section").classList.add("hidden");
+$("auth-section").classList.remove("hidden");$("app-section").classList.add("hidden");
 if(unsubscribeClients)unsubscribeClients();
 if(unsubscribeLoans)unsubscribeLoans();
+if(unsubscribeCash)unsubscribeCash();
+cashMovements=[];
 if(notificationTimer)clearInterval(notificationTimer);
 }
 });
-
 function subscribeData(){
 if(unsubscribeClients)unsubscribeClients();
 if(unsubscribeLoans)unsubscribeLoans();
-
 unsubscribeClients=onSnapshot(query(collection(db,"clients"),orderBy("createdAt","desc")),snapshot=>{
 allClients=snapshot.docs.map(d=>({id:d.id,...d.data()}));
-renderClients();
-updateClientSelector();
-if(profileDni)renderProfile(profileDni);
-renderDashboard();
-renderCommissions();
-renderNotifications();
-renderCalendar();
-renderStatistics();
+renderClients();updateClientSelector();if(profileDni)renderProfile(profileDni);
+renderDashboard();renderCommissions();renderNotifications();renderCalendar();renderStatistics();
 },error=>console.error("Clientes:",error));
-
 unsubscribeLoans=onSnapshot(query(collection(db,"loans"),orderBy("createdAt","desc")),snapshot=>{
 allLoans=snapshot.docs.map(d=>({id:d.id,...d.data()}));
-renderClients();
-renderLoansForProfile();
-renderDashboard();
-renderCalendar();
-renderStatistics();
-renderCommissions();
-renderNotifications();
-checkBrowserNotifications();
+renderClients();renderLoansForProfile();renderDashboard();renderCalendar();renderStatistics();renderCommissions();renderNotifications();checkBrowserNotifications();
 },error=>console.error("Préstamos:",error));
 }
-
 function getClients(){
 const map=new Map();
 allClients.forEach(c=>map.set(String(c.dni),c));
-allLoans.forEach(l=>{
-const dni=String(l.clientDni||"");
-if(dni&&!map.has(dni)){
-map.set(dni,{name:l.clientName||"Sin nombre",dni,phone:l.clientPhone||"",address:"",city:"",notes:"",legacy:true});
+allLoans.forEach(l=>{const dni=String(l.clientDni||"");if(dni&&!map.has(dni))map.set(dni,{name:l.clientName||"Sin nombre",dni,phone:l.clientPhone||"",address:"",city:"",notes:"",legacy:true});});
+return[...map.values()];
 }
-});
-return [...map.values()];
-}
-
 $("client-form").addEventListener("submit",async e=>{
-e.preventDefault();
-const status=$("client-status");
-status.textContent="Guardando...";
-const client={
-name:$("new-name").value.trim(),
-dni:$("new-dni").value.trim(),
-phone:$("new-phone").value.trim(),
-address:$("new-address").value.trim(),
-city:$("new-city").value.trim(),
-notes:$("new-notes").value.trim(),
-createdAt:Date.now(),
-createdBy:auth.currentUser?.email||""
-};
+e.preventDefault();const status=$("client-status");status.textContent="Guardando...";
+const client={name:$("new-name").value.trim(),dni:$("new-dni").value.trim(),phone:$("new-phone").value.trim(),address:$("new-address").value.trim(),city:$("new-city").value.trim(),notes:$("new-notes").value.trim(),createdAt:Date.now(),createdBy:auth.currentUser?.email||""};
 try{
-if(getClients().some(c=>String(c.dni)===client.dni)){
-status.textContent="Ya existe un cliente con ese DNI.";
-return;
-}
-await addDoc(collection(db,"clients"),client);
-$("client-form").reset();
-status.textContent="Cliente guardado.";
-setTimeout(()=>closeModal("client-modal"),500);
-}catch(err){
-status.textContent="Error: "+err.message;
-}
+if(getClients().some(c=>String(c.dni)===client.dni)){status.textContent="Ya existe un cliente con ese DNI.";return;}
+await addDoc(collection(db,"clients"),client);$("client-form").reset();status.textContent="Cliente guardado.";setTimeout(()=>closeModal("client-modal"),500);
+}catch(err){status.textContent="Error: "+err.message;}
 });
-
-function openProfile(dni){
-profileDni=String(dni);
-renderProfile(profileDni);
-$("profile-panel").classList.remove("hidden");
-$("profile-panel").scrollIntoView({behavior:"smooth"});
-}
-
-$("close-profile").onclick=()=>{
-profileDni=null;
-$("profile-panel").classList.add("hidden");
-};
-
-$("profile-new-loan").onclick=()=>{
-if(!profileDni)return;
-openLoanForClient(profileDni);
-};
-
+function openProfile(dni){profileDni=String(dni);renderProfile(profileDni);$("profile-panel").classList.remove("hidden");$("profile-panel").scrollIntoView({behavior:"smooth"});}
+$("close-profile").onclick=()=>{profileDni=null;$("profile-panel").classList.add("hidden");};
+$("profile-new-loan").onclick=()=>{if(profileDni)openLoanForClient(profileDni);};
 function renderClients(){
-const clients=getClients();
-const term=$("client-search").value.trim().toLowerCase();
+const clients=getClients(),term=$("client-search").value.trim().toLowerCase();
 $("client-count").textContent=clients.length;
 $("client-active-count").textContent=clients.filter(c=>allLoans.some(l=>String(l.clientDni)===String(c.dni)&&!isLoanPaid(l))).length;
-
 const filtered=clients.filter(c=>(c.name||"").toLowerCase().includes(term)||String(c.dni||"").toLowerCase().includes(term));
-if(!filtered.length){
-$("clients-list").innerHTML='<div class="empty">No se encontraron clientes.</div>';
-return;
-}
-
+if(!filtered.length){$("clients-list").innerHTML='<div class="empty">No se encontraron clientes.</div>';return;}
 $("clients-list").innerHTML=filtered.map(c=>{
-const loans=allLoans.filter(l=>String(l.clientDni)===String(c.dni));
-const active=loans.filter(l=>!isLoanPaid(l)).length;
-const balance=loans.reduce((s,l)=>s+loanBalance(l),0);
-return`
-<div class="item">
-<div class="row"><div><strong>${esc(c.name)}</strong><div class="muted">DNI ${esc(c.dni)}</div></div><span class="badge">${active} activos</span></div>
-<p class="muted">📞 ${esc(c.phone||"Sin teléfono")}</p>
-<p class="muted">📍 ${esc([c.address,c.city].filter(Boolean).join(", ")||"Sin dirección")}</p>
+const loans=allLoans.filter(l=>String(l.clientDni)===String(c.dni)),active=loans.filter(l=>!isLoanPaid(l)).length,balance=loans.reduce((s,l)=>s+loanBalance(l),0);
+return `<div class="item"><div class="row"><div><strong>${esc(c.name)}</strong><div class="muted">DNI ${esc(c.dni)}</div></div><span class="badge">${active} activos</span></div>
+<p class="muted">📞 ${esc(c.phone||"Sin teléfono")}</p><p class="muted">📍 ${esc([c.address,c.city].filter(Boolean).join(", ")||"Sin dirección")}</p>
 <div class="row"><span class="muted">${loans.length} créditos históricos</span><strong>${fmtMoney(balance)}</strong></div>
-<div class="item-actions">
-<button class="secondary" data-profile="${esc(c.dni)}">Ver perfil e historial</button>
-<button data-loan="${esc(c.dni)}">Nuevo préstamo</button>
-</div>
-</div>`;
+<div class="item-actions"><button class="secondary" data-profile="${esc(c.dni)}">Ver perfil e historial</button><button data-loan="${esc(c.dni)}">Nuevo préstamo</button></div></div>`;
 }).join("");
-
 $("clients-list").querySelectorAll("[data-profile]").forEach(b=>b.onclick=()=>openProfile(b.dataset.profile));
 $("clients-list").querySelectorAll("[data-loan]").forEach(b=>b.onclick=()=>openLoanForClient(b.dataset.loan));
 }
 $("client-search").addEventListener("input",renderClients);
-
 function updateClientSelector(){
-const select=$("loan-client");
-const current=select.value;
+const select=$("loan-client"),current=select.value;
 select.innerHTML='<option value="">Seleccionar cliente...</option>';
-getClients().forEach(c=>{
-const o=document.createElement("option");
-o.value=c.dni;
-o.textContent=c.name+" — "+c.dni;
-select.appendChild(o);
-});
+getClients().forEach(c=>{const o=document.createElement("option");o.value=c.dni;o.textContent=c.name+" — "+c.dni;select.appendChild(o);});
 if(getClients().some(c=>String(c.dni)===String(current)))select.value=current;
 updateSelectedClient();
 }
-
-function openLoanForClient(dni){
-updateClientSelector();
-$("loan-client").value=dni;
-updateSelectedClient();
-$("form-status").textContent="";
-openModal("loan-modal");
-}
-
+function openLoanForClient(dni){updateClientSelector();$("loan-client").value=dni;updateSelectedClient();$("form-status").textContent="";openModal("loan-modal");}
 $("loan-client").onchange=updateSelectedClient;
-
 function updateSelectedClient(){
-const c=getClients().find(x=>String(x.dni)===$("loan-client").value);
-const el=$("selected-client-info");
-if(!c){el.classList.add("hidden");return}
-el.classList.remove("hidden");
-el.innerHTML=`<strong>Cliente:</strong> ${esc(c.name)}<br>DNI: ${esc(c.dni)}<br>Teléfono: ${esc(c.phone||"No informado")}`;
+const c=getClients().find(x=>String(x.dni)===$("loan-client").value),el=$("selected-client-info");
+if(!c){el.classList.add("hidden");return;}
+el.classList.remove("hidden");el.innerHTML=`<strong>Cliente:</strong> ${esc(c.name)}<br>DNI: ${esc(c.dni)}<br>Teléfono: ${esc(c.phone||"No informado")}`;
 }
-
 function calculateLoan(capital,months,rate){
 const c=Number(capital),m=Number(months),r=Number(rate);
 if(!Number.isFinite(c)||c<=0||!Number.isInteger(m)||m<1||m>120||!Number.isFinite(r)||r<0||r>10000)return null;
-const interest=Math.round(c*r)/100;
-const total=Math.round((c+interest)*100)/100;
-const installment=Math.round(total/m*100)/100;
+const interest=Math.round(c*r)/100,total=Math.round((c+interest)*100)/100,installment=Math.round(total/m*100)/100;
 return{capital:c,months:m,rate:r,interest,total,installment};
 }
-
 function updatePreview(){
 const x=calculateLoan($("capital").value,$("months").value,$("interest-rate").value);
-if(!x){$("calc-preview").textContent="Ingresá valores válidos.";return}
-$("calc-preview").innerHTML=`
-Capital: <strong>${fmtMoney(x.capital)}</strong><br>
-Interés total (${x.rate}%): <strong>${fmtMoney(x.interest)}</strong><br>
-Total a devolver: <strong class="green-text">${fmtMoney(x.total)}</strong><br>
-${x.months} cuotas de aproximadamente: <strong>${fmtMoney(x.installment)}</strong>
-`;
+if(!x){$("calc-preview").textContent="Ingresá valores válidos.";return;}
+$("calc-preview").innerHTML=`Capital: <strong>${fmtMoney(x.capital)}</strong><br>Interés total (${x.rate}%): <strong>${fmtMoney(x.interest)}</strong><br>Total a devolver: <strong class="green-text">${fmtMoney(x.total)}</strong><br>${x.months} cuotas de aproximadamente: <strong>${fmtMoney(x.installment)}</strong>`;
 }
 ["capital","months","interest-rate"].forEach(id=>$(id).addEventListener("input",updatePreview));
-
-function dueDate(loan,c,index){
-if(c.dueDate)return c.dueDate;
-const start=parseDate(loan.startDate);
-if(!start)return null;
-return localDateString(addMonths(start,index+1));
-}
-
-function installments(loan){
-return(loan.installments||[]).map((c,i)=>({...c,dueDate:dueDate(loan,c,i)}));
-}
-
-function isLoanPaid(loan){
-const list=loan.installments||[];
-return list.length>0&&list.every(c=>c.paid);
-}
-
-function isLate(c){
-return !c.paid&&c.dueDate&&c.dueDate<localDateString(new Date());
-}
-
-function loanStatus(loan){
-const list=installments(loan);
-if(list.length&&list.every(c=>c.paid))return"paid";
-if(list.some(isLate))return"late";
-return"active";
-}
-
-function loanBalance(loan){
-return installments(loan).filter(c=>!c.paid).reduce((s,c)=>s+Number(c.amount||0),0);
-}
-
-function collectedAmount(loan){
-return installments(loan).filter(c=>c.paid).reduce((s,c)=>s+Number(c.amount||0),0);
-}
-
+function dueDate(loan,c,index){if(c.dueDate)return c.dueDate;const start=parseDate(loan.startDate);if(!start)return null;return localDateString(addMonths(start,index+1));}
+function installments(loan){return(loan.installments||[]).map((c,i)=>({...c,dueDate:dueDate(loan,c,i)}));}
+function isLoanPaid(loan){const list=loan.installments||[];return list.length>0&&list.every(c=>c.paid);}
+function isLate(c){return !c.paid&&c.dueDate&&c.dueDate<localDateString(new Date());}
+function loanStatus(loan){const list=installments(loan);if(list.length&&list.every(c=>c.paid))return"paid";if(list.some(isLate))return"late";return"active";}
+function loanBalance(loan){return installments(loan).filter(c=>!c.paid).reduce((s,c)=>s+Number(c.amount||0),0);}
+function collectedAmount(loan){return installments(loan).filter(c=>c.paid).reduce((s,c)=>s+Number(c.amount||0),0);}
 function compressImage(file,maxWidth=640,quality=.55){
 return new Promise((resolve,reject)=>{
 if(!file)return resolve("");
 const reader=new FileReader();
-reader.onload=e=>{
-const img=new Image();
-img.onload=()=>{
-const scale=Math.min(1,maxWidth/img.width);
-const canvas=document.createElement("canvas");
-canvas.width=Math.max(1,Math.round(img.width*scale));
-canvas.height=Math.max(1,Math.round(img.height*scale));
-canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
-resolve(canvas.toDataURL("image/jpeg",quality));
-};
-img.onerror=reject;
-img.src=e.target.result;
-};
-reader.onerror=reject;
-reader.readAsDataURL(file);
+reader.onload=e=>{const img=new Image();img.onload=()=>{
+const scale=Math.min(1,maxWidth/img.width),canvas=document.createElement("canvas");
+canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));
+canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);resolve(canvas.toDataURL("image/jpeg",quality));
+};img.onerror=reject;img.src=e.target.result;};
+reader.onerror=reject;reader.readAsDataURL(file);
 });
 }
-
 $("loan-form").addEventListener("submit",async e=>{
-e.preventDefault();
-const status=$("form-status");
-const btn=$("save-loan");
-status.textContent="Guardando...";
-btn.disabled=true;
+e.preventDefault();const status=$("form-status"),btn=$("save-loan");status.textContent="Guardando...";btn.disabled=true;
 try{
-const client=getClients().find(c=>String(c.dni)===$("loan-client").value);
-const calc=calculateLoan($("capital").value,$("months").value,$("interest-rate").value);
+const client=getClients().find(c=>String(c.dni)===$("loan-client").value),calc=calculateLoan($("capital").value,$("months").value,$("interest-rate").value);
 if(!client||!calc)throw new Error("Revisá los datos del préstamo.");
-const start=parseDate($("start-date").value);
-if(!start)throw new Error("Fecha de inicio inválida.");
-
-const[dniPhoto,promissoryPhoto]=await Promise.all([
-compressImage($("dni-photo").files[0]),
-compressImage($("promissory-photo").files[0])
-]);
-
-const list=Array.from({length:calc.months},(_,i)=>({
-number:i+1,
-amount:i===calc.months-1?Math.round((calc.total-calc.installment*(calc.months-1))*100)/100:calc.installment,
-paid:false,
-paidAt:null,
-dueDate:localDateString(addMonths(start,i+1))
-}));
-
+const start=parseDate($("start-date").value);if(!start)throw new Error("Fecha de inicio inválida.");
+const[dniPhoto,promissoryPhoto]=await Promise.all([compressImage($("dni-photo").files[0]),compressImage($("promissory-photo").files[0])]);
+const list=Array.from({length:calc.months},(_,i)=>({number:i+1,amount:i===calc.months-1?Math.round((calc.total-calc.installment*(calc.months-1))*100)/100:calc.installment,paid:false,paidAt:null,dueDate:localDateString(addMonths(start,i+1))}));
 await addDoc(collection(db,"loans"),{
-clientName:client.name,
-clientDni:client.dni,
-clientPhone:client.phone||"",
-guarantorName:$("guarantor-name").value.trim(),
-guarantorDni:$("guarantor-dni").value.trim(),
-startDate:$("start-date").value,
-months:calc.months,
-interestRate:calc.rate,
-capital:calc.capital,
-interestTotal:calc.interest,
-totalAmount:calc.total,
-installmentAmount:calc.installment,
-installments:list,
-dniPhoto,
-promissoryPhoto,
-commissionRate:5,
-commissionStatus:"not_earned",
-commissionAmount:0,
-createdBy:auth.currentUser?.email||"",
-createdAt:Date.now()
+clientName:client.name,clientDni:client.dni,clientPhone:client.phone||"",
+guarantorName:$("guarantor-name").value.trim(),guarantorDni:$("guarantor-dni").value.trim(),
+startDate:$("start-date").value,months:calc.months,interestRate:calc.rate,capital:calc.capital,
+interestTotal:calc.interest,totalAmount:calc.total,installmentAmount:calc.installment,
+installments:list,dniPhoto,promissoryPhoto,commissionRate:5,commissionStatus:"not_earned",
+commissionAmount:0,createdBy:auth.currentUser?.email||"",createdAt:Date.now()
 });
-
-$("loan-form").reset();
-$("start-date").valueAsDate=new Date();
-$("months").value="1";
-$("interest-rate").value="40";
-$("selected-client-info").classList.add("hidden");
-updatePreview();
-status.textContent="Préstamo guardado correctamente.";
+$("loan-form").reset();$("start-date").valueAsDate=new Date();$("months").value="1";$("interest-rate").value="40";
+$("selected-client-info").classList.add("hidden");updatePreview();status.textContent="Préstamo guardado correctamente.";
 setTimeout(()=>closeModal("loan-modal"),700);
-}catch(err){
-status.textContent="Error: "+err.message;
-}finally{
-btn.disabled=false;
-}
+}catch(err){status.textContent="Error: "+err.message;}
+finally{btn.disabled=false;}
 });
-
-// REGISTRAR CUOTA Y GENERAR COMISIÓN
 async function payInstallment(loan,index){
-const list=loan.installments||[];
-if(!list[index]||list[index].paid)return;
-
+const list=loan.installments||[];if(!list[index]||list[index].paid)return;
 const updated=list.map((c,i)=>i===index?{...c,paid:true,paidAt:new Date().toISOString()}:c);
 const changes={installments:updated};
-
-// Comisión del 5% sobre el total pactado (capital + intereses).
-// Se habilita al registrar el pago de la primera cuota.
 if(index===0&&loan.commissionStatus!=="paid"){
-const totalLoan=Number(loan.totalAmount||(
-Number(loan.capital||0)+Number(loan.interestTotal||0)
-));
-changes.commissionRate=5;
-changes.commissionAmount=Math.round(totalLoan*5)/100;
-changes.commissionStatus="pending";
-changes.commissionCreatedAt=new Date().toISOString();
+const totalLoan=Number(loan.totalAmount||(Number(loan.capital||0)+Number(loan.interestTotal||0)));
+changes.commissionRate=5;changes.commissionAmount=Math.round(totalLoan*5)/100;
+changes.commissionStatus="pending";changes.commissionCreatedAt=new Date().toISOString();
 }
-
-try{
-await updateDoc(doc(db,"loans",loan.id),changes);
-}catch(err){
-alert("No se pudo registrar el pago: "+err.message);
+try{await updateDoc(doc(db,"loans",loan.id),changes);}
+catch(err){alert("No se pudo registrar el pago: "+err.message);}
 }
-}
-
-function renderLoansForProfile(){
-if(profileDni)renderProfile(profileDni);
-}
-
+function renderLoansForProfile(){if(profileDni)renderProfile(profileDni);}
 function renderProfile(dni){
-const client=getClients().find(c=>String(c.dni)===String(dni));
-if(!client)return;
-const loans=allLoans.filter(l=>String(l.clientDni)===String(dni));
-const paid=loans.filter(isLoanPaid);
-const active=loans.filter(l=>!isLoanPaid(l));
-const late=loans.filter(l=>loanStatus(l)==="late");
-
-$("profile-name").textContent=client.name;
-$("profile-dni").textContent="DNI: "+client.dni;
-$("profile-info").innerHTML=`
-<p class="muted">📞 ${esc(client.phone||"Sin teléfono")} · 📍 ${esc(client.address||"Sin dirección")} ${esc(client.city||"")}</p>
-<p class="muted">${esc(client.notes||"Sin observaciones")}</p>
-`;
-$("history-count").textContent=loans.length;
-$("history-paid").textContent=paid.length;
-$("history-active").textContent=active.length;
-$("history-overdue").textContent=late.length;
-
+const client=getClients().find(c=>String(c.dni)===String(dni));if(!client)return;
+const loans=allLoans.filter(l=>String(l.clientDni)===String(dni)),paid=loans.filter(isLoanPaid),active=loans.filter(l=>!isLoanPaid(l)),late=loans.filter(l=>loanStatus(l)==="late");
+$("profile-name").textContent=client.name;$("profile-dni").textContent="DNI: "+client.dni;
+$("profile-info").innerHTML=`<p class="muted">📞 ${esc(client.phone||"Sin teléfono")} · 📍 ${esc(client.address||"Sin dirección")} ${esc(client.city||"")}</p><p class="muted">${esc(client.notes||"Sin observaciones")}</p>`;
+$("history-count").textContent=loans.length;$("history-paid").textContent=paid.length;$("history-active").textContent=active.length;$("history-overdue").textContent=late.length;
 $("credit-history").innerHTML=loans.length?loans.map(l=>{
-const list=installments(l);
-const status=loanStatus(l);
-const balance=loanBalance(l);
-return`
-<div class="item">
-<div class="row"><strong>Crédito · ${fmtDate(l.startDate)}</strong><span class="badge ${status==="paid"?"ok":status==="late"?"bad":"warn"}">${status==="paid"?"Pagado":status==="late"?"Con mora":"Activo"}</span></div>
-<p class="muted">Capital: ${fmtMoney(l.capital)} · Interés: ${l.interestRate??"—"}%</p>
-<p>Total: <strong>${fmtMoney(l.totalAmount)}</strong> · Saldo: <strong>${fmtMoney(balance)}</strong></p>
-<p class="muted">Cuotas: ${list.filter(c=>c.paid).length}/${list.length}</p>
-<details>
-<summary>Ver cuotas</summary>
-${list.map((c,i)=>`
-<div class="payment-row">
-<div class="row"><strong>Cuota ${c.number}</strong><strong>${fmtMoney(c.amount)}</strong></div>
-<div class="muted">Vence: ${fmtDate(c.dueDate)} · ${c.paid?"Pagada":isLate(c)?"En mora":"Pendiente"}</div>
-${c.paid?`<small>Pagada el ${new Date(c.paidAt).toLocaleDateString("es-AR")}</small>`:""}
-</div>`).join("")}
-</details>
-</div>`;
+const list=installments(l),status=loanStatus(l),balance=loanBalance(l);
+return `<div class="item"><div class="row"><strong>Crédito · ${fmtDate(l.startDate)}</strong><span class="badge ${status==="paid"?"ok":status==="late"?"bad":"warn"}">${status==="paid"?"Pagado":status==="late"?"Con mora":"Activo"}</span></div>
+<p class="muted">Capital: ${fmtMoney(l.capital)} · Interés: ${l.interestRate??"—"}%</p><p>Total: <strong>${fmtMoney(l.totalAmount)}</strong> · Saldo: <strong>${fmtMoney(balance)}</strong></p>
+<p class="muted">Cuotas: ${list.filter(c=>c.paid).length}/${list.length}</p><details><summary>Ver cuotas</summary>
+${list.map(c=>`<div class="payment-row"><div class="row"><strong>Cuota ${c.number}</strong><strong>${fmtMoney(c.amount)}</strong></div><div class="muted">Vence: ${fmtDate(c.dueDate)} · ${c.paid?"Pagada":isLate(c)?"En mora":"Pendiente"}</div>${c.paid?`<small>Pagada el ${new Date(c.paidAt).toLocaleDateString("es-AR")}</small>`:""}</div>`).join("")}
+</details></div>`;
 }).join(""):'<div class="empty">Este cliente todavía no tiene créditos.</div>';
 }
-
 function paymentsForDate(date){
-const out=[];
-allLoans.forEach(loan=>{
-installments(loan).forEach((c,i)=>{
-if(!c.paid&&c.dueDate===date)out.push({loan,c,index:i,late:isLate(c)});
-});
-});
+const out=[];allLoans.forEach(loan=>installments(loan).forEach((c,i)=>{if(!c.paid&&c.dueDate===date)out.push({loan,c,index:i,late:isLate(c)});}));
 return out;
 }
-
 function monthlyPayments(year,month){
-const out=[];
-allLoans.forEach(loan=>{
-installments(loan).forEach((c,i)=>{
-const d=parseDate(c.dueDate);
-if(!c.paid&&d&&d.getFullYear()===year&&d.getMonth()===month)out.push({loan,c,index:i});
-});
-});
+const out=[];allLoans.forEach(loan=>installments(loan).forEach((c,i)=>{const d=parseDate(c.dueDate);if(!c.paid&&d&&d.getFullYear()===year&&d.getMonth()===month)out.push({loan,c,index:i});}));
 return out;
 }
-
-function monthlyTotal(year,month){
-return monthlyPayments(year,month).reduce((s,p)=>s+Number(p.c.amount||0),0);
-}
-
+function monthlyTotal(year,month){return monthlyPayments(year,month).reduce((s,p)=>s+Number(p.c.amount||0),0);}
 function renderFutureMonths(){
-const now=new Date();
-let html="";
-for(let i=0;i<12;i++){
-const d=new Date(now.getFullYear(),now.getMonth()+i,1);
-const total=monthlyTotal(d.getFullYear(),d.getMonth());
-const count=monthlyPayments(d.getFullYear(),d.getMonth()).length;
-html+=`
-<div class="month-card">
-<small>${d.toLocaleDateString("es-AR",{month:"long",year:"numeric"})}</small>
-<strong class="money">${fmtMoney(total)}</strong>
-<small>${count} cuotas pendientes</small>
-</div>`;
-}
+const now=new Date();let html="";
+for(let i=0;i<12;i++){const d=new Date(now.getFullYear(),now.getMonth()+i,1),total=monthlyTotal(d.getFullYear(),d.getMonth()),count=monthlyPayments(d.getFullYear(),d.getMonth()).length;
+html+=`<div class="month-card"><small>${d.toLocaleDateString("es-AR",{month:"long",year:"numeric"})}</small><strong class="money">${fmtMoney(total)}</strong><small>${count} cuotas pendientes</small></div>`;}
 $("future-months").innerHTML=html;
 }
-
 function renderCalendar(){
-const year=calendarDate.getFullYear();
-const month=calendarDate.getMonth();
+const year=calendarDate.getFullYear(),month=calendarDate.getMonth();
 $("calendar-title").textContent=calendarDate.toLocaleDateString("es-AR",{month:"long",year:"numeric"});
-const payments=monthlyPayments(year,month);
-const total=payments.reduce((s,p)=>s+Number(p.c.amount||0),0);
-$("calendar-month-total").textContent=fmtMoney(total);
-$("calendar-month-count").textContent=payments.length;
-renderFutureMonths();
-
-const first=new Date(year,month,1).getDay();
-const days=new Date(year,month+1,0).getDate();
+const payments=monthlyPayments(year,month),total=payments.reduce((s,p)=>s+Number(p.c.amount||0),0);
+$("calendar-month-total").textContent=fmtMoney(total);$("calendar-month-count").textContent=payments.length;renderFutureMonths();
+const first=new Date(year,month,1).getDay(),days=new Date(year,month+1,0).getDate();
 let html=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"].map(x=>`<div class="weekday">${x}</div>`).join("");
 for(let i=0;i<first;i++)html+='<div class="day empty"></div>';
 for(let day=1;day<=days;day++){
-const date=localDateString(new Date(year,month,day));
-const items=paymentsForDate(date);
-const dayTotal=items.reduce((s,p)=>s+Number(p.c.amount||0),0);
-html+=`
-<div class="day ${selectedDate===date?"selected":""} ${date===localDateString(new Date())?"today":""}" data-date="${date}">
-<strong>${day}</strong>
-${items.length?`<div class="day-total">${fmtMoney(dayTotal)}</div><div class="day-count">${items.length} pagos</div>`:""}
-</div>`;
+const date=localDateString(new Date(year,month,day)),items=paymentsForDate(date),dayTotal=items.reduce((s,p)=>s+Number(p.c.amount||0),0);
+html+=`<div class="day ${selectedDate===date?"selected":""} ${date===localDateString(new Date())?"today":""}" data-date="${date}"><strong>${day}</strong>${items.length?`<div class="day-total">${fmtMoney(dayTotal)}</div><div class="day-count">${items.length} pagos</div>`:""}</div>`;
 }
-$("calendar-grid").innerHTML=html;
-$("calendar-grid").querySelectorAll("[data-date]").forEach(el=>{
-el.onclick=()=>{selectedDate=el.dataset.date;renderCalendar()};
-});
+$("calendar-grid").innerHTML=html;$("calendar-grid").querySelectorAll("[data-date]").forEach(el=>el.onclick=()=>{selectedDate=el.dataset.date;renderCalendar();});
 renderCalendarDetail();
 }
-
 function renderCalendarDetail(){
-const items=paymentsForDate(selectedDate);
-const total=items.reduce((s,p)=>s+Number(p.c.amount||0),0);
-$("calendar-day-total").textContent=fmtMoney(total);
-$("selected-date-title").textContent="Detalle del "+fmtDate(selectedDate);
-if(!items.length){
-$("calendar-payments").innerHTML='<div class="empty">No hay cuotas pendientes para este día.</div>';
-return;
+const items=paymentsForDate(selectedDate),total=items.reduce((s,p)=>s+Number(p.c.amount||0),0);
+$("calendar-day-total").textContent=fmtMoney(total);$("selected-date-title").textContent="Detalle del "+fmtDate(selectedDate);
+if(!items.length){$("calendar-payments").innerHTML='<div class="empty">No hay cuotas pendientes para este día.</div>';return;}
+$("calendar-payments").innerHTML=`<p class="green-text"><strong>${items.length} cuotas · Total ${fmtMoney(total)}</strong></p>${items.map(p=>`
+<div class="payment-row"><div class="row"><div><strong>${esc(p.loan.clientName)}</strong><div class="muted">DNI ${esc(p.loan.clientDni)}</div><div class="muted">Cuota ${p.c.number} de ${p.loan.months}</div><span class="badge ${p.late?"bad":"warn"}">${p.late?"En mora":"Pendiente"}</span></div>
+<div style="text-align:right"><strong class="money">${fmtMoney(p.c.amount)}</strong><br><button data-pay="${p.loan.id}" data-index="${p.index}" style="margin-top:8px">Registrar pago</button></div></div></div>`).join("")}`;
+$("calendar-payments").querySelectorAll("[data-pay]").forEach(b=>b.onclick=()=>{const loan=allLoans.find(l=>l.id===b.dataset.pay);if(loan)payInstallment(loan,Number(b.dataset.index));});
 }
-$("calendar-payments").innerHTML=`
-<p class="green-text"><strong>${items.length} cuotas · Total ${fmtMoney(total)}</strong></p>
-${items.map(p=>`
-<div class="payment-row">
-<div class="row">
-<div><strong>${esc(p.loan.clientName)}</strong><div class="muted">DNI ${esc(p.loan.clientDni)}</div><div class="muted">Cuota ${p.c.number} de ${p.loan.months}</div><span class="badge ${p.late?"bad":"warn"}">${p.late?"En mora":"Pendiente"}</span></div>
-<div style="text-align:right"><strong class="money">${fmtMoney(p.c.amount)}</strong><br><button data-pay="${p.loan.id}" data-index="${p.index}" style="margin-top:8px">Registrar pago</button></div>
-</div>
-</div>`).join("")}
-`;
-$("calendar-payments").querySelectorAll("[data-pay]").forEach(b=>{
-b.onclick=()=>{
-const loan=allLoans.find(l=>l.id===b.dataset.pay);
-if(loan)payInstallment(loan,Number(b.dataset.index));
-};
-});
-}
-
-$("prev-month").onclick=()=>{calendarDate=new Date(calendarDate.getFullYear(),calendarDate.getMonth()-1,1);renderCalendar()};
-$("next-month").onclick=()=>{calendarDate=new Date(calendarDate.getFullYear(),calendarDate.getMonth()+1,1);renderCalendar()};
-
+$("prev-month").onclick=()=>{calendarDate=new Date(calendarDate.getFullYear(),calendarDate.getMonth()-1,1);renderCalendar();};
+$("next-month").onclick=()=>{calendarDate=new Date(calendarDate.getFullYear(),calendarDate.getMonth()+1,1);renderCalendar();};
 function renderDashboard(){
-const today=localDateString(new Date());
-const tomorrow=localDateString(new Date(Date.now()+86400000));
-const todayPayments=paymentsForDate(today);
-const overdue=allLoans.flatMap(l=>installments(l).filter(isLate));
-const active=allLoans.filter(l=>!isLoanPaid(l));
+const today=localDateString(new Date()),tomorrow=localDateString(new Date(Date.now()+86400000));
+const todayPayments=paymentsForDate(today),overdue=allLoans.flatMap(l=>installments(l).filter(isLate)),active=allLoans.filter(l=>!isLoanPaid(l));
 $("today-label").textContent=new Date().toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
 $("home-balance").textContent=fmtMoney(allLoans.reduce((s,l)=>s+loanBalance(l),0));
 $("home-today").textContent=fmtMoney(todayPayments.reduce((s,p)=>s+Number(p.c.amount||0),0));
 $("home-today-count").textContent=todayPayments.length+" cuotas";
 $("home-overdue").textContent=fmtMoney(overdue.reduce((s,c)=>s+Number(c.amount||0),0));
-$("home-overdue-count").textContent=overdue.length+" cuotas vencidas";
-$("home-active").textContent=active.length;
-
+$("home-overdue-count").textContent=overdue.length+" cuotas vencidas";$("home-active").textContent=active.length;
 const upcoming=[...todayPayments.map(p=>({...p,label:"Vence hoy"})),...paymentsForDate(tomorrow).map(p=>({...p,label:"Vence mañana"}))];
-$("home-upcoming").innerHTML=upcoming.length?upcoming.map(p=>`
-<div class="payment-row row"><div><strong>${esc(p.loan.clientName)}</strong><div class="muted">${p.label} · Cuota ${p.c.number}</div></div><strong>${fmtMoney(p.c.amount)}</strong></div>
-`).join(""):'<div class="empty">No hay cobros previstos para hoy ni mañana.</div>';
-
+$("home-upcoming").innerHTML=upcoming.length?upcoming.map(p=>`<div class="payment-row row"><div><strong>${esc(p.loan.clientName)}</strong><div class="muted">${p.label} · Cuota ${p.c.number}</div></div><strong>${fmtMoney(p.c.amount)}</strong></div>`).join(""):'<div class="empty">No hay cobros previstos para hoy ni mañana.</div>';
 const notices=getNoticeItems();
-$("home-notifications").innerHTML=notices.length?notices.slice(0,4).map(n=>`
-<div class="notice ${n.type==="late"?"danger-notice":"warning-notice"}"><strong>${esc(n.title)}</strong><div class="muted">${esc(n.detail)}</div></div>
-`).join(""):'<div class="empty">No hay avisos pendientes.</div>';
+$("home-notifications").innerHTML=notices.length?notices.slice(0,4).map(n=>`<div class="notice ${n.type==="late"?"danger-notice":"warning-notice"}"><strong>${esc(n.title)}</strong><div class="muted">${esc(n.detail)}</div></div>`).join(""):'<div class="empty">No hay avisos pendientes.</div>';
 }
-
 function renderStatistics(){
-const capital=allLoans.reduce((s,l)=>s+Number(l.capital||0),0);
-const interest=allLoans.reduce((s,l)=>s+Number(l.interestTotal||0),0);
-const collected=allLoans.reduce((s,l)=>s+collectedAmount(l),0);
-const pending=allLoans.reduce((s,l)=>s+loanBalance(l),0);
-const paid=allLoans.filter(isLoanPaid).length;
-const late=allLoans.filter(l=>loanStatus(l)==="late").length;
-$("stat-capital").textContent=fmtMoney(capital);
-$("stat-interest").textContent=fmtMoney(interest);
-$("stat-collected").textContent=fmtMoney(collected);
-$("stat-pending").textContent=fmtMoney(pending);
-$("stat-paid-loans").textContent=paid;
-$("stat-late-loans").textContent=late;
-
-const now=new Date();
-const months=[];
-for(let i=0;i<12;i++){
-const d=new Date(now.getFullYear(),now.getMonth()+i,1);
-months.push({date:d,total:monthlyTotal(d.getFullYear(),d.getMonth())});
-}
+const capital=allLoans.reduce((s,l)=>s+Number(l.capital||0),0),interest=allLoans.reduce((s,l)=>s+Number(l.interestTotal||0),0);
+const collected=allLoans.reduce((s,l)=>s+collectedAmount(l),0),pending=allLoans.reduce((s,l)=>s+loanBalance(l),0);
+const paid=allLoans.filter(isLoanPaid).length,late=allLoans.filter(l=>loanStatus(l)==="late").length;
+$("stat-capital").textContent=fmtMoney(capital);$("stat-interest").textContent=fmtMoney(interest);$("stat-collected").textContent=fmtMoney(collected);
+$("stat-pending").textContent=fmtMoney(pending);$("stat-paid-loans").textContent=paid;$("stat-late-loans").textContent=late;
+const now=new Date(),months=[];
+for(let i=0;i<12;i++){const d=new Date(now.getFullYear(),now.getMonth()+i,1);months.push({date:d,total:monthlyTotal(d.getFullYear(),d.getMonth())});}
 const max=Math.max(...months.map(x=>x.total),1);
-$("annual-chart").innerHTML=months.map(m=>{
-const height=Math.max(2,m.total/max*135);
-return`
-<div class="bar-column">
-<div class="bar-value">${m.total?fmtMoney(m.total).replace(",00",""):"-"}</div>
-<div class="bar" style="height:${height}px"></div>
-<div class="bar-label">${m.date.toLocaleDateString("es-AR",{month:"short"})}</div>
-</div>`;
-}).join("");
-
-$("annual-table").innerHTML=months.map(m=>`
-<div class="month-card"><small>${m.date.toLocaleDateString("es-AR",{month:"long",year:"numeric"})}</small><strong>${fmtMoney(m.total)}</strong><small>${monthlyPayments(m.date.getFullYear(),m.date.getMonth()).length} cuotas</small></div>
-`).join("");
-
-const totalInstallments=allLoans.reduce((s,l)=>s+(l.installments||[]).length,0);
-const paidInstallments=allLoans.reduce((s,l)=>s+(l.installments||[]).filter(c=>c.paid).length,0);
+$("annual-chart").innerHTML=months.map(m=>{const height=Math.max(2,m.total/max*135);return `<div class="bar-column"><div class="bar-value">${m.total?fmtMoney(m.total).replace(",00",""):"-"}</div><div class="bar" style="height:${height}px"></div><div class="bar-label">${m.date.toLocaleDateString("es-AR",{month:"short"})}</div></div>`;}).join("");
+$("annual-table").innerHTML=months.map(m=>`<div class="month-card"><small>${m.date.toLocaleDateString("es-AR",{month:"long",year:"numeric"})}</small><strong>${fmtMoney(m.total)}</strong><small>${monthlyPayments(m.date.getFullYear(),m.date.getMonth()).length} cuotas</small></div>`).join("");
+const totalInstallments=allLoans.reduce((s,l)=>s+(l.installments||[]).length,0),paidInstallments=allLoans.reduce((s,l)=>s+(l.installments||[]).filter(c=>c.paid).length,0);
 const rate=totalInstallments?paidInstallments/totalInstallments*100:0;
-$("portfolio-indicators").innerHTML=`
-<div class="stats">
-<div class="stat"><div class="muted">Clientes registrados</div><div class="value">${getClients().length}</div></div>
-<div class="stat"><div class="muted">Cuotas cobradas</div><div class="value">${paidInstallments}/${totalInstallments}</div></div>
-<div class="stat"><div class="muted">Cumplimiento de cuotas</div><div class="value">${rate.toFixed(1)}%</div></div>
-<div class="stat"><div class="muted">Cartera vencida</div><div class="value">${fmtMoney(overdueAmount())}</div></div>
-</div>
-<p class="footer-note">El cumplimiento se calcula sobre la cantidad de cuotas abonadas respecto del total de cuotas registradas. La cartera vencida corresponde a cuotas impagas con fecha de vencimiento anterior a hoy.</p>
-`;
+$("portfolio-indicators").innerHTML=`<div class="stats"><div class="stat"><div class="muted">Clientes registrados</div><div class="value">${getClients().length}</div></div><div class="stat"><div class="muted">Cuotas cobradas</div><div class="value">${paidInstallments}/${totalInstallments}</div></div><div class="stat"><div class="muted">Cumplimiento de cuotas</div><div class="value">${rate.toFixed(1)}%</div></div><div class="stat"><div class="muted">Cartera vencida</div><div class="value">${fmtMoney(overdueAmount())}</div></div></div><p class="footer-note">El cumplimiento se calcula sobre la cantidad de cuotas abonadas respecto del total de cuotas registradas. La cartera vencida corresponde a cuotas impagas con fecha de vencimiento anterior a hoy.</p>`;
 }
-
-function overdueAmount(){
-return allLoans.reduce((s,l)=>s+installments(l).filter(isLate).reduce((a,c)=>a+Number(c.amount||0),0),0);
-}
-
+function overdueAmount(){return allLoans.reduce((s,l)=>s+installments(l).filter(isLate).reduce((a,c)=>a+Number(c.amount||0),0),0);}
 // COMISIONES: 5% SOBRE CAPITAL + INTERESES
-function commissionEligible(loan){
-return Boolean(loan.installments?.[0]?.paid);
-}
-
-function commissionBase(loan){
-return Number(loan.totalAmount??(
-Number(loan.capital||0)+Number(loan.interestTotal||0)
-));
-}
-
+function commissionEligible(loan){return Boolean(loan.installments?.[0]?.paid);}
+function commissionBase(loan){return Number(loan.totalAmount??(Number(loan.capital||0)+Number(loan.interestTotal||0)));}
 function commissionAmount(loan){
-return Number(loan.commissionAmount??(Math.round(commissionBase(loan)*5)/100));
+if(loan.commissionStatus==="paid"&&loan.commissionAmount!=null)return Number(loan.commissionAmount);
+return Math.round(commissionBase(loan)*5)/100;
 }
-
-function commissionIsPaid(loan){
-return loan.commissionStatus==="paid";
-}
-
+function commissionIsPaid(loan){return loan.commissionStatus==="paid";}
 function renderCommissions(){
-const eligible=allLoans.filter(commissionEligible);
-const pending=eligible.filter(l=>!commissionIsPaid(l));
-const paid=eligible.filter(commissionIsPaid);
-const pendingTotal=pending.reduce((s,l)=>s+commissionAmount(l),0);
-const paidTotal=paid.reduce((s,l)=>s+commissionAmount(l),0);
-
-$("commission-pending").textContent=fmtMoney(pendingTotal);
-$("commission-paid").textContent=fmtMoney(paidTotal);
-$("commission-total").textContent=fmtMoney(pendingTotal+paidTotal);
-
-$("commission-pending-list").innerHTML=pending.length?pending.map(l=>`
-<div class="item">
-<div class="row">
-<div><strong>${esc(l.clientName)}</strong><div class="muted">DNI ${esc(l.clientDni)}</div></div>
-<strong class="orange-text">${fmtMoney(commissionAmount(l))}</strong>
-</div>
-<p class="muted">Total del préstamo (capital + intereses): ${fmtMoney(commissionBase(l))}</p>
-<p class="muted">Comisión: 5% · Primera cuota abonada: ${l.installments?.[0]?.paidAt?new Date(l.installments[0].paidAt).toLocaleDateString("es-AR"):"Sí"}</p>
-<button data-commission-paid="${l.id}">Marcar comisión pagada</button>
-</div>
-`).join(""):'<div class="empty">No hay comisiones pendientes.</div>';
-
-$("commission-paid-list").innerHTML=paid.length?paid.map(l=>`
-<div class="item">
-<div class="row">
-<div><strong>${esc(l.clientName)}</strong><div class="muted">DNI ${esc(l.clientDni)}</div></div>
-<strong class="green-text">${fmtMoney(commissionAmount(l))}</strong>
-</div>
-<div class="muted">Base de cálculo (capital + intereses): ${fmtMoney(commissionBase(l))}</div>
-<div class="muted">Comisión del 5% · Crédito ${fmtDate(l.startDate)}</div>
-<div class="muted">Fecha de entrega: ${l.commissionPaidAt?new Date(l.commissionPaidAt).toLocaleDateString("es-AR"):"No registrada"}</div>
-</div>
-`).join(""):'<div class="empty">Todavía no hay comisiones pagadas.</div>';
-
-$("commission-pending-list").querySelectorAll("[data-commission-paid]").forEach(b=>{
-b.onclick=async()=>{
+const eligible=allLoans.filter(commissionEligible),pending=eligible.filter(l=>!commissionIsPaid(l)),paid=eligible.filter(commissionIsPaid);
+const pendingTotal=pending.reduce((s,l)=>s+commissionAmount(l),0),paidTotal=paid.reduce((s,l)=>s+commissionAmount(l),0);
+$("commission-pending").textContent=fmtMoney(pendingTotal);$("commission-paid").textContent=fmtMoney(paidTotal);$("commission-total").textContent=fmtMoney(pendingTotal+paidTotal);
+$("commission-pending-list").innerHTML=pending.length?pending.map(l=>`<div class="item"><div class="row"><div><strong>${esc(l.clientName)}</strong><div class="muted">DNI ${esc(l.clientDni)}</div></div><strong class="orange-text">${fmtMoney(commissionAmount(l))}</strong></div><p class="muted">Total del préstamo (capital + intereses): ${fmtMoney(commissionBase(l))}</p><p class="muted">Comisión: 5% · Primera cuota abonada: ${l.installments?.[0]?.paidAt?new Date(l.installments[0].paidAt).toLocaleDateString("es-AR"):"Sí"}</p><button data-commission-paid="${l.id}">Marcar comisión pagada</button></div>`).join(""):'<div class="empty">No hay comisiones pendientes.</div>';
+$("commission-paid-list").innerHTML=paid.length?paid.map(l=>`<div class="item"><div class="row"><div><strong>${esc(l.clientName)}</strong><div class="muted">DNI ${esc(l.clientDni)}</div></div><strong class="green-text">${fmtMoney(commissionAmount(l))}</strong></div><div class="muted">Base de cálculo (capital + intereses): ${fmtMoney(commissionBase(l))}</div><div class="muted">Comisión del 5% · Crédito ${fmtDate(l.startDate)}</div><div class="muted">Fecha de entrega: ${l.commissionPaidAt?new Date(l.commissionPaidAt).toLocaleDateString("es-AR"):"No registrada"}</div></div>`).join(""):'<div class="empty">Todavía no hay comisiones pagadas.</div>';
+$("commission-pending-list").querySelectorAll("[data-commission-paid]").forEach(b=>b.onclick=async()=>{
 if(!confirm("¿Confirmás que entregaste esta comisión al empleado?"))return;
-try{
-await updateDoc(doc(db,"loans",b.dataset.commissionPaid),{
-commissionStatus:"paid",
-commissionPaidAt:new Date().toISOString(),
-commissionPaidBy:auth.currentUser?.email||""
-});
-}catch(err){
-alert("No se pudo actualizar la comisión: "+err.message);
-}
-};
+try{await updateDoc(doc(db,"loans",b.dataset.commissionPaid),{commissionStatus:"paid",commissionAmount:commissionAmount(allLoans.find(l=>l.id===b.dataset.commissionPaid)),commissionPaidAt:new Date().toISOString(),commissionPaidBy:auth.currentUser?.email||""});}
+catch(err){alert("No se pudo actualizar la comisión: "+err.message);}
 });
 }
-
 function getNoticeItems(){
-const today=localDateString(new Date());
-const tomorrow=localDateString(new Date(Date.now()+86400000));
-const out=[];
-allLoans.forEach(loan=>{
-installments(loan).forEach(c=>{
+const today=localDateString(new Date()),tomorrow=localDateString(new Date(Date.now()+86400000)),out=[];
+allLoans.forEach(loan=>installments(loan).forEach(c=>{
 if(c.paid||!c.dueDate)return;
 if(c.dueDate===tomorrow)out.push({type:"tomorrow",title:"Cobro para mañana",detail:`${loan.clientName} · Cuota ${c.number} · ${fmtMoney(c.amount)}`});
 if(c.dueDate<today)out.push({type:"late",title:"Cuota vencida",detail:`${loan.clientName} · Cuota ${c.number} · ${fmtMoney(c.amount)} · Venció ${fmtDate(c.dueDate)}`});
-});
-});
+}));
 return out;
 }
-
 function renderNotifications(){
 const tomorrow=localDateString(new Date(Date.now()+86400000));
 const tomorrowItems=allLoans.flatMap(l=>installments(l).filter(c=>!c.paid&&c.dueDate===tomorrow).map(c=>({loan:l,c})));
 const overdue=allLoans.flatMap(l=>installments(l).filter(isLate).map(c=>({loan:l,c})));
 const upcoming=allLoans.flatMap(l=>installments(l).filter(c=>!c.paid&&c.dueDate>tomorrow).map(c=>({loan:l,c}))).sort((a,b)=>a.c.dueDate.localeCompare(b.c.dueDate));
-
 $("tomorrow-notifications").innerHTML=tomorrowItems.length?tomorrowItems.map(x=>noticeRow(x.loan,x.c,"Mañana")).join(""):'<div class="empty">No hay cuotas que venzan mañana.</div>';
 $("overdue-notifications").innerHTML=overdue.length?overdue.map(x=>noticeRow(x.loan,x.c,"En mora")).join(""):'<div class="empty">No hay cuotas vencidas.</div>';
 $("next-notifications").innerHTML=upcoming.length?upcoming.slice(0,30).map(x=>noticeRow(x.loan,x.c,fmtDate(x.c.dueDate))).join(""):'<div class="empty">No hay próximos vencimientos.</div>';
-
-const count=tomorrowItems.length+overdue.length;
-$("notification-count").textContent=count?`(${count})`:"";
-
-if("Notification"in window){
-$("notification-permission").textContent=Notification.permission==="granted"?"Los avisos del navegador están habilitados.":Notification.permission==="denied"?"El navegador bloqueó los avisos. Podés cambiarlo desde los permisos del sitio.":"Los avisos del navegador todavía no están habilitados.";
-}else{
-$("notification-permission").textContent="Este navegador no admite notificaciones.";
+const count=tomorrowItems.length+overdue.length;$("notification-count").textContent=count?`(${count})`:"";
+if("Notification"in window)$("notification-permission").textContent=Notification.permission==="granted"?"Los avisos del navegador están habilitados.":Notification.permission==="denied"?"El navegador bloqueó los avisos. Podés cambiarlo desde los permisos del sitio.":"Los avisos del navegador todavía no están habilitados.";
+else $("notification-permission").textContent="Este navegador no admite notificaciones.";
 }
-}
-
-function noticeRow(loan,c,label){
-return`
-<div class="payment-row row">
-<div><strong>${esc(loan.clientName)}</strong><div class="muted">${label} · Cuota ${c.number} · DNI ${esc(loan.clientDni)}</div></div>
-<strong>${fmtMoney(c.amount)}</strong>
-</div>`;
-}
-
+function noticeRow(loan,c,label){return `<div class="payment-row row"><div><strong>${esc(loan.clientName)}</strong><div class="muted">${label} · Cuota ${c.number} · DNI ${esc(loan.clientDni)}</div></div><strong>${fmtMoney(c.amount)}</strong></div>`;}
 $("enable-notifications").onclick=async()=>{
-if(!("Notification"in window)){alert("Este navegador no admite notificaciones.");return}
-const permission=await Notification.requestPermission();
-renderNotifications();
+if(!("Notification"in window)){alert("Este navegador no admite notificaciones.");return;}
+const permission=await Notification.requestPermission();renderNotifications();
 if(permission==="granted")new Notification("IB Créditos",{body:"Notificaciones activadas correctamente."});
 };
-
 function checkBrowserNotifications(){
 if(!("Notification"in window)||Notification.permission!=="granted")return;
-const today=localDateString(new Date());
-if(lastNotificationCheck===today)return;
-lastNotificationCheck=today;
+const today=localDateString(new Date());if(lastNotificationCheck===today)return;lastNotificationCheck=today;
 const tomorrow=localDateString(new Date(Date.now()+86400000));
-allLoans.forEach(loan=>{
-installments(loan).forEach(c=>{
+allLoans.forEach(loan=>installments(loan).forEach(c=>{
 if(!c.paid&&c.dueDate===tomorrow){
 const key=`ib-aviso-${loan.id}-${c.number}-${tomorrow}`;
-try{
-if(sessionStorage.getItem(key))return;
-sessionStorage.setItem(key,"1");
-new Notification("IB Créditos · Cobro mañana",{body:`${loan.clientName}: cuota ${c.number} por ${fmtMoney(c.amount)}`});
-}catch(e){console.error("No se pudo mostrar la notificación",e)}
+try{if(sessionStorage.getItem(key))return;sessionStorage.setItem(key,"1");new Notification("IB Créditos · Cobro mañana",{body:`${loan.clientName}: cuota ${c.number} por ${fmtMoney(c.amount)}`});}
+catch(e){console.error("No se pudo mostrar la notificación",e);}
 }
-});
-});
+}));
 }
-
 function startNotificationChecks(){
 if(notificationTimer)clearInterval(notificationTimer);
-notificationTimer=setInterval(()=>{
-if(auth.currentUser)checkBrowserNotifications();
-},60000);
+notificationTimer=setInterval(()=>{if(auth.currentUser)checkBrowserNotifications();},60000);
 }
-
+// CAJA DISPONIBLE
+function cashBalance(){
+return cashMovements.reduce((total,m)=>total+(m.type==="expense"?-Number(m.amount||0):Number(m.amount||0)),0);
+}
+function subscribeCash(){
+if(unsubscribeCash)unsubscribeCash();
+unsubscribeCash=onSnapshot(query(collection(db,"cash_movements"),orderBy("createdAt","desc")),snapshot=>{
+cashMovements=snapshot.docs.map(d=>({id:d.id,...d.data()}));renderCash();
+},error=>{
+console.error("Error de caja:",error);
+$("cash-movements-list").innerHTML='<div class="empty">No se pudo cargar la caja. Revisá los permisos de Firebase.</div>';
+});
+}
+function renderCash(){
+const balance=cashBalance();
+const income=cashMovements.filter(m=>m.type==="income").reduce((s,m)=>s+Number(m.amount||0),0);
+const expenses=cashMovements.filter(m=>m.type==="expense").reduce((s,m)=>s+Number(m.amount||0),0);
+$("cash-balance").textContent=fmtMoney(balance);$("cash-income").textContent=fmtMoney(income);$("cash-expenses").textContent=fmtMoney(expenses);
+const initialExists=cashMovements.some(m=>m.isInitial===true);
+$("cash-initial-button").classList.toggle("hidden",initialExists);
+const term=$("cash-search").value.trim().toLowerCase();
+const filtered=cashMovements.filter(m=>String(m.description||"").toLowerCase().includes(term)||String(m.createdBy||"").toLowerCase().includes(term)||String(m.type||"").toLowerCase().includes(term));
+if(!filtered.length){$("cash-movements-list").innerHTML='<div class="empty">Todavía no hay movimientos registrados.</div>';return;}
+$("cash-movements-list").innerHTML=filtered.map(m=>{
+const expense=m.type==="expense",history=Array.isArray(m.editHistory)?m.editHistory:[];
+return `<div class="item">
+<div class="row"><div><strong>${esc(m.description||"Movimiento")}</strong><div class="muted">${m.isInitial?"Saldo inicial · ":""}${m.createdAt?new Date(m.createdAt).toLocaleString("es-AR"):"Fecha no disponible"}</div></div><strong class="${expense?"red-text":"green-text"}">${expense?"−":"+"}${fmtMoney(m.amount)}</strong></div>
+<p class="muted">Registrado por: ${esc(m.createdBy||"Usuario desconocido")}</p>
+<div class="item-actions"><button class="secondary" data-cash-edit="${m.id}">Modificar movimiento</button></div>
+${history.length?`<details><summary>Ver historial de modificaciones (${history.length})</summary>${history.slice().reverse().map(h=>`
+<div class="payment-row"><strong>Modificación</strong><div class="muted">${h.editedAt?new Date(h.editedAt).toLocaleString("es-AR"):"Fecha no disponible"}</div>
+<div class="muted">Antes: ${h.oldType==="expense"?"Egreso":"Ingreso"} · ${fmtMoney(h.oldAmount)}</div>
+<div class="muted">Después: ${h.newType==="expense"?"Egreso":"Ingreso"} · ${fmtMoney(h.newAmount)}</div>
+<div class="muted">Descripción anterior: ${esc(h.oldDescription)}</div><div class="muted">Descripción nueva: ${esc(h.newDescription)}</div><div class="muted">Modificado por: ${esc(h.editedBy)}</div></div>`).join("")}</details>`:""}
+</div>`;
+}).join("");
+$("cash-movements-list").querySelectorAll("[data-cash-edit]").forEach(b=>b.onclick=()=>editCashMovement(b.dataset.cashEdit));
+}
+function openCashModal(type){
+$("cash-form").reset();$("cash-edit-id").value="";$("cash-type").disabled=false;$("cash-type").value=type;
+$("cash-modal-title").textContent=type==="income"?"Registrar ingreso":"Registrar egreso";
+$("cash-status").textContent="";openModal("cash-modal");
+}
+$("cash-in-button").onclick=()=>openCashModal("income");
+$("cash-out-button").onclick=()=>openCashModal("expense");
+$("cash-initial-button").onclick=()=>{
+if(cashMovements.some(m=>m.isInitial===true)){alert("Ya existe un saldo inicial. Podés modificarlo desde el historial.");return;}
+$("cash-form").reset();$("cash-edit-id").value="";$("cash-type").value="income";$("cash-type").disabled=true;
+$("cash-modal-title").textContent="Configurar saldo inicial";$("cash-description").value="Saldo inicial";$("cash-status").textContent="";openModal("cash-modal");
+};
+function editCashMovement(id){
+const m=cashMovements.find(x=>x.id===id);if(!m)return;
+$("cash-edit-id").value=id;$("cash-type").value=m.type;$("cash-type").disabled=false;
+$("cash-amount").value=m.amount;$("cash-description").value=m.description||"";
+$("cash-modal-title").textContent=m.isInitial?"Modificar saldo inicial":"Modificar movimiento";
+$("cash-status").textContent="";openModal("cash-modal");
+}
+$("cash-form").addEventListener("submit",async e=>{
+e.preventDefault();
+const id=$("cash-edit-id").value,type=$("cash-type").value,amount=Number($("cash-amount").value);
+const description=$("cash-description").value.trim(),status=$("cash-status"),button=$("cash-save-button");
+if(!Number.isFinite(amount)||amount<=0){status.textContent="Ingresá un importe válido.";return;}
+if(!description){status.textContent="Ingresá una descripción.";return;}
+const user=auth.currentUser?.email||"Usuario desconocido",now=new Date().toISOString();
+button.disabled=true;status.textContent="Guardando...";
+try{
+if(id){
+const ref=doc(db,"cash_movements",id);
+await runTransaction(db,async transaction=>{
+const snap=await transaction.get(ref);
+if(!snap.exists())throw new Error("El movimiento ya no existe.");
+const old=snap.data(),history=Array.isArray(old.editHistory)?old.editHistory:[];
+const balanceWithoutThis=cashBalance()+(old.type==="expense"?Number(old.amount||0):-Number(old.amount||0));
+if(type==="expense"&&amount>balanceWithoutThis)throw new Error("El egreso supera el saldo disponible.");
+history.push({oldType:old.type,oldAmount:Number(old.amount||0),oldDescription:old.description||"",newType:type,newAmount:amount,newDescription:description,editedAt:now,editedBy:user});
+transaction.update(ref,{type,amount,description,editHistory:history,updatedAt:now,updatedBy:user});
+});
+}else{
+const isInitial=$("cash-type").disabled;
+if(type==="expense"&&amount>cashBalance())throw new Error("El egreso supera el saldo disponible.");
+if(isInitial&&cashMovements.some(m=>m.isInitial===true))throw new Error("Ya existe un saldo inicial.");
+await addDoc(collection(db,"cash_movements"),{type,amount,description,isInitial,createdAt:now,createdBy:user,updatedAt:null,updatedBy:null,editHistory:[]});
+}
+closeModal("cash-modal");$("cash-form").reset();
+}catch(err){console.error(err);status.textContent="Error al guardar: "+err.message;}
+finally{button.disabled=false;}
+});
+$("cash-search").addEventListener("input",renderCash);
+// RECIBOS
+let currentWaText="";
 function openReceipt(loan){
-const list=installments(loan);
-const paid=list.filter(c=>c.paid).length;
-$("receipt-content").innerHTML=`
-<h2>IB Créditos — Comprobante</h2>
-<p class="muted">Emitido: ${new Date().toLocaleString("es-AR")}</p>
-<p><strong>Cliente:</strong> ${esc(loan.clientName)}</p>
-<p><strong>DNI:</strong> ${esc(loan.clientDni)}</p>
-<hr>
-<p><strong>Capital:</strong> ${fmtMoney(loan.capital)}</p>
-<p><strong>Interés:</strong> ${loan.interestRate??"—"}%</p>
-<p><strong>Total pactado:</strong> ${fmtMoney(loan.totalAmount)}</p>
-<p><strong>Cuotas pagadas:</strong> ${paid}/${list.length}</p>
-<p><strong>Saldo pendiente:</strong> ${fmtMoney(loanBalance(loan))}</p>
-`;
+const list=installments(loan),paid=list.filter(c=>c.paid).length;
+$("receipt-content").innerHTML=`<h2>IB Créditos — Comprobante</h2><p class="muted">Emitido: ${new Date().toLocaleString("es-AR")}</p><p><strong>Cliente:</strong> ${esc(loan.clientName)}</p><p><strong>DNI:</strong> ${esc(loan.clientDni)}</p><hr><p><strong>Capital:</strong> ${fmtMoney(loan.capital)}</p><p><strong>Interés:</strong> ${loan.interestRate??"—"}%</p><p><strong>Total pactado:</strong> ${fmtMoney(loan.totalAmount)}</p><p><strong>Cuotas pagadas:</strong> ${paid}/${list.length}</p><p><strong>Saldo pendiente:</strong> ${fmtMoney(loanBalance(loan))}</p>`;
 currentWaText=`*IB Créditos - Comprobante*\nCliente: ${loan.clientName}\nDNI: ${loan.clientDni}\nCapital: ${fmtMoney(loan.capital)}\nTotal: ${fmtMoney(loan.totalAmount)}\nCuotas pagadas: ${paid}/${list.length}\nSaldo pendiente: ${fmtMoney(loanBalance(loan))}`;
 openModal("receipt-modal");
 }
-
 $("copy-wa").onclick=async()=>{
-try{
-await navigator.clipboard.writeText(currentWaText);
-$("copy-wa").textContent="Copiado";
-setTimeout(()=>$("copy-wa").textContent="Copiar WhatsApp",1600);
-}catch{alert(currentWaText)}
+try{await navigator.clipboard.writeText(currentWaText);$("copy-wa").textContent="Copiado";setTimeout(()=>$("copy-wa").textContent="Copiar WhatsApp",1600);}
+catch{alert(currentWaText);}
 };
-
 $("start-date").valueAsDate=new Date();
 updatePreview();
-
 </script>
 </body>
 </html>
