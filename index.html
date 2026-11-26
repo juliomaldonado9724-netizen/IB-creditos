@@ -1,514 +1,903 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IB Créditos — Gestión de Préstamos</title>
-  <style>
-    :root {
-      --bg: #0f172a;
-      --card: #1e293b;
-      --card-2: #0b1220;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --accent: #22c55e;
-      --accent-hover: #16a34a;
-      --danger: #ef4444;
-      --border: #334155;
-    }
-    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
-    body { margin: 0; background: var(--bg); color: var(--text); padding: 16px; }
-    .container { max-width: 960px; margin: 0 auto; }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    h1, h2, h3 { margin-top: 0; }
-    .muted { color: var(--muted); font-size: 0.9rem; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-    label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 4px; }
-    input, select, textarea {
-      width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);
-      background: var(--card-2); color: var(--text); font-size: 1rem;
-    }
-    button {
-      padding: 10px 14px; border-radius: 8px; border: none; cursor: pointer;
-      font-weight: 600; font-size: 0.95rem; background: var(--accent); color: #052e16;
-    }
-    button:hover { background: var(--accent-hover); }
-    button.secondary { background: #334155; color: var(--text); }
-    button.danger { background: var(--danger); color: #fff; }
-    .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
-    .loan-item { background: var(--card-2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-top: 12px; }
-    .badge { display: inline-block; padding: 3px 8px; border-radius: 999px; font-size: 0.78rem; background: #1e3a8a; color: #bfdbfe; }
-    .badge.ok { background: #14532d; color: #bbf7d0; }
-    .cuota-btn { padding: 6px 10px; font-size: 0.85rem; margin: 4px 4px 0 0; }
-    .thumbs { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
-    .thumbs img { width: 110px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); }
-    .hidden { display: none; }
-    .resumen-box { background: var(--card-2); border-left: 4px solid var(--accent); padding: 12px; border-radius: 8px; margin: 12px 0; }
-    @media print {
-      body { background: #fff; color: #000; padding: 0; }
-      .no-print { display: none !important; }
-      .card, .loan-item { background: #fff; color: #000; border: 1px solid #ccc; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IB Créditos — Gestión de Préstamos</title>
+
+<style>
+:root {
+  --bg:#0f172a;
+  --card:#1e293b;
+  --card2:#0b1220;
+  --text:#f8fafc;
+  --muted:#94a3b8;
+  --accent:#22c55e;
+  --danger:#ef4444;
+  --border:#334155;
+}
+* {box-sizing:border-box;font-family:system-ui,sans-serif}
+body {margin:0;background:var(--bg);color:var(--text);padding:16px}
+.container {max-width:1050px;margin:auto}
+.card {background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:16px}
+h1,h2,h3 {margin-top:0}
+.muted {color:var(--muted);font-size:.88rem}
+.grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+label {display:block;font-size:.85rem;color:var(--muted);margin-bottom:5px}
+input,select,textarea {
+ width:100%;padding:11px;border-radius:8px;border:1px solid var(--border);
+ background:var(--card2);color:var(--text);font-size:1rem
+}
+button {
+ padding:10px 14px;border-radius:8px;border:none;cursor:pointer;
+ font-weight:600;background:var(--accent);color:#052e16
+}
+button.secondary {background:#334155;color:white}
+button.danger {background:var(--danger);color:white}
+button:disabled {opacity:.5;cursor:not-allowed}
+.row {display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.hidden {display:none!important}
+.tabs {display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tab {background:#334155;color:white}
+.tab.active {background:var(--accent);color:#052e16}
+.library-item,.loan-item {
+ background:var(--card2);border:1px solid var(--border);
+ border-radius:10px;padding:15px;margin-top:12px
+}
+.library-item h3 {margin-bottom:5px}
+.badge {display:inline-block;padding:4px 9px;border-radius:20px;background:#1e3a8a;color:#bfdbfe;font-size:.78rem}
+.badge.ok {background:#14532d;color:#bbf7d0}
+.stats {display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:15px 0}
+.stat {background:var(--card2);padding:13px;border-radius:9px}
+.stat strong {display:block;font-size:1.25rem;margin-top:5px}
+.resumen-box {background:var(--card2);border-left:4px solid var(--accent);padding:13px;border-radius:8px;margin:14px 0}
+.cuota-btn {padding:7px 10px;font-size:.83rem;margin:4px 4px 0 0}
+.thumbs {display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.thumbs img {width:110px;height:80px;object-fit:cover;border-radius:8px}
+.client-detail {line-height:1.8}
+@media(max-width:600px) {
+ body {padding:9px}
+ .card {padding:13px}
+ .tabs button {flex:1}
+}
+@media print {
+ body {background:white;color:black;padding:0}
+ .no-print {display:none!important}
+ .card,.loan-item {background:white;color:black}
+}
+</style>
 </head>
+
 <body>
-  <div class="container">
-    <!-- LOGIN -->
-    <div id="auth-section" class="card" style="max-width: 420px; margin: 40px auto;">
-      <h2>IB Créditos</h2>
-      <p class="muted">Iniciá sesión con tu cuenta habilitada para sincronizar préstamos en tiempo real.</p>
-      <form id="login-form">
-        <div style="margin-bottom: 12px;">
-          <label for="login-email">Correo electrónico</label>
-          <input id="login-email" type="email" required autocomplete="email" />
-        </div>
-        <div style="margin-bottom: 14px;">
-          <label for="login-password">Contraseña</label>
-          <input id="login-password" type="password" required autocomplete="current-password" />
-        </div>
-        <button type="submit" style="width: 100%;">Ingresar</button>
-        <p id="auth-error" class="muted" style="color: #fca5a5; margin-top: 10px;"></p>
-      </form>
-    </div>
+<div class="container">
 
-    <!-- APP PRINCIPAL -->
-    <div id="app-section" class="hidden">
-      <div class="card row no-print">
-        <div>
-          <h2 style="margin-bottom: 4px;">IB Créditos</h2>
-          <span id="user-info" class="muted"></span>
-        </div>
-        <button id="logout-btn" class="secondary">Cerrar sesión</button>
-      </div>
+<!-- LOGIN -->
+<div id="auth-section" class="card" style="max-width:420px;margin:40px auto">
+<h2>IB Créditos</h2>
+<p class="muted">Ingresá con tu cuenta habilitada.</p>
+<form id="login-form">
+<label>Correo electrónico</label>
+<input id="login-email" type="email" required>
+<br><br>
+<label>Contraseña</label>
+<input id="login-password" type="password" required>
+<br><br>
+<button style="width:100%">Ingresar</button>
+<p id="auth-error" class="muted"></p>
+</form>
+</div>
 
-      <!-- ALTA / SIMULADOR DE CRÉDITO -->
-      <div class="card no-print">
-        <h3>Nuevo préstamo</h3>
-        <form id="loan-form">
-          <div class="grid">
-            <div>
-              <label for="client-name">Nombre y apellido del cliente *</label>
-              <input id="client-name" type="text" required />
-            </div>
-            <div>
-              <label for="client-dni">DNI del cliente *</label>
-              <input id="client-dni" type="text" required />
-            </div>
-            <div>
-              <label for="client-phone">Teléfono / WhatsApp</label>
-              <input id="client-phone" type="text" />
-            </div>
-            <div>
-              <label for="guarantor-name">Nombre del garante</label>
-              <input id="guarantor-name" type="text" />
-            </div>
-            <div>
-              <label for="guarantor-dni">DNI del garante</label>
-              <input id="guarantor-dni" type="text" />
-            </div>
-            <div>
-              <label for="capital">Capital prestado ($) *</label>
-              <input id="capital" type="number" min="1" step="0.01" required />
-            </div>
-            <div>
-              <label for="months">Plazo (meses) *</label>
-              <select id="months" required>
-                <option value="1">1 mes (40% interés)</option>
-                <option value="2">2 meses (25% mensual acumulado)</option>
-                <option value="3">3 meses (25% mensual acumulado)</option>
-                <option value="4">4 meses (25% mensual acumulado)</option>
-              </select>
-            </div>
-            <div>
-              <label for="start-date">Fecha de inicio *</label>
-              <input id="start-date" type="date" required />
-            </div>
-          </div>
+<!-- APLICACIÓN -->
+<div id="app-section" class="hidden">
 
-          <div class="grid" style="margin-top: 12px;">
-            <div>
-              <label for="dni-photo">Foto DNI (se comprime automáticamente)</label>
-              <input id="dni-photo" type="file" accept="image/*" />
-            </div>
-            <div>
-              <label for="promissory-photo">Foto Pagaré firmado (se comprime automáticamente)</label>
-              <input id="promissory-photo" type="file" accept="image/*" />
-            </div>
-          </div>
+<div class="card row no-print">
+<div>
+<h2 style="margin-bottom:4px">IB Créditos</h2>
+<span id="user-info" class="muted"></span>
+</div>
+<button id="logout-btn" class="secondary">Cerrar sesión</button>
+</div>
 
-          <div class="resumen-box" id="calc-preview">
-            Ingresá un capital para ver el total a devolver y el valor de cada cuota (sin recargos por mora).
-          </div>
+<!-- NAVEGACIÓN -->
+<div class="tabs no-print">
+<button class="tab active" data-tab="library">Biblioteca</button>
+<button class="tab" data-tab="new-client">Nuevo cliente</button>
+<button class="tab" data-tab="new-loan">Nuevo préstamo</button>
+<button class="tab" data-tab="loans">Préstamos</button>
+</div>
 
-          <button type="submit">Guardar préstamo</button>
-          <span id="form-status" class="muted" style="margin-left: 10px;"></span>
-        </form>
-      </div>
+<!-- BIBLIOTECA -->
+<section id="library-section">
+<div class="card">
+<div class="row">
+<div>
+<h2>Biblioteca de clientes</h2>
+<p class="muted">Directorio general de clientes registrados.</p>
+</div>
+<button onclick="showTab('new-client')">+ Nuevo cliente</button>
+</div>
 
-      <!-- LISTADO EN TIEMPO REAL -->
-      <div class="card">
-        <div class="row no-print">
-          <h3 style="margin: 0;">Préstamos registrados</h3>
-          <input id="search-input" type="text" placeholder="Buscar por nombre o DNI..." style="max-width: 260px;" />
-        </div>
-        <div id="loans-list"></div>
-      </div>
-    </div>
-  </div>
+<div class="stats">
+<div class="stat">
+<span class="muted">Clientes registrados</span>
+<strong id="total-clients">0</strong>
+</div>
+<div class="stat">
+<span class="muted">Con préstamos</span>
+<strong id="clients-with-loans">0</strong>
+</div>
+</div>
 
-  <!-- RECIBO MODAL -->
-  <div id="receipt-modal" class="hidden card" style="position: fixed; inset: 16px; z-index: 50; overflow: auto; max-width: 640px; margin: auto; box-shadow: 0 20px 50px rgba(0,0,0,.7);">
-    <div id="receipt-content"></div>
-    <div class="row no-print" style="margin-top: 16px;">
-      <button onclick="window.print()">Imprimir / Guardar PDF</button>
-      <button id="copy-wa-btn" class="secondary">Copiar texto para WhatsApp</button>
-      <button id="close-receipt-btn" class="danger">Cerrar</button>
-    </div>
-  </div>
+<input id="client-search" placeholder="Buscar cliente por nombre o DNI...">
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-    import {
-      getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-    import {
-      getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy
-    } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+<div id="clients-list"></div>
+</div>
+</section>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAJHmfSW2gu3wdjcPWJkQ2jTFNI90Odl9A",
-      authDomain: "ib-creditos.firebaseapp.com",
-      projectId: "ib-creditos",
-      storageBucket: "ib-creditos.firebasestorage.app",
-      messagingSenderId: "732719293947",
-      appId: "1:732719293947:web:b31b5ffa2486de8465175e"
-    };
+<!-- NUEVO CLIENTE -->
+<section id="new-client-section" class="hidden">
+<div class="card">
+<h2>Registrar nuevo cliente</h2>
+<p class="muted">Completá los datos para incorporar una persona a la biblioteca.</p>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+<form id="client-form">
+<div class="grid">
+<div>
+<label>Nombre y apellido *</label>
+<input id="new-name" required>
+</div>
+<div>
+<label>DNI *</label>
+<input id="new-dni" required>
+</div>
+<div>
+<label>Teléfono / WhatsApp</label>
+<input id="new-phone">
+</div>
+<div>
+<label>Dirección</label>
+<input id="new-address">
+</div>
+<div>
+<label>Localidad</label>
+<input id="new-city">
+</div>
+<div>
+<label>Observaciones</label>
+<textarea id="new-notes" rows="2"></textarea>
+</div>
+</div>
+<br>
+<button type="submit">Guardar cliente</button>
+<span id="client-status" class="muted"></span>
+</form>
+</div>
+</section>
 
-    const authSection = document.getElementById("auth-section");
-    const appSection = document.getElementById("app-section");
-    const loginForm = document.getElementById("login-form");
-    const authError = document.getElementById("auth-error");
-    const userInfo = document.getElementById("user-info");
-    const logoutBtn = document.getElementById("logout-btn");
+<!-- NUEVO PRÉSTAMO -->
+<section id="new-loan-section" class="hidden">
+<div class="card">
+<h2>Nuevo préstamo</h2>
 
-    const loanForm = document.getElementById("loan-form");
-    const capitalInput = document.getElementById("capital");
-    const monthsSelect = document.getElementById("months");
-    const startDateInput = document.getElementById("start-date");
-    const calcPreview = document.getElementById("calc-preview");
-    const formStatus = document.getElementById("form-status");
-    const loansList = document.getElementById("loans-list");
-    const searchInput = document.getElementById("search-input");
+<form id="loan-form">
 
-    const receiptModal = document.getElementById("receipt-modal");
-    const receiptContent = document.getElementById("receipt-content");
-    const closeReceiptBtn = document.getElementById("close-receipt-btn");
-    const copyWaBtn = document.getElementById("copy-wa-btn");
+<div class="grid">
+<div>
+<label>Seleccionar cliente *</label>
+<select id="loan-client" required>
+<option value="">Seleccionar cliente...</option>
+</select>
+</div>
+<div>
+<label>Fecha de inicio *</label>
+<input id="start-date" type="date" required>
+</div>
+<div>
+<label>Capital prestado ($) *</label>
+<input id="capital" type="number" min="1" step="0.01" required>
+</div>
+<div>
+<label>Plazo *</label>
+<select id="months">
+<option value="1">1 mes (40% interés)</option>
+<option value="2">2 meses (25% mensual acumulado)</option>
+<option value="3">3 meses (25% mensual acumulado)</option>
+<option value="4">4 meses (25% mensual acumulado)</option>
+</select>
+</div>
+<div>
+<label>Nombre del garante</label>
+<input id="guarantor-name">
+</div>
+<div>
+<label>DNI del garante</label>
+<input id="guarantor-dni">
+</div>
+<div>
+<label>Foto DNI</label>
+<input id="dni-photo" type="file" accept="image/*">
+</div>
+<div>
+<label>Foto pagaré firmado</label>
+<input id="promissory-photo" type="file" accept="image/*">
+</div>
+</div>
 
-    startDateInput.valueAsDate = new Date();
+<div id="selected-client-info" class="resumen-box hidden"></div>
 
-    let allLoans = [];
-    let unsubscribeLoans = null;
-    let currentWaText = "";
+<div id="calc-preview" class="resumen-box">
+Ingresá el capital para calcular el préstamo.
+</div>
 
-    const fmtMoney = (n) =>
-      Number(n || 0).toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+<button type="submit">Guardar préstamo</button>
+<span id="form-status" class="muted"></span>
+</form>
+</div>
+</section>
 
-    // Regla de negocio:
-    // 1 mes -> +40%
-    // 2 a 4 meses -> +25% mensual acumulativo (sin recargos por mora)
-    function calculateLoan(capital, months) {
-      const cap = Number(capital);
-      const m = Number(months);
-      if (!Number.isFinite(cap) || cap <= 0 || !Number.isFinite(m) || m <= 0) return null;
+<!-- PRÉSTAMOS -->
+<section id="loans-section" class="hidden">
+<div class="card">
+<h2>Préstamos registrados</h2>
+<input id="search-input" placeholder="Buscar por cliente o DNI...">
+<div id="loans-list"></div>
+</div>
+</section>
 
-      let rawTotal = 0;
-      if (m === 1) {
-        rawTotal = cap * 1.4;
-      } else {
-        rawTotal = cap;
-        for (let i = 1; i <= m; i++) {
-          rawTotal = rawTotal * 1.25;
-        }
-      }
-      const total = Math.round(rawTotal * 100) / 100;
-      const cuota = Math.round((total / m) * 100) / 100;
-      const interesTotal = Math.round((total - cap) * 100) / 100;
+</div>
+</div>
 
-      return {
-        capital: Math.round(cap * 100) / 100,
-        months: m,
-        interesTotal,
-        total,
-        cuota
-      };
-    }
+<!-- RECIBO -->
+<div id="receipt-modal" class="hidden card" style="position:fixed;inset:16px;z-index:50;overflow:auto;max-width:640px;margin:auto;box-shadow:0 20px 50px #000">
+<div id="receipt-content"></div>
+<div class="row no-print" style="margin-top:16px">
+<button onclick="window.print()">Imprimir / PDF</button>
+<button id="copy-wa-btn" class="secondary">Copiar WhatsApp</button>
+<button id="close-receipt-btn" class="danger">Cerrar</button>
+</div>
+</div>
 
-    function updatePreview() {
-      const res = calculateLoan(capitalInput.value, monthsSelect.value);
-      if (!res) {
-        calcPreview.textContent = "Ingresá un capital para ver el total a devolver y el valor de cada cuota (sin recargos por mora).";
-        return;
-      }
-      const reglaTexto = res.months === 1 ? "40% único (1 mes)" : "25% mensual acumulativo (sin recargos por mora)";
-      calcPreview.innerHTML = `
-        <strong>Regla:</strong> ${reglaTexto}<br/>
-        <strong>Interés total:</strong> $${fmtMoney(res.interesTotal)} |
-        <strong>Total a devolver:</strong> $${fmtMoney(res.total)}<br/>
-        <strong>${res.months} cuota(s) de:</strong> $${fmtMoney(res.cuota)}
-      `;
-    }
+<script type="module">
 
-    capitalInput.addEventListener("input", updatePreview);
-    monthsSelect.addEventListener("change", updatePreview);
+import {initializeApp} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 
-    // Comprime imagen en el navegador para mantener Firestore liviano sin pagar Storage
-    function compressImage(file, maxWidth = 640, quality = 0.55) {
-      return new Promise((resolve, reject) => {
-        if (!file) return resolve("");
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const img = new Image();
-          img.onload = () => {
-            const scale = Math.min(1, maxWidth / (img.width || maxWidth));
-            const canvas = document.createElement("canvas");
-            canvas.width = Math.max(1, Math.round((img.width || maxWidth) * scale));
-            canvas.height = Math.max(1, Math.round((img.height || maxWidth) * scale));
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            resolve(canvas.toDataURL("image/jpeg", quality) || "");
-          };
-          img.onerror = reject;
-          img.src = e.target.result;
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
+import {
+getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      authError.textContent = "";
-      try {
-        await signInWithEmailAndPassword(
-          auth,
-          document.getElementById("login-email").value.trim(),
-          document.getElementById("login-password").value
-        );
-      } catch (err) {
-        authError.textContent = "No se pudo iniciar sesión. Revisá correo y contraseña.";
-      }
-    });
+import {
+getFirestore,collection,addDoc,updateDoc,doc,onSnapshot,query,orderBy,getDocs
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
-    logoutBtn.addEventListener("click", () => signOut(auth));
+const firebaseConfig = {
+apiKey:"AIzaSyAJHmfSW2gu3wdjcPWJkQ2jTFNI90Odl9A",
+authDomain:"ib-creditos.firebaseapp.com",
+projectId:"ib-creditos",
+storageBucket:"ib-creditos.firebasestorage.app",
+messagingSenderId:"732719293947",
+appId:"1:732719293947:web:b31b5ffa2486de8465175e"
+};
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        authSection.classList.add("hidden");
-        appSection.classList.remove("hidden");
-        userInfo.textContent = `Conectado como ${user.email}`;
-        subscribeLoans();
-      } else {
-        authSection.classList.remove("hidden");
-        appSection.classList.add("hidden");
-        if (unsubscribeLoans) unsubscribeLoans();
-      }
-    });
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
 
-    loanForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      formStatus.textContent = "Guardando...";
-      const calc = calculateLoan(capitalInput.value, monthsSelect.value);
-      if (!calc) {
-        formStatus.textContent = "Revisá el capital y el plazo.";
-        return;
-      }
+let allClients=[];
+let allLoans=[];
+let unsubscribeClients=null;
+let unsubscribeLoans=null;
+let currentWaText="";
 
-      const dniFile = document.getElementById("dni-photo").files[0];
-      const promFile = document.getElementById("promissory-photo").files[0];
+const $=id=>document.getElementById(id);
 
-      try {
-        const [dniPhoto, promissoryPhoto] = await Promise.all([
-          compressImage(dniFile),
-          compressImage(promFile)
-        ]);
+const fmtMoney=n=>Number(n||0).toLocaleString("es-AR",{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+});
 
-        const installments = Array.from({ length: calc.months }, (_, idx) => ({
-          number: idx + 1,
-          amount: Number(calc.cuota || 0),
-          paid: false,
-          paidAt: null
-        }));
+function esc(value){
+return String(value??"").replace(/[&<>"']/g,c=>({
+"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
+}
 
-        const loanData = {
-          clientName: String(document.getElementById("client-name").value || "").trim(),
-          clientDni: String(document.getElementById("client-dni").value || "").trim(),
-          clientPhone: String(document.getElementById("client-phone").value || "").trim(),
-          guarantorName: String(document.getElementById("guarantor-name").value || "").trim(),
-          guarantorDni: String(document.getElementById("guarantor-dni").value || "").trim(),
-          startDate: String(startDateInput.value || ""),
-          months: Number(calc.months || 1),
-          capital: Number(calc.capital || 0),
-          interestTotal: Number(calc.interesTotal || 0),
-          totalAmount: Number(calc.total || 0),
-          installmentAmount: Number(calc.cuota || 0),
-          installments,
-          dniPhoto: String(dniPhoto || ""),
-          promissoryPhoto: String(promissoryPhoto || ""),
-          createdBy: String(auth.currentUser?.email || ""),
-          createdAt: Date.now()
-        };
+function showTab(tab){
+["library","new-client","new-loan","loans"].forEach(name=>{
+$(name+"-section").classList.toggle("hidden",name!==tab);
+});
+document.querySelectorAll(".tab").forEach(btn=>{
+btn.classList.toggle("active",btn.dataset.tab===tab);
+});
+}
 
-        await addDoc(collection(db, "loans"), loanData);
+window.showTab=showTab;
 
-        loanForm.reset();
-        startDateInput.valueAsDate = new Date();
-        updatePreview();
-        formStatus.textContent = "¡Préstamo guardado y sincronizado!";
-      } catch (err) {
-        formStatus.textContent = "Error al guardar: " + err.message;
-      }
-    });
+document.querySelectorAll(".tab").forEach(btn=>{
+btn.addEventListener("click",()=>showTab(btn.dataset.tab));
+});
 
-    function subscribeLoans() {
-      const q = query(collection(db, "loans"), orderBy("createdAt", "desc"));
-      unsubscribeLoans = onSnapshot(q, (snapshot) => {
-        allLoans = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
-        renderLoans();
-      });
-    }
+$("start-date").valueAsDate=new Date();
 
-    searchInput.addEventListener("input", renderLoans);
+// AUTENTICACIÓN
 
-    function renderLoans() {
-      const term = searchInput.value.trim().toLowerCase();
-      const filtered = allLoans.filter((l) =>
-        (l.clientName || "").toLowerCase().includes(term) ||
-        (l.clientDni || "").toLowerCase().includes(term)
-      );
+$("login-form").addEventListener("submit",async e=>{
+e.preventDefault();
+$("auth-error").textContent="";
+try{
+await signInWithEmailAndPassword(auth,$("login-email").value.trim(),$("login-password").value);
+}catch(err){
+$("auth-error").textContent="No se pudo iniciar sesión. Revisá tus datos.";
+}
+});
 
-      if (!filtered.length) {
-        loansList.innerHTML = `<p class="muted" style="margin-top: 12px;">No hay préstamos para mostrar.</p>`;
-        return;
-      }
+$("logout-btn").addEventListener("click",()=>signOut(auth));
 
-      loansList.innerHTML = filtered.map((loan) => {
-        const paidCount = (loan.installments || []).filter((c) => c.paid).length;
-        const totalCuotas = (loan.installments || []).length;
-        const saldoRestante = (loan.installments || [])
-          .filter((c) => !c.paid)
-          .reduce((acc, c) => acc + Number(c.amount || 0), 0);
-        const allPaid = paidCount === totalCuotas && totalCuotas > 0;
+onAuthStateChanged(auth,user=>{
+if(user){
+$("auth-section").classList.add("hidden");
+$("app-section").classList.remove("hidden");
+$("user-info").textContent="Conectado como "+user.email;
+subscribeData();
+}else{
+$("auth-section").classList.remove("hidden");
+$("app-section").classList.add("hidden");
+if(unsubscribeClients)unsubscribeClients();
+if(unsubscribeLoans)unsubscribeLoans();
+}
+});
 
-        return `
-          <div class="loan-item">
-            <div class="row">
-              <div>
-                <strong>${loan.clientName}</strong> <span class="muted">DNI: ${loan.clientDni}</span>
-                <div class="muted">
-                  Garante: ${loan.guarantorName || "—"} ${loan.guarantorDni ? `(DNI ${loan.guarantorDni})` : ""}
-                  · Inicio: ${loan.startDate}
-                </div>
-              </div>
-              <span class="badge ${allPaid ? "ok" : ""}">${allPaid ? "Cancelado" : `${paidCount}/${totalCuotas} cuotas`}</span>
-            </div>
+// SUSCRIPCIÓN A FIREBASE
 
-            <div style="margin-top: 8px;">
-              Capital: <strong>$${fmtMoney(loan.capital)}</strong> ·
-              Total: <strong>$${fmtMoney(loan.totalAmount)}</strong> ·
-              Saldo pendiente: <strong>$${fmtMoney(saldoRestante)}</strong> (sin recargos por mora)
-            </div>
+function subscribeData(){
 
-            <div style="margin-top: 10px;">
-              ${(loan.installments || []).map((c, idx) => `
-                <button
-                  class="cuota-btn ${c.paid ? "" : "secondary"}"
-                  data-loan-id="${loan.id}"
-                  data-cuota-idx="${idx}"
-                >
-                  ${c.paid ? "✓" : "○"} Cuota ${c.number} ($${fmtMoney(c.amount)})
-                </button>
-              `).join("")}
-            </div>
+if(unsubscribeClients)unsubscribeClients();
+if(unsubscribeLoans)unsubscribeLoans();
 
-            ${(loan.dniPhoto || loan.promissoryPhoto) ? `
-              <div class="thumbs">
-                ${loan.dniPhoto ? `<img src="${loan.dniPhoto}" alt="DNI" />` : ""}
-                ${loan.promissoryPhoto ? `<img src="${loan.promissoryPhoto}" alt="Pagaré" />` : ""}
-              </div>
-            ` : ""}
+unsubscribeClients=onSnapshot(
+query(collection(db,"clients"),orderBy("createdAt","desc")),
+snapshot=>{
+allClients=snapshot.docs.map(d=>({id:d.id,...d.data()}));
+renderClients();
+updateClientSelector();
+},
+error=>console.error("Error clientes:",error)
+);
 
-            <div class="no-print" style="margin-top: 12px;">
-              <button class="secondary" data-receipt-id="${loan.id}">Ver / Imprimir recibo</button>
-            </div>
-          </div>
-        `;
-      }).join("");
+unsubscribeLoans=onSnapshot(
+query(collection(db,"loans"),orderBy("createdAt","desc")),
+snapshot=>{
+allLoans=snapshot.docs.map(d=>({id:d.id,...d.data()}));
+renderClients();
+renderLoans();
+},
+error=>console.error("Error préstamos:",error)
+);
+}
 
-      loansList.querySelectorAll("[data-loan-id]").forEach((btn) => {
-        btn.addEventListener("click", async () => {
-          const loanId = btn.getAttribute("data-loan-id");
-          const cuotaIdx = Number(btn.getAttribute("data-cuota-idx"));
-          const loan = allLoans.find((x) => x.id === loanId);
-          if (!loan) return;
+// CLIENTES
 
-          const updated = loan.installments.map((c, i) =>
-            i === cuotaIdx ? { ...c, paid: !c.paid, paidAt: !c.paid ? new Date().toISOString() : null } : c
-          );
-          await updateDoc(doc(db, "loans", loanId), { installments: updated });
-        });
-      });
+function getClients(){
 
-      loansList.querySelectorAll("[data-receipt-id]").forEach((btn) => {
-        btn.addEventListener("click", () => openReceipt(btn.getAttribute("data-receipt-id")));
-      });
-    }
+const map=new Map();
 
-    function openReceipt(loanId) {
-      const loan = allLoans.find((x) => x.id === loanId);
-      if (!loan) return;
+allClients.forEach(c=>{
+map.set(String(c.dni),c);
+});
 
-      const paidCuotas = (loan.installments || []).filter((c) => c.paid);
-      const saldo = (loan.installments || [])
-        .filter((c) => !c.paid)
-        .reduce((acc, c) => acc + Number(c.amount || 0), 0);
+// Compatibilidad con préstamos anteriores:
+// los clientes antiguos aparecen en la biblioteca
+// aunque todavía no estén en la colección clients.
 
-      receiptContent.innerHTML = `
-        <h2>IB Créditos — Comprobante de Préstamo</h2>
-        <p class="muted">Emitido: ${new Date().toLocaleString("es-AR")}</p>
-        <p><strong>Cliente:</strong> ${loan.clientName} (DNI: ${loan.clientDni})</p>
-        <p><strong>Garante:</strong> ${loan.guarantorName || "No especificado"} ${loan.guarantorDni ? `(DNI: ${loan.guarantorDni})` : ""}</p>
-        <p><strong>Plazo:</strong> ${loan.months} mes(es) · <strong>Sin recargos por mora</strong></p>
-        <p><strong>Capital:</strong> $${fmtMoney(loan.capital)} · <strong>Total pactado:</strong> $${fmtMoney(loan.totalAmount)}</p>
-        <p><strong>Cuotas abonadas:</strong> ${paidCuotas.length} de ${(loan.installments || []).length} · <strong>Saldo restante:</strong> $${fmtMoney(saldo)}</p>
-      `;
+allLoans.forEach(l=>{
+const dni=String(l.clientDni||"");
+if(!dni)return;
 
-      currentWaText =
-        `*IB Créditos - Comprobante*\n` +
-        `Cliente: ${loan.clientName} (DNI ${loan.clientDni})\n` +
-        `Plazo: ${loan.months} mes(es) (sin recargos por mora)\n` +
-        `Total: $${fmtMoney(loan.totalAmount)}\n` +
-        `Cuotas pagas: ${paidCuotas.length}/${(loan.installments || []).length}\n` +
-        `Saldo pendiente: $${fmtMoney(saldo)}`;
+if(!map.has(dni)){
+map.set(dni,{
+id:null,
+name:l.clientName||"Sin nombre",
+dni:dni,
+phone:l.clientPhone||"",
+address:"",
+city:"",
+notes:"",
+legacy:true
+});
+}
+});
 
-      receiptModal.classList.remove("hidden");
-    }
+return Array.from(map.values());
+}
 
-    closeReceiptBtn.addEventListener("click", () => receiptModal.classList.add("hidden"));
+$("client-form").addEventListener("submit",async e=>{
+e.preventDefault();
 
-    copyWaBtn.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(currentWaText);
-        copyWaBtn.textContent = "¡Copiado!";
-        setTimeout(() => (copyWaBtn.textContent = "Copiar texto para WhatsApp"), 1800);
-      } catch {
-        alert(currentWaText);
-      }
-    });
-  </script>
+const status=$("client-status");
+status.textContent="Guardando...";
+
+const client={
+name:$("new-name").value.trim(),
+dni:$("new-dni").value.trim(),
+phone:$("new-phone").value.trim(),
+address:$("new-address").value.trim(),
+city:$("new-city").value.trim(),
+notes:$("new-notes").value.trim(),
+createdAt:Date.now(),
+createdBy:auth.currentUser?.email||""
+};
+
+try{
+
+const existing=allClients.find(c=>String(c.dni)===client.dni);
+
+if(existing){
+status.textContent="Ya existe un cliente con ese DNI.";
+return;
+}
+
+await addDoc(collection(db,"clients"),client);
+
+$("client-form").reset();
+status.textContent="Cliente guardado correctamente.";
+
+showTab("library");
+
+}catch(err){
+status.textContent="Error al guardar: "+err.message;
+}
+});
+
+function renderClients(){
+
+const clients=getClients();
+const term=$("client-search").value.trim().toLowerCase();
+
+const filtered=clients.filter(c=>
+(c.name||"").toLowerCase().includes(term)||
+(c.dni||"").toLowerCase().includes(term)
+);
+
+$("total-clients").textContent=clients.length;
+
+$("clients-with-loans").textContent=clients.filter(c=>
+allLoans.some(l=>String(l.clientDni)===String(c.dni))
+).length;
+
+if(!filtered.length){
+$("clients-list").innerHTML='<p class="muted">No se encontraron clientes.</p>';
+return;
+}
+
+$("clients-list").innerHTML=filtered.map(c=>{
+
+const loans=allLoans.filter(l=>String(l.clientDni)===String(c.dni));
+
+const balance=loans.reduce((sum,l)=>{
+return sum+(l.installments||[])
+.filter(x=>!x.paid)
+.reduce((s,x)=>s+Number(x.amount||0),0);
+},0);
+
+return `
+<div class="library-item">
+<div class="row">
+<div>
+<h3>${esc(c.name)}</h3>
+<div class="muted">DNI: ${esc(c.dni)}</div>
+</div>
+<span class="badge">${loans.length} préstamo(s)</span>
+</div>
+
+<div class="client-detail">
+<div>📞 ${esc(c.phone||"Sin teléfono")}</div>
+<div>📍 ${esc([c.address,c.city].filter(Boolean).join(", ")||"Sin dirección")}</div>
+<div>💰 Saldo pendiente: <strong>$${fmtMoney(balance)}</strong></div>
+</div>
+
+${c.notes?`<p class="muted">Observaciones: ${esc(c.notes)}</p>`:""}
+
+<div class="row no-print" style="margin-top:10px">
+<button class="secondary" data-client-loans="${esc(c.dni)}">Ver préstamos</button>
+<button data-new-loan="${esc(c.dni)}">Nuevo préstamo</button>
+</div>
+</div>
+`;
+}).join("");
+
+$("clients-list").querySelectorAll("[data-client-loans]").forEach(btn=>{
+btn.addEventListener("click",()=>{
+$("search-input").value=btn.dataset.clientLoans;
+showTab("loans");
+renderLoans();
+});
+});
+
+$("clients-list").querySelectorAll("[data-new-loan]").forEach(btn=>{
+btn.addEventListener("click",()=>{
+showTab("new-loan");
+$("loan-client").value=btn.dataset.newLoan;
+updateSelectedClient();
+});
+});
+
+}
+
+$("client-search").addEventListener("input",renderClients);
+
+// SELECTOR DE CLIENTES
+
+function updateClientSelector(){
+
+const clients=getClients();
+const select=$("loan-client");
+const current=select.value;
+
+select.innerHTML='<option value="">Seleccionar cliente...</option>';
+
+clients.forEach(c=>{
+const option=document.createElement("option");
+option.value=c.dni;
+option.textContent=c.name+" — DNI "+c.dni;
+select.appendChild(option);
+});
+
+if(clients.some(c=>String(c.dni)===String(current))){
+select.value=current;
+}
+
+updateSelectedClient();
+}
+
+$("loan-client").addEventListener("change",updateSelectedClient);
+
+function updateSelectedClient(){
+
+const client=getClients().find(c=>
+String(c.dni)===$("loan-client").value
+);
+
+const info=$("selected-client-info");
+
+if(!client){
+info.classList.add("hidden");
+return;
+}
+
+info.classList.remove("hidden");
+info.innerHTML=`
+<strong>Cliente seleccionado</strong><br>
+${esc(client.name)}<br>
+DNI: ${esc(client.dni)}<br>
+Teléfono: ${esc(client.phone||"No informado")}
+`;
+}
+
+// CÁLCULO DE PRÉSTAMOS
+
+function calculateLoan(capital,months){
+
+const cap=Number(capital);
+const m=Number(months);
+
+if(!Number.isFinite(cap)||cap<=0||!Number.isFinite(m)||m<=0)return null;
+
+let total=cap;
+
+if(m===1){
+total=cap*1.4;
+}else{
+for(let i=1;i<=m;i++)total*=1.25;
+}
+
+total=Math.round(total*100)/100;
+
+return{
+capital:Math.round(cap*100)/100,
+months:m,
+total,
+interest:Math.round((total-cap)*100)/100,
+installment:Math.round(total/m*100)/100
+};
+}
+
+function updatePreview(){
+
+const calc=calculateLoan($("capital").value,$("months").value);
+
+if(!calc){
+$("calc-preview").textContent="Ingresá un capital para calcular el préstamo.";
+return;
+}
+
+$("calc-preview").innerHTML=`
+<strong>Interés total:</strong> $${fmtMoney(calc.interest)}<br>
+<strong>Total a devolver:</strong> $${fmtMoney(calc.total)}<br>
+<strong>${calc.months} cuota(s) de:</strong> $${fmtMoney(calc.installment)}
+`;
+}
+
+$("capital").addEventListener("input",updatePreview);
+$("months").addEventListener("change",updatePreview);
+
+// COMPRESIÓN DE IMÁGENES
+
+function compressImage(file,maxWidth=640,quality=.55){
+
+return new Promise((resolve,reject)=>{
+
+if(!file)return resolve("");
+
+const reader=new FileReader();
+
+reader.onload=e=>{
+const img=new Image();
+
+img.onload=()=>{
+const scale=Math.min(1,maxWidth/img.width);
+const canvas=document.createElement("canvas");
+
+canvas.width=Math.max(1,Math.round(img.width*scale));
+canvas.height=Math.max(1,Math.round(img.height*scale));
+
+canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
+
+resolve(canvas.toDataURL("image/jpeg",quality));
+};
+
+img.onerror=reject;
+img.src=e.target.result;
+};
+
+reader.onerror=reject;
+reader.readAsDataURL(file);
+
+});
+}
+
+// GUARDAR PRÉSTAMO
+
+$("loan-form").addEventListener("submit",async e=>{
+
+e.preventDefault();
+
+const status=$("form-status");
+status.textContent="Guardando...";
+
+const client=getClients().find(c=>
+String(c.dni)===$("loan-client").value
+);
+
+const calc=calculateLoan($("capital").value,$("months").value);
+
+if(!client||!calc){
+status.textContent="Seleccioná un cliente e ingresá un capital válido.";
+return;
+}
+
+try{
+
+const [dniPhoto,promissoryPhoto]=await Promise.all([
+compressImage($("dni-photo").files[0]),
+compressImage($("promissory-photo").files[0])
+]);
+
+const installments=Array.from({length:calc.months},(_,i)=>({
+number:i+1,
+amount:calc.installment,
+paid:false,
+paidAt:null
+}));
+
+const loanData={
+
+clientName:client.name,
+clientDni:client.dni,
+clientPhone:client.phone||"",
+
+guarantorName:$("guarantor-name").value.trim(),
+guarantorDni:$("guarantor-dni").value.trim(),
+
+startDate:$("start-date").value,
+months:calc.months,
+
+capital:calc.capital,
+interestTotal:calc.interest,
+totalAmount:calc.total,
+installmentAmount:calc.installment,
+
+installments,
+
+dniPhoto,
+promissoryPhoto,
+
+createdBy:auth.currentUser?.email||"",
+createdAt:Date.now()
+
+};
+
+await addDoc(collection(db,"loans"),loanData);
+
+$("loan-form").reset();
+$("start-date").valueAsDate=new Date();
+$("selected-client-info").classList.add("hidden");
+updatePreview();
+
+status.textContent="Préstamo guardado correctamente.";
+
+showTab("loans");
+
+}catch(err){
+status.textContent="Error: "+err.message;
+}
+
+});
+
+// LISTADO DE PRÉSTAMOS
+
+$("search-input").addEventListener("input",renderLoans);
+
+function renderLoans(){
+
+const term=$("search-input").value.trim().toLowerCase();
+
+const filtered=allLoans.filter(l=>
+(l.clientName||"").toLowerCase().includes(term)||
+String(l.clientDni||"").toLowerCase().includes(term)
+);
+
+if(!filtered.length){
+$("loans-list").innerHTML='<p class="muted">No hay préstamos para mostrar.</p>';
+return;
+}
+
+$("loans-list").innerHTML=filtered.map(loan=>{
+
+const installments=loan.installments||[];
+
+const paid=installments.filter(c=>c.paid).length;
+const total=installments.length;
+
+const balance=installments.filter(c=>!c.paid)
+.reduce((s,c)=>s+Number(c.amount||0),0);
+
+const allPaid=paid===total&&total>0;
+
+return `
+<div class="loan-item">
+
+<div class="row">
+<div>
+<strong>${esc(loan.clientName)}</strong>
+<div class="muted">DNI: ${esc(loan.clientDni)}</div>
+<div class="muted">Inicio: ${esc(loan.startDate)}</div>
+</div>
+<span class="badge ${allPaid?"ok":""}">
+${allPaid?"Cancelado":paid+"/"+total+" cuotas"}
+</span>
+</div>
+
+<p>
+Capital: <strong>$${fmtMoney(loan.capital)}</strong><br>
+Total: <strong>$${fmtMoney(loan.totalAmount)}</strong><br>
+Saldo pendiente: <strong>$${fmtMoney(balance)}</strong>
+</p>
+
+<div>
+${installments.map((c,i)=>`
+<button class="cuota-btn ${c.paid?"":"secondary"}"
+data-loan-id="${loan.id}" data-cuota-idx="${i}">
+${c.paid?"✓":"○"} Cuota ${c.number} ($${fmtMoney(c.amount)})
+</button>
+`).join("")}
+</div>
+
+${loan.dniPhoto||loan.promissoryPhoto?`
+<div class="thumbs">
+${loan.dniPhoto?`<img src="${loan.dniPhoto}" alt="DNI">`:""}
+${loan.promissoryPhoto?`<img src="${loan.promissoryPhoto}" alt="Pagaré">`:""}
+</div>`:""}
+
+<div class="no-print" style="margin-top:12px">
+<button class="secondary" data-receipt-id="${loan.id}">Ver / Imprimir recibo</button>
+</div>
+
+</div>
+`;
+
+}).join("");
+
+$("loans-list").querySelectorAll("[data-loan-id]").forEach(btn=>{
+
+btn.addEventListener("click",async()=>{
+
+const loan=allLoans.find(x=>x.id===btn.dataset.loanId);
+if(!loan)return;
+
+const idx=Number(btn.dataset.cuotaIdx);
+
+const updated=loan.installments.map((c,i)=>
+i===idx?{
+...c,
+paid:!c.paid,
+paidAt:!c.paid?new Date().toISOString():null
+}:c
+);
+
+try{
+await updateDoc(doc(db,"loans",loan.id),{installments:updated});
+}catch(err){
+alert("No se pudo actualizar la cuota: "+err.message);
+}
+
+});
+
+});
+
+$("loans-list").querySelectorAll("[data-receipt-id]").forEach(btn=>{
+btn.addEventListener("click",()=>openReceipt(btn.dataset.receiptId));
+});
+
+}
+
+// RECIBOS
+
+function openReceipt(id){
+
+const loan=allLoans.find(x=>x.id===id);
+if(!loan)return;
+
+const installments=loan.installments||[];
+const paid=installments.filter(c=>c.paid).length;
+
+const balance=installments.filter(c=>!c.paid)
+.reduce((s,c)=>s+Number(c.amount||0),0);
+
+$("receipt-content").innerHTML=`
+
+<h2>IB Créditos — Comprobante</h2>
+
+<p class="muted">Emitido: ${new Date().toLocaleString("es-AR")}</p>
+
+<p><strong>Cliente:</strong> ${esc(loan.clientName)}</p>
+<p><strong>DNI:</strong> ${esc(loan.clientDni)}</p>
+<p><strong>Garante:</strong> ${esc(loan.guarantorName||"No especificado")}</p>
+<p><strong>Plazo:</strong> ${loan.months} mes(es)</p>
+
+<hr>
+
+<p><strong>Capital:</strong> $${fmtMoney(loan.capital)}</p>
+<p><strong>Total pactado:</strong> $${fmtMoney(loan.totalAmount)}</p>
+<p><strong>Cuotas abonadas:</strong> ${paid}/${installments.length}</p>
+<p><strong>Saldo pendiente:</strong> $${fmtMoney(balance)}</p>
+
+`;
+
+currentWaText=
+`*IB Créditos - Comprobante*\n`+
+`Cliente: ${loan.clientName}\n`+
+`DNI: ${loan.clientDni}\n`+
+`Total: $${fmtMoney(loan.totalAmount)}\n`+
+`Cuotas pagas: ${paid}/${installments.length}\n`+
+`Saldo pendiente: $${fmtMoney(balance)}`;
+
+$("receipt-modal").classList.remove("hidden");
+
+}
+
+$("close-receipt-btn").addEventListener("click",()=>{
+$("receipt-modal").classList.add("hidden");
+});
+
+$("copy-wa-btn").addEventListener("click",async()=>{
+try{
+await navigator.clipboard.writeText(currentWaText);
+$("copy-wa-btn").textContent="¡Copiado!";
+setTimeout(()=>$("copy-wa-btn").textContent="Copiar WhatsApp",1800);
+}catch{
+alert(currentWaText);
+}
+});
+
+</script>
 </body>
 </html>
