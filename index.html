@@ -224,22 +224,28 @@
     function calculateLoan(capital, months) {
       const cap = Number(capital);
       const m = Number(months);
-      if (!cap || cap <= 0 || !m) return null;
+      if (!Number.isFinite(cap) || cap <= 0 || !Number.isFinite(m) || m <= 0) return null;
 
-      let total = 0;
+      let rawTotal = 0;
       if (m === 1) {
-        total = cap * 1.4;
+        rawTotal = cap * 1.4;
       } else {
-        total = cap;
+        rawTotal = cap;
         for (let i = 1; i <= m; i++) {
-          total = total * 1.25;
+          rawTotal = rawTotal * 1.25;
         }
       }
-      total = Math.round(total * 100) / 100;
+      const total = Math.round(rawTotal * 100) / 100;
       const cuota = Math.round((total / m) * 100) / 100;
       const interesTotal = Math.round((total - cap) * 100) / 100;
 
-      return { capital: cap, months: m, interesTotal, total, cuota };
+      return {
+        capital: Math.round(cap * 100) / 100,
+        months: m,
+        interesTotal,
+        total,
+        cuota
+      };
     }
 
     function updatePreview() {
@@ -261,20 +267,20 @@
     monthsSelect.addEventListener("change", updatePreview);
 
     // Comprime imagen en el navegador para mantener Firestore liviano sin pagar Storage
-    function compressImage(file, maxWidth = 800, quality = 0.65) {
+    function compressImage(file, maxWidth = 640, quality = 0.55) {
       return new Promise((resolve, reject) => {
         if (!file) return resolve("");
         const reader = new FileReader();
         reader.onload = (e) => {
           const img = new Image();
           img.onload = () => {
-            const scale = Math.min(1, maxWidth / img.width);
+            const scale = Math.min(1, maxWidth / (img.width || maxWidth));
             const canvas = document.createElement("canvas");
-            canvas.width = Math.round(img.width * scale);
-            canvas.height = Math.round(img.height * scale);
+            canvas.width = Math.max(1, Math.round((img.width || maxWidth) * scale));
+            canvas.height = Math.max(1, Math.round((img.height || maxWidth) * scale));
             const ctx = canvas.getContext("2d");
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            resolve(canvas.toDataURL("image/jpeg", quality));
+            resolve(canvas.toDataURL("image/jpeg", quality) || "");
           };
           img.onerror = reject;
           img.src = e.target.result;
@@ -317,7 +323,10 @@
       e.preventDefault();
       formStatus.textContent = "Guardando...";
       const calc = calculateLoan(capitalInput.value, monthsSelect.value);
-      if (!calc) return;
+      if (!calc) {
+        formStatus.textContent = "Revisá el capital y el plazo.";
+        return;
+      }
 
       const dniFile = document.getElementById("dni-photo").files[0];
       const promFile = document.getElementById("promissory-photo").files[0];
@@ -330,29 +339,31 @@
 
         const installments = Array.from({ length: calc.months }, (_, idx) => ({
           number: idx + 1,
-          amount: calc.cuota,
+          amount: Number(calc.cuota || 0),
           paid: false,
           paidAt: null
         }));
 
-        await addDoc(collection(db, "loans"), {
-          clientName: document.getElementById("client-name").value.trim(),
-          clientDni: document.getElementById("client-dni").value.trim(),
-          clientPhone: document.getElementById("client-phone").value.trim(),
-          guarantorName: document.getElementById("guarantor-name").value.trim(),
-          guarantorDni: document.getElementById("guarantor-dni").value.trim(),
-          startDate: startDateInput.value,
-          months: calc.months,
-          capital: calc.capital,
-          interestTotal: calc.interestTotal,
-          totalAmount: calc.total,
-          installmentAmount: calc.cuota,
+        const loanData = {
+          clientName: String(document.getElementById("client-name").value || "").trim(),
+          clientDni: String(document.getElementById("client-dni").value || "").trim(),
+          clientPhone: String(document.getElementById("client-phone").value || "").trim(),
+          guarantorName: String(document.getElementById("guarantor-name").value || "").trim(),
+          guarantorDni: String(document.getElementById("guarantor-dni").value || "").trim(),
+          startDate: String(startDateInput.value || ""),
+          months: Number(calc.months || 1),
+          capital: Number(calc.capital || 0),
+          interestTotal: Number(calc.interesTotal || 0),
+          totalAmount: Number(calc.total || 0),
+          installmentAmount: Number(calc.cuota || 0),
           installments,
-          dniPhoto,
-          promissoryPhoto,
-          createdBy: auth.currentUser?.email || "",
+          dniPhoto: String(dniPhoto || ""),
+          promissoryPhoto: String(promissoryPhoto || ""),
+          createdBy: String(auth.currentUser?.email || ""),
           createdAt: Date.now()
-        });
+        };
+
+        await addDoc(collection(db, "loans"), loanData);
 
         loanForm.reset();
         startDateInput.valueAsDate = new Date();
