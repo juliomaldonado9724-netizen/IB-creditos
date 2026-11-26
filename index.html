@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IB Créditos — Gestión de Préstamos</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --card-2: #0b1220;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #22c55e;
+      --accent-hover: #16a34a;
+      --danger: #ef4444;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+    body { margin: 0; background: var(--bg); color: var(--text); padding: 16px; }
+    .container { max-width: 960px; margin: 0 auto; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    h1, h2, h3 { margin-top: 0; }
+    .muted { color: var(--muted); font-size: 0.9rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 4px; }
+    input, select, textarea {
+      width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);
+      background: var(--card-2); color: var(--text); font-size: 1rem;
+    }
+    button {
+      padding: 10px 14px; border-radius: 8px; border: none; cursor: pointer;
+      font-weight: 600; font-size: 0.95rem; background: var(--accent); color: #052e16;
+    }
+    button:hover { background: var(--accent-hover); }
+    button.secondary { background: #334155; color: var(--text); }
+    button.danger { background: var(--danger); color: #fff; }
+    .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+    .loan-item { background: var(--card-2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-top: 12px; }
+    .badge { display: inline-block; padding: 3px 8px; border-radius: 999px; font-size: 0.78rem; background: #1e3a8a; color: #bfdbfe; }
+    .badge.ok { background: #14532d; color: #bbf7d0; }
+    .cuota-btn { padding: 6px 10px; font-size: 0.85rem; margin: 4px 4px 0 0; }
+    .thumbs { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+    .thumbs img { width: 110px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); }
+    .hidden { display: none; }
+    .resumen-box { background: var(--card-2); border-left: 4px solid var(--accent); padding: 12px; border-radius: 8px; margin: 12px 0; }
+    @media print {
+      body { background: #fff; color: #000; padding: 0; }
+      .no-print { display: none !important; }
+      .card, .loan-item { background: #fff; color: #000; border: 1px solid #ccc; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- LOGIN -->
+    <div id="auth-section" class="card" style="max-width: 420px; margin: 40px auto;">
+      <h2>IB Créditos</h2>
+      <p class="muted">Iniciá sesión con tu cuenta habilitada para sincronizar préstamos en tiempo real.</p>
+      <form id="login-form">
+        <div style="margin-bottom: 12px;">
+          <label for="login-email">Correo electrónico</label>
+          <input id="login-email" type="email" required autocomplete="email" />
+        </div>
+        <div style="margin-bottom: 14px;">
+          <label for="login-password">Contraseña</label>
+          <input id="login-password" type="password" required autocomplete="current-password" />
+        </div>
+        <button type="submit" style="width: 100%;">Ingresar</button>
+        <p id="auth-error" class="muted" style="color: #fca5a5; margin-top: 10px;"></p>
+      </form>
+    </div>
+
+    <!-- APP PRINCIPAL -->
+    <div id="app-section" class="hidden">
+      <div class="card row no-print">
+        <div>
+          <h2 style="margin-bottom: 4px;">IB Créditos</h2>
+          <span id="user-info" class="muted"></span>
+        </div>
+        <button id="logout-btn" class="secondary">Cerrar sesión</button>
+      </div>
+
+      <!-- ALTA / SIMULADOR DE CRÉDITO -->
+      <div class="card no-print">
+        <h3>Nuevo préstamo</h3>
+        <form id="loan-form">
+          <div class="grid">
+            <div>
+              <label for="client-name">Nombre y apellido del cliente *</label>
+              <input id="client-name" type="text" required />
+            </div>
+            <div>
+              <label for="client-dni">DNI del cliente *</label>
+              <input id="client-dni" type="text" required />
+            </div>
+            <div>
+              <label for="client-phone">Teléfono / WhatsApp</label>
+              <input id="client-phone" type="text" />
+            </div>
+            <div>
+              <label for="guarantor-name">Nombre del garante</label>
+              <input id="guarantor-name" type="text" />
+            </div>
+            <div>
+              <label for="guarantor-dni">DNI del garante</label>
+              <input id="guarantor-dni" type="text" />
+            </div>
+            <div>
+              <label for="capital">Capital prestado ($) *</label>
+              <input id="capital" type="number" min="1" step="0.01" required />
+            </div>
+            <div>
+              <label for="months">Plazo (meses) *</label>
+              <select id="months" required>
+                <option value="1">1 mes (40% interés)</option>
+                <option value="2">2 meses (25% mensual acumulado)</option>
+                <option value="3">3 meses (25% mensual acumulado)</option>
+                <option value="4">4 meses (25% mensual acumulado)</option>
+              </select>
+            </div>
+            <div>
+              <label for="start-date">Fecha de inicio *</label>
+              <input id="start-date" type="date" required />
+            </div>
+          </div>
+
+          <div class="grid" style="margin-top: 12px;">
+            <div>
+              <label for="dni-photo">Foto DNI (se comprime automáticamente)</label>
+              <input id="dni-photo" type="file" accept="image/*" />
+            </div>
+            <div>
+              <label for="promissory-photo">Foto Pagaré firmado (se comprime automáticamente)</label>
+              <input id="promissory-photo" type="file" accept="image/*" />
+            </div>
+          </div>
+
+          <div class="resumen-box" id="calc-preview">
+            Ingresá un capital para ver el total a devolver y el valor de cada cuota (sin recargos por mora).
+          </div>
+
+          <button type="submit">Guardar préstamo</button>
+          <span id="form-status" class="muted" style="margin-left: 10px;"></span>
+        </form>
+      </div>
+
+      <!-- LISTADO EN TIEMPO REAL -->
+      <div class="card">
+        <div class="row no-print">
+          <h3 style="margin: 0;">Préstamos registrados</h3>
+          <input id="search-input" type="text" placeholder="Buscar por nombre o DNI..." style="max-width: 260px;" />
+        </div>
+        <div id="loans-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECIBO MODAL -->
+  <div id="receipt-modal" class="hidden card" style="position: fixed; inset: 16px; z-index: 50; overflow: auto; max-width: 640px; margin: auto; box-shadow: 0 20px 50px rgba(0,0,0,.7);">
+    <div id="receipt-content"></div>
+    <div class="row no-print" style="margin-top: 16px;">
+      <button onclick="window.print()">Imprimir / Guardar PDF</button>
+      <button id="copy-wa-btn" class="secondary">Copiar texto para WhatsApp</button>
+      <button id="close-receipt-btn" class="danger">Cerrar</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import {
+      getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+    import {
+      getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy
+    } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAJHmfSW2gu3wdjcPWJkQ2jTFNI90Odl9A",
+      authDomain: "ib-creditos.firebaseapp.com",
+      projectId: "ib-creditos",
+      storageBucket: "ib-creditos.firebasestorage.app",
+      messagingSenderId: "732719293947",
+      appId: "1:732719293947:web:b31b5ffa2486de8465175e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const authSection = document.getElementById("auth-section");
+    const appSection = document.getElementById("app-section");
+    const loginForm = document.getElementById("login-form");
+    const authError = document.getElementById("auth-error");
+    const userInfo = document.getElementById("user-info");
+    const logoutBtn = document.getElementById("logout-btn");
+
+    const loanForm = document.getElementById("loan-form");
+    const capitalInput = document.getElementById("capital");
+    const monthsSelect = document.getElementById("months");
+    const startDateInput = document.getElementById("start-date");
+    const calcPreview = document.getElementById("calc-preview");
+    const formStatus = document.getElementById("form-status");
+    const loansList = document.getElementById("loans-list");
+    const searchInput = document.getElementById("search-input");
+
+    const receiptModal = document.getElementById("receipt-modal");
+    const receiptContent = document.getElementById("receipt-content");
+    const closeReceiptBtn = document.getElementById("close-receipt-btn");
+    const copyWaBtn = document.getElementById("copy-wa-btn");
+
+    startDateInput.valueAsDate = new Date();
+
+    let allLoans = [];
+    let unsubscribeLoans = null;
+    let currentWaText = "";
+
+    const fmtMoney = (n) =>
+      Number(n || 0).toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    // Regla de negocio:
+    // 1 mes -> +40%
+    // 2 a 4 meses -> +25% mensual acumulativo (sin recargos por mora)
+    function calculateLoan(capital, months) {
+      const cap = Number(capital);
+      const m = Number(months);
+      if (!cap || cap <= 0 || !m) return null;
+
+      let total = 0;
+      if (m === 1) {
+        total = cap * 1.4;
+      } else {
+        total = cap;
+        for (let i = 1; i <= m; i++) {
+          total = total * 1.25;
+        }
+      }
+      total = Math.round(total * 100) / 100;
+      const cuota = Math.round((total / m) * 100) / 100;
+      const interesTotal = Math.round((total - cap) * 100) / 100;
+
+      return { capital: cap, months: m, interesTotal, total, cuota };
+    }
+
+    function updatePreview() {
+      const res = calculateLoan(capitalInput.value, monthsSelect.value);
+      if (!res) {
+        calcPreview.textContent = "Ingresá un capital para ver el total a devolver y el valor de cada cuota (sin recargos por mora).";
+        return;
+      }
+      const reglaTexto = res.months === 1 ? "40% único (1 mes)" : "25% mensual acumulativo (sin recargos por mora)";
+      calcPreview.innerHTML = `
+        <strong>Regla:</strong> ${reglaTexto}<br/>
+        <strong>Interés total:</strong> $${fmtMoney(res.interesTotal)} |
+        <strong>Total a devolver:</strong> $${fmtMoney(res.total)}<br/>
+        <strong>${res.months} cuota(s) de:</strong> $${fmtMoney(res.cuota)}
+      `;
+    }
+
+    capitalInput.addEventListener("input", updatePreview);
+    monthsSelect.addEventListener("change", updatePreview);
+
+    // Comprime imagen en el navegador para mantener Firestore liviano sin pagar Storage
+    function compressImage(file, maxWidth = 800, quality = 0.65) {
+      return new Promise((resolve, reject) => {
+        if (!file) return resolve("");
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const scale = Math.min(1, maxWidth / img.width);
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.round(img.width * scale);
+            canvas.height = Math.round(img.height * scale);
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL("image/jpeg", quality));
+          };
+          img.onerror = reject;
+          img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      authError.textContent = "";
+      try {
+        await signInWithEmailAndPassword(
+          auth,
+          document.getElementById("login-email").value.trim(),
+          document.getElementById("login-password").value
+        );
+      } catch (err) {
+        authError.textContent = "No se pudo iniciar sesión. Revisá correo y contraseña.";
+      }
+    });
+
+    logoutBtn.addEventListener("click", () => signOut(auth));
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        authSection.classList.add("hidden");
+        appSection.classList.remove("hidden");
+        userInfo.textContent = `Conectado como ${user.email}`;
+        subscribeLoans();
+      } else {
+        authSection.classList.remove("hidden");
+        appSection.classList.add("hidden");
+        if (unsubscribeLoans) unsubscribeLoans();
+      }
+    });
+
+    loanForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      formStatus.textContent = "Guardando...";
+      const calc = calculateLoan(capitalInput.value, monthsSelect.value);
+      if (!calc) return;
+
+      const dniFile = document.getElementById("dni-photo").files[0];
+      const promFile = document.getElementById("promissory-photo").files[0];
+
+      try {
+        const [dniPhoto, promissoryPhoto] = await Promise.all([
+          compressImage(dniFile),
+          compressImage(promFile)
+        ]);
+
+        const installments = Array.from({ length: calc.months }, (_, idx) => ({
+          number: idx + 1,
+          amount: calc.cuota,
+          paid: false,
+          paidAt: null
+        }));
+
+        await addDoc(collection(db, "loans"), {
+          clientName: document.getElementById("client-name").value.trim(),
+          clientDni: document.getElementById("client-dni").value.trim(),
+          clientPhone: document.getElementById("client-phone").value.trim(),
+          guarantorName: document.getElementById("guarantor-name").value.trim(),
+          guarantorDni: document.getElementById("guarantor-dni").value.trim(),
+          startDate: startDateInput.value,
+          months: calc.months,
+          capital: calc.capital,
+          interestTotal: calc.interestTotal,
+          totalAmount: calc.total,
+          installmentAmount: calc.cuota,
+          installments,
+          dniPhoto,
+          promissoryPhoto,
+          createdBy: auth.currentUser?.email || "",
+          createdAt: Date.now()
+        });
+
+        loanForm.reset();
+        startDateInput.valueAsDate = new Date();
+        updatePreview();
+        formStatus.textContent = "¡Préstamo guardado y sincronizado!";
+      } catch (err) {
+        formStatus.textContent = "Error al guardar: " + err.message;
+      }
+    });
+
+    function subscribeLoans() {
+      const q = query(collection(db, "loans"), orderBy("createdAt", "desc"));
+      unsubscribeLoans = onSnapshot(q, (snapshot) => {
+        allLoans = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+        renderLoans();
+      });
+    }
+
+    searchInput.addEventListener("input", renderLoans);
+
+    function renderLoans() {
+      const term = searchInput.value.trim().toLowerCase();
+      const filtered = allLoans.filter((l) =>
+        (l.clientName || "").toLowerCase().includes(term) ||
+        (l.clientDni || "").toLowerCase().includes(term)
+      );
+
+      if (!filtered.length) {
+        loansList.innerHTML = `<p class="muted" style="margin-top: 12px;">No hay préstamos para mostrar.</p>`;
+        return;
+      }
+
+      loansList.innerHTML = filtered.map((loan) => {
+        const paidCount = (loan.installments || []).filter((c) => c.paid).length;
+        const totalCuotas = (loan.installments || []).length;
+        const saldoRestante = (loan.installments || [])
+          .filter((c) => !c.paid)
+          .reduce((acc, c) => acc + Number(c.amount || 0), 0);
+        const allPaid = paidCount === totalCuotas && totalCuotas > 0;
+
+        return `
+          <div class="loan-item">
+            <div class="row">
+              <div>
+                <strong>${loan.clientName}</strong> <span class="muted">DNI: ${loan.clientDni}</span>
+                <div class="muted">
+                  Garante: ${loan.guarantorName || "—"} ${loan.guarantorDni ? `(DNI ${loan.guarantorDni})` : ""}
+                  · Inicio: ${loan.startDate}
+                </div>
+              </div>
+              <span class="badge ${allPaid ? "ok" : ""}">${allPaid ? "Cancelado" : `${paidCount}/${totalCuotas} cuotas`}</span>
+            </div>
+
+            <div style="margin-top: 8px;">
+              Capital: <strong>$${fmtMoney(loan.capital)}</strong> ·
+              Total: <strong>$${fmtMoney(loan.totalAmount)}</strong> ·
+              Saldo pendiente: <strong>$${fmtMoney(saldoRestante)}</strong> (sin recargos por mora)
+            </div>
+
+            <div style="margin-top: 10px;">
+              ${(loan.installments || []).map((c, idx) => `
+                <button
+                  class="cuota-btn ${c.paid ? "" : "secondary"}"
+                  data-loan-id="${loan.id}"
+                  data-cuota-idx="${idx}"
+                >
+                  ${c.paid ? "✓" : "○"} Cuota ${c.number} ($${fmtMoney(c.amount)})
+                </button>
+              `).join("")}
+            </div>
+
+            ${(loan.dniPhoto || loan.promissoryPhoto) ? `
+              <div class="thumbs">
+                ${loan.dniPhoto ? `<img src="${loan.dniPhoto}" alt="DNI" />` : ""}
+                ${loan.promissoryPhoto ? `<img src="${loan.promissoryPhoto}" alt="Pagaré" />` : ""}
+              </div>
+            ` : ""}
+
+            <div class="no-print" style="margin-top: 12px;">
+              <button class="secondary" data-receipt-id="${loan.id}">Ver / Imprimir recibo</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      loansList.querySelectorAll("[data-loan-id]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const loanId = btn.getAttribute("data-loan-id");
+          const cuotaIdx = Number(btn.getAttribute("data-cuota-idx"));
+          const loan = allLoans.find((x) => x.id === loanId);
+          if (!loan) return;
+
+          const updated = loan.installments.map((c, i) =>
+            i === cuotaIdx ? { ...c, paid: !c.paid, paidAt: !c.paid ? new Date().toISOString() : null } : c
+          );
+          await updateDoc(doc(db, "loans", loanId), { installments: updated });
+        });
+      });
+
+      loansList.querySelectorAll("[data-receipt-id]").forEach((btn) => {
+        btn.addEventListener("click", () => openReceipt(btn.getAttribute("data-receipt-id")));
+      });
+    }
+
+    function openReceipt(loanId) {
+      const loan = allLoans.find((x) => x.id === loanId);
+      if (!loan) return;
+
+      const paidCuotas = (loan.installments || []).filter((c) => c.paid);
+      const saldo = (loan.installments || [])
+        .filter((c) => !c.paid)
+        .reduce((acc, c) => acc + Number(c.amount || 0), 0);
+
+      receiptContent.innerHTML = `
+        <h2>IB Créditos — Comprobante de Préstamo</h2>
+        <p class="muted">Emitido: ${new Date().toLocaleString("es-AR")}</p>
+        <p><strong>Cliente:</strong> ${loan.clientName} (DNI: ${loan.clientDni})</p>
+        <p><strong>Garante:</strong> ${loan.guarantorName || "No especificado"} ${loan.guarantorDni ? `(DNI: ${loan.guarantorDni})` : ""}</p>
+        <p><strong>Plazo:</strong> ${loan.months} mes(es) · <strong>Sin recargos por mora</strong></p>
+        <p><strong>Capital:</strong> $${fmtMoney(loan.capital)} · <strong>Total pactado:</strong> $${fmtMoney(loan.totalAmount)}</p>
+        <p><strong>Cuotas abonadas:</strong> ${paidCuotas.length} de ${(loan.installments || []).length} · <strong>Saldo restante:</strong> $${fmtMoney(saldo)}</p>
+      `;
+
+      currentWaText =
+        `*IB Créditos - Comprobante*\n` +
+        `Cliente: ${loan.clientName} (DNI ${loan.clientDni})\n` +
+        `Plazo: ${loan.months} mes(es) (sin recargos por mora)\n` +
+        `Total: $${fmtMoney(loan.totalAmount)}\n` +
+        `Cuotas pagas: ${paidCuotas.length}/${(loan.installments || []).length}\n` +
+        `Saldo pendiente: $${fmtMoney(saldo)}`;
+
+      receiptModal.classList.remove("hidden");
+    }
+
+    closeReceiptBtn.addEventListener("click", () => receiptModal.classList.add("hidden"));
+
+    copyWaBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(currentWaText);
+        copyWaBtn.textContent = "¡Copiado!";
+        setTimeout(() => (copyWaBtn.textContent = "Copiar texto para WhatsApp"), 1800);
+      } catch {
+        alert(currentWaText);
+      }
+    });
+  </script>
+</body>
+</html>
