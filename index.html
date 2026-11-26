@@ -630,11 +630,12 @@ body{background:white;color:black}
 </div>
 </div>
 
-<!-- MODAL CLIENTE -->
+<!-- MODAL CLIENTE (CREAR / EDITAR) -->
 <div class="modal-backdrop hidden" id="client-modal">
 <div class="modal">
-<div class="row"><h2>Nuevo cliente</h2><button type="button" class="secondary" data-close="client-modal">Cancelar</button></div>
+<div class="row"><h2 id="client-modal-title">Nuevo cliente</h2><button type="button" class="secondary" data-close="client-modal">Cancelar</button></div>
 <form id="client-form" style="margin-top:14px">
+<input type="hidden" id="edit-client-id">
 <div class="form-grid">
 <div><label>Nombre y apellido *</label><input id="new-name" required></div>
 <div><label>DNI</label><input id="new-dni"></div>
@@ -645,7 +646,7 @@ body{background:white;color:black}
 </div>
 <br>
 <div class="row">
-<button type="submit">Guardar cliente</button>
+<button type="submit" id="save-client-button">Guardar cliente</button>
 <button type="button" class="secondary" data-close="client-modal">Cancelar</button>
 </div>
 <p id="client-status" class="muted" style="margin-top:10px"></p>
@@ -922,7 +923,38 @@ document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",(
 function openModal(id){$(id).classList.remove("hidden")}
 function closeModal(id){$(id).classList.add("hidden")}
 
-$("open-client-form").onclick=()=>openModal("client-modal");
+function openNewClientModal(){
+$("client-form").reset();
+$("edit-client-id").value="";
+$("client-modal-title").textContent="Nuevo cliente";
+$("save-client-button").textContent="Guardar cliente";
+$("client-status").textContent="";
+openModal("client-modal");
+}
+
+function openEditClientModal(key){
+const clients=getClients();
+const client=clients.find((c,i)=>clientKey(c,i)===key);
+if(!client)return;
+if(!client.id||client.legacy){
+alert("Este cliente proviene de préstamos históricos y no tiene una ficha editable en clientes.");
+return;
+}
+$("client-form").reset();
+$("edit-client-id").value=client.id;
+$("new-name").value=client.name||"";
+$("new-dni").value=client.dni||"";
+$("new-phone").value=client.phone||"";
+$("new-address").value=client.address||"";
+$("new-city").value=client.city||"";
+$("new-notes").value=client.notes||"";
+$("client-modal-title").textContent="Editar cliente";
+$("save-client-button").textContent="Guardar cambios";
+$("client-status").textContent="";
+openModal("client-modal");
+}
+
+$("open-client-form").onclick=openNewClientModal;
 $("open-loan-form").onclick=()=>openModal("loan-modal");
 
 document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>closeModal(b.dataset.close)));
@@ -1038,29 +1070,64 @@ return false;
 $("client-form").addEventListener("submit",async e=>{
 e.preventDefault();
 const status=$("client-status");
+const saveBtn=$("save-client-button");
 status.textContent="Guardando...";
+saveBtn.disabled=true;
+
+const editId=$("edit-client-id").value.trim();
+const nameVal=$("new-name").value.trim();
 const dniVal=$("new-dni").value.trim();
-const client={
-name:$("new-name").value.trim(),
-dni:dniVal,
-phone:$("new-phone").value.trim(),
-address:$("new-address").value.trim(),
-city:$("new-city").value.trim(),
-notes:$("new-notes").value.trim(),
-createdAt:Date.now(),
-createdBy:auth.currentUser?.email||""
-};
+const phoneVal=$("new-phone").value.trim();
+const addressVal=$("new-address").value.trim();
+const cityVal=$("new-city").value.trim();
+const notesVal=$("new-notes").value.trim();
+
 try{
-if(dniVal&&getClients().some(c=>String(c.dni||"").trim()===dniVal)){
-status.textContent="Ya existe un cliente con ese DNI.";
+if(!nameVal){
+status.textContent="Ingresá el nombre y apellido.";
 return;
 }
-await addDoc(collection(db,"clients"),client);
-$("client-form").reset();
+if(dniVal&&allClients.some(c=>c.id!==editId&&String(c.dni||"").trim()===dniVal)){
+status.textContent="Ya existe otro cliente con ese DNI.";
+return;
+}
+
+if(editId){
+await updateDoc(doc(db,"clients",editId),{
+name:nameVal,
+dni:dniVal,
+phone:phoneVal,
+address:addressVal,
+city:cityVal,
+notes:notesVal,
+updatedAt:Date.now(),
+updatedBy:auth.currentUser?.email||""
+});
+if(profileClientId===`id:${editId}`){
+profileDni=dniVal||null;
+}
+status.textContent="Cambios guardados.";
+}else{
+await addDoc(collection(db,"clients"),{
+name:nameVal,
+dni:dniVal,
+phone:phoneVal,
+address:addressVal,
+city:cityVal,
+notes:notesVal,
+createdAt:Date.now(),
+createdBy:auth.currentUser?.email||""
+});
 status.textContent="Cliente guardado.";
-setTimeout(()=>closeModal("client-modal"),500);
+}
+
+$("client-form").reset();
+$("edit-client-id").value="";
+setTimeout(()=>closeModal("client-modal"),450);
 }catch(err){
 status.textContent="Error: "+err.message;
+}finally{
+saveBtn.disabled=false;
 }
 });
 
@@ -1146,6 +1213,7 @@ const loans=loansForClient(c);
 const active=loans.filter(l=>!isLoanPaid(l)).length;
 const balance=loans.reduce((s,l)=>s+loanBalance(l),0);
 const dniText=c.dni?`DNI ${esc(c.dni)}`:"Sin DNI";
+const canEdit=Boolean(c.id&&!c.legacy);
 return`
 <div class="item">
 <div class="row">
@@ -1157,12 +1225,14 @@ return`
 <div class="row"><span class="muted">${loans.length} créditos históricos</span><strong>${fmtMoney(balance)}</strong></div>
 <div class="item-actions">
 <button type="button" class="secondary" data-profile="${esc(key)}" data-dni="${esc(c.dni||"")}">Ver perfil e historial</button>
+${canEdit?`<button type="button" class="secondary" data-edit-client="${esc(key)}">Editar</button>`:""}
 <button type="button" data-loan="${esc(key)}">Nuevo préstamo</button>
 </div>
 </div>`;
 }).join("");
 
 $("clients-list").querySelectorAll("[data-profile]").forEach(b=>b.onclick=()=>openProfile(b.dataset.profile,b.dataset.dni));
+$("clients-list").querySelectorAll("[data-edit-client]").forEach(b=>b.onclick=()=>openEditClientModal(b.dataset.editClient));
 $("clients-list").querySelectorAll("[data-loan]").forEach(b=>b.onclick=()=>openLoanForClient(b.dataset.loan));
 $("clients-list").querySelectorAll("[data-delete-client]").forEach(b=>b.onclick=()=>deleteClient(b.dataset.deleteClient));
 }
