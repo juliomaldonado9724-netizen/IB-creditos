@@ -637,7 +637,7 @@ body{background:white;color:black}
 <form id="client-form" style="margin-top:14px">
 <div class="form-grid">
 <div><label>Nombre y apellido *</label><input id="new-name" required></div>
-<div><label>DNI *</label><input id="new-dni" required></div>
+<div><label>DNI</label><input id="new-dni"></div>
 <div><label>Teléfono / WhatsApp</label><input id="new-phone"></div>
 <div><label>Dirección</label><input id="new-address"></div>
 <div><label>Localidad</label><input id="new-city"></div>
@@ -766,6 +766,7 @@ let unsubscribeCash=null;
 let calendarDate=new Date();
 let selectedDate=localDateString(new Date());
 let profileDni=null;
+let profileClientId=null;
 let currentWaText="";
 let notificationTimer=null;
 let lastNotificationCheck="";
@@ -979,7 +980,7 @@ unsubscribeClients=onSnapshot(query(collection(db,"clients"),orderBy("createdAt"
 allClients=snapshot.docs.map(d=>({id:d.id,...d.data()}));
 renderClients();
 updateClientSelector();
-if(profileDni)renderProfile(profileDni);
+if(profileDni||profileClientId)renderProfile(profileDni,profileClientId);
 renderCalendar();
 renderStatistics();
 renderCommissions();
@@ -998,25 +999,50 @@ checkBrowserNotifications();
 },error=>console.error("Préstamos:",error));
 }
 
+function clientKey(c,index=0){
+if(c?.id)return `id:${c.id}`;
+const dni=String(c?.dni||"").trim();
+if(dni)return `dni:${dni}`;
+return `name:${String(c?.name||"").trim()}:${index}`;
+}
+
 function getClients(){
-const map=new Map();
-allClients.forEach(c=>map.set(String(c.dni),c));
-allLoans.forEach(l=>{
-const dni=String(l.clientDni||"");
-if(dni&&!map.has(dni)){
-map.set(dni,{name:l.clientName||"Sin nombre",dni,phone:l.clientPhone||"",address:"",city:"",notes:"",legacy:true});
+const list=[];
+const seenDnis=new Set();
+allClients.forEach(c=>{
+const dni=String(c.dni||"").trim();
+if(dni)seenDnis.add(dni);
+list.push({...c,dni});
+});
+allLoans.forEach((l,idx)=>{
+const dni=String(l.clientDni||"").trim();
+if(dni&&!seenDnis.has(dni)){
+seenDnis.add(dni);
+list.push({id:`legacy-${dni}-${idx}`,name:l.clientName||"Sin nombre",dni,phone:l.clientPhone||"",address:"",city:"",notes:"",legacy:true});
 }
 });
-return [...map.values()];
+return list;
+}
+
+function loansForClient(client){
+const dni=String(client?.dni||"").trim();
+const name=String(client?.name||"").trim().toLowerCase();
+return allLoans.filter(l=>{
+const lDni=String(l.clientDni||"").trim();
+if(dni&&lDni)return lDni===dni;
+if(!dni&&!lDni&&name)return String(l.clientName||"").trim().toLowerCase()===name;
+return false;
+});
 }
 
 $("client-form").addEventListener("submit",async e=>{
 e.preventDefault();
 const status=$("client-status");
 status.textContent="Guardando...";
+const dniVal=$("new-dni").value.trim();
 const client={
 name:$("new-name").value.trim(),
-dni:$("new-dni").value.trim(),
+dni:dniVal,
 phone:$("new-phone").value.trim(),
 address:$("new-address").value.trim(),
 city:$("new-city").value.trim(),
@@ -1025,7 +1051,7 @@ createdAt:Date.now(),
 createdBy:auth.currentUser?.email||""
 };
 try{
-if(getClients().some(c=>String(c.dni)===client.dni)){
+if(dniVal&&getClients().some(c=>String(c.dni||"").trim()===dniVal)){
 status.textContent="Ya existe un cliente con ese DNI.";
 return;
 }
@@ -1038,18 +1064,21 @@ status.textContent="Error: "+err.message;
 }
 });
 
-async function deleteClient(dni){
-const client=getClients().find(c=>String(c.dni)===String(dni));
+async function deleteClient(key){
+const clients=getClients();
+const client=clients.find((c,i)=>clientKey(c,i)===key);
 if(!client)return;
-const loans=allLoans.filter(l=>String(l.clientDni)===String(dni));
+const loans=loansForClient(client);
+const dniLabel=client.dni?`DNI ${client.dni}`:"sin DNI";
 
 if(!client.id||client.legacy){
 if(!loans.length)return;
-if(!confirm(`Este cliente no tiene ficha propia en clientes, pero tiene ${loans.length} préstamo(s) registrado(s) con DNI ${client.dni}. ¿Querés eliminar esos préstamos?`))return;
+if(!confirm(`Este cliente no tiene ficha propia en clientes, pero tiene ${loans.length} préstamo(s) registrado(s) (${dniLabel}). ¿Querés eliminar esos préstamos?`))return;
 try{
 await Promise.all(loans.map(l=>deleteDoc(doc(db,"loans",l.id))));
-if(String(profileDni)===String(dni)){
+if(profileClientId===key||(client.dni&&String(profileDni)===String(client.dni))){
 profileDni=null;
+profileClientId=null;
 $("profile-panel").classList.add("hidden");
 }
 }catch(err){
@@ -1058,7 +1087,7 @@ alert("No se pudieron eliminar los préstamos: "+err.message);
 return;
 }
 
-if(!confirm(`¿Eliminar a ${client.name} (DNI ${client.dni}) de la lista de clientes?`))return;
+if(!confirm(`¿Eliminar a ${client.name} (${dniLabel}) de la lista de clientes?`))return;
 
 let deleteLoansToo=false;
 if(loans.length){
@@ -1070,8 +1099,9 @@ await deleteDoc(doc(db,"clients",client.id));
 if(deleteLoansToo){
 await Promise.all(loans.map(l=>deleteDoc(doc(db,"loans",l.id))));
 }
-if(String(profileDni)===String(dni)){
+if(profileClientId===key||(client.dni&&String(profileDni)===String(client.dni))){
 profileDni=null;
+profileClientId=null;
 $("profile-panel").classList.add("hidden");
 }
 }catch(err){
@@ -1079,28 +1109,30 @@ alert("No se pudo eliminar el cliente: "+err.message);
 }
 }
 
-function openProfile(dni){
-profileDni=String(dni);
-renderProfile(profileDni);
+function openProfile(key,dni){
+profileClientId=key||null;
+profileDni=dni?String(dni):null;
+renderProfile(profileDni,profileClientId);
 $("profile-panel").classList.remove("hidden");
 $("profile-panel").scrollIntoView({behavior:"smooth"});
 }
 
 $("close-profile").onclick=()=>{
 profileDni=null;
+profileClientId=null;
 $("profile-panel").classList.add("hidden");
 };
 
 $("profile-new-loan").onclick=()=>{
-if(!profileDni)return;
-openLoanForClient(profileDni);
+if(!profileClientId&&!profileDni)return;
+openLoanForClient(profileClientId||profileDni);
 };
 
 function renderClients(){
 const clients=getClients();
 const term=$("client-search").value.trim().toLowerCase();
 $("client-count").textContent=clients.length;
-$("client-active-count").textContent=clients.filter(c=>allLoans.some(l=>String(l.clientDni)===String(c.dni)&&!isLoanPaid(l))).length;
+$("client-active-count").textContent=clients.filter(c=>loansForClient(c).some(l=>!isLoanPaid(l))).length;
 
 const filtered=clients.filter(c=>(c.name||"").toLowerCase().includes(term)||String(c.dni||"").toLowerCase().includes(term));
 if(!filtered.length){
@@ -1108,27 +1140,29 @@ $("clients-list").innerHTML='<div class="empty">No se encontraron clientes.</div
 return;
 }
 
-$("clients-list").innerHTML=filtered.map(c=>{
-const loans=allLoans.filter(l=>String(l.clientDni)===String(c.dni));
+$("clients-list").innerHTML=filtered.map((c,i)=>{
+const key=clientKey(c,i);
+const loans=loansForClient(c);
 const active=loans.filter(l=>!isLoanPaid(l)).length;
 const balance=loans.reduce((s,l)=>s+loanBalance(l),0);
+const dniText=c.dni?`DNI ${esc(c.dni)}`:"Sin DNI";
 return`
 <div class="item">
 <div class="row">
-<div><strong>${esc(c.name)}</strong><div class="muted">DNI ${esc(c.dni)}</div></div>
-<div class="row"><span class="badge">${active} activos</span><button type="button" class="danger icon-btn" data-delete-client="${esc(c.dni)}" aria-label="Eliminar cliente ${esc(c.name)}" title="Eliminar cliente">✕</button></div>
+<div><strong>${esc(c.name)}</strong><div class="muted">${dniText}</div></div>
+<div class="row"><span class="badge">${active} activos</span><button type="button" class="danger icon-btn" data-delete-client="${esc(key)}" aria-label="Eliminar cliente ${esc(c.name)}" title="Eliminar cliente">✕</button></div>
 </div>
 <p class="muted">📞 ${esc(c.phone||"Sin teléfono")}</p>
 <p class="muted">📍 ${esc([c.address,c.city].filter(Boolean).join(", ")||"Sin dirección")}</p>
 <div class="row"><span class="muted">${loans.length} créditos históricos</span><strong>${fmtMoney(balance)}</strong></div>
 <div class="item-actions">
-<button type="button" class="secondary" data-profile="${esc(c.dni)}">Ver perfil e historial</button>
-<button type="button" data-loan="${esc(c.dni)}">Nuevo préstamo</button>
+<button type="button" class="secondary" data-profile="${esc(key)}" data-dni="${esc(c.dni||"")}">Ver perfil e historial</button>
+<button type="button" data-loan="${esc(key)}">Nuevo préstamo</button>
 </div>
 </div>`;
 }).join("");
 
-$("clients-list").querySelectorAll("[data-profile]").forEach(b=>b.onclick=()=>openProfile(b.dataset.profile));
+$("clients-list").querySelectorAll("[data-profile]").forEach(b=>b.onclick=()=>openProfile(b.dataset.profile,b.dataset.dni));
 $("clients-list").querySelectorAll("[data-loan]").forEach(b=>b.onclick=()=>openLoanForClient(b.dataset.loan));
 $("clients-list").querySelectorAll("[data-delete-client]").forEach(b=>b.onclick=()=>deleteClient(b.dataset.deleteClient));
 }
@@ -1137,20 +1171,24 @@ $("client-search").addEventListener("input",renderClients);
 function updateClientSelector(){
 const select=$("loan-client");
 const current=select.value;
+const clients=getClients();
 select.innerHTML='<option value="">Seleccionar cliente...</option>';
-getClients().forEach(c=>{
+clients.forEach((c,i)=>{
+const key=clientKey(c,i);
 const o=document.createElement("option");
-o.value=c.dni;
-o.textContent=c.name+" — "+c.dni;
+o.value=key;
+o.textContent=c.dni?`${c.name} — DNI ${c.dni}`:`${c.name} — Sin DNI`;
 select.appendChild(o);
 });
-if(getClients().some(c=>String(c.dni)===String(current)))select.value=current;
+if(clients.some((c,i)=>clientKey(c,i)===current))select.value=current;
 updateSelectedClient();
 }
 
-function openLoanForClient(dni){
+function openLoanForClient(keyOrDni){
 updateClientSelector();
-$("loan-client").value=dni;
+const clients=getClients();
+const match=clients.find((c,i)=>clientKey(c,i)===keyOrDni||(c.dni&&String(c.dni)===String(keyOrDni)));
+$("loan-client").value=match?clientKey(match,clients.indexOf(match)):"";
 updateSelectedClient();
 $("form-status").textContent="";
 openModal("loan-modal");
@@ -1159,11 +1197,12 @@ openModal("loan-modal");
 $("loan-client").onchange=updateSelectedClient;
 
 function updateSelectedClient(){
-const c=getClients().find(x=>String(x.dni)===$("loan-client").value);
+const clients=getClients();
+const c=clients.find((x,i)=>clientKey(x,i)===$("loan-client").value);
 const el=$("selected-client-info");
 if(!c){el.classList.add("hidden");return}
 el.classList.remove("hidden");
-el.innerHTML=`<strong>Cliente:</strong> ${esc(c.name)}<br>DNI: ${esc(c.dni)}<br>Teléfono: ${esc(c.phone||"No informado")}`;
+el.innerHTML=`<strong>Cliente:</strong> ${esc(c.name)}<br>DNI: ${esc(c.dni||"Sin DNI")}<br>Teléfono: ${esc(c.phone||"No informado")}`;
 }
 
 function calculateLoan(capital,months,rate){
@@ -1255,7 +1294,8 @@ const btn=$("save-loan");
 status.textContent="Guardando...";
 btn.disabled=true;
 try{
-const client=getClients().find(c=>String(c.dni)===$("loan-client").value);
+const clients=getClients();
+const client=clients.find((c,i)=>clientKey(c,i)===$("loan-client").value);
 const calc=calculateLoan($("capital").value,$("months").value,$("interest-rate").value);
 if(!client||!calc)throw new Error("Revisá los datos del préstamo.");
 const start=parseDate($("start-date").value);
@@ -1278,7 +1318,7 @@ dueDate:localDateString(addMonths(start,i+1))
 
 await addDoc(collection(db,"loans"),{
 clientName:client.name,
-clientDni:client.dni,
+clientDni:client.dni||"",
 clientPhone:client.phone||"",
 guarantorName:$("guarantor-name").value.trim(),
 guarantorDni:$("guarantor-dni").value.trim(),
@@ -1342,19 +1382,20 @@ alert("No se pudo registrar el pago: "+err.message);
 }
 
 function renderLoansForProfile(){
-if(profileDni)renderProfile(profileDni);
+if(profileDni||profileClientId)renderProfile(profileDni,profileClientId);
 }
 
-function renderProfile(dni){
-const client=getClients().find(c=>String(c.dni)===String(dni));
+function renderProfile(dni,key){
+const clients=getClients();
+const client=clients.find((c,i)=>(key&&clientKey(c,i)===key)||(dni&&String(c.dni)===String(dni)));
 if(!client)return;
-const loans=allLoans.filter(l=>String(l.clientDni)===String(dni));
+const loans=loansForClient(client);
 const paid=loans.filter(isLoanPaid);
 const active=loans.filter(l=>!isLoanPaid(l));
 const late=loans.filter(l=>loanStatus(l)==="late");
 
 $("profile-name").textContent=client.name;
-$("profile-dni").textContent="DNI: "+client.dni;
+$("profile-dni").textContent=client.dni?`DNI: ${client.dni}`:"DNI: Sin DNI";
 $("profile-info").innerHTML=`
 <p class="muted">📞 ${esc(client.phone||"Sin teléfono")} · 📍 ${esc(client.address||"Sin dirección")} ${esc(client.city||"")}</p>
 <p class="muted">${esc(client.notes||"Sin observaciones")}</p>
@@ -1456,7 +1497,7 @@ $("calendar-payments").innerHTML=`
 ${items.map(p=>`
 <div class="payment-row">
 <div class="row">
-<div><strong>${esc(p.loan.clientName)}</strong><div class="muted">DNI ${esc(p.loan.clientDni)}</div><div class="muted">Cuota ${p.c.number} de ${p.loan.months}</div><span class="badge ${p.late?"bad":"warn"}">${p.late?"En mora":"Pendiente"}</span></div>
+<div><strong>${esc(p.loan.clientName)}</strong><div class="muted">${p.loan.clientDni?`DNI ${esc(p.loan.clientDni)}`:"Sin DNI"}</div><div class="muted">Cuota ${p.c.number} de ${p.loan.months}</div><span class="badge ${p.late?"bad":"warn"}">${p.late?"En mora":"Pendiente"}</span></div>
 <div style="text-align:right"><strong class="money">${fmtMoney(p.c.amount)}</strong><br><button type="button" data-pay="${p.loan.id}" data-index="${p.index}" style="margin-top:8px">Registrar pago</button></div>
 </div>
 </div>`).join("")}
@@ -1564,7 +1605,7 @@ $("commission-total").textContent=fmtMoney(pendingTotal+paidTotal);
 $("commission-pending-list").innerHTML=pending.length?pending.map(l=>`
 <div class="item">
 <div class="row">
-<div><strong>${esc(l.clientName)}</strong><div class="muted">DNI ${esc(l.clientDni)}</div></div>
+<div><strong>${esc(l.clientName)}</strong><div class="muted">${l.clientDni?`DNI ${esc(l.clientDni)}`:"Sin DNI"}</div></div>
 <strong class="orange-text">${fmtMoney(commissionAmount(l))}</strong>
 </div>
 <p class="muted">Total del préstamo (capital + intereses): ${fmtMoney(commissionBase(l))}</p>
@@ -1576,7 +1617,7 @@ $("commission-pending-list").innerHTML=pending.length?pending.map(l=>`
 $("commission-paid-list").innerHTML=paid.length?paid.map(l=>`
 <div class="item">
 <div class="row">
-<div><strong>${esc(l.clientName)}</strong><div class="muted">DNI ${esc(l.clientDni)}</div></div>
+<div><strong>${esc(l.clientName)}</strong><div class="muted">${l.clientDni?`DNI ${esc(l.clientDni)}`:"Sin DNI"}</div></div>
 <strong class="green-text">${fmtMoney(commissionAmount(l))}</strong>
 </div>
 <div class="muted">Base de cálculo (capital + intereses): ${fmtMoney(commissionBase(l))}</div>
@@ -1871,7 +1912,7 @@ $("notification-permission").textContent="Este navegador no admite notificacione
 function noticeRow(loan,c,label){
 return`
 <div class="payment-row row">
-<div><strong>${esc(loan.clientName)}</strong><div class="muted">${label} · Cuota ${c.number} · DNI ${esc(loan.clientDni)}</div></div>
+<div><strong>${esc(loan.clientName)}</strong><div class="muted">${label} · Cuota ${c.number} · ${loan.clientDni?`DNI ${esc(loan.clientDni)}`:"Sin DNI"}</div></div>
 <strong>${fmtMoney(c.amount)}</strong>
 </div>`;
 }
@@ -1917,7 +1958,7 @@ $("receipt-content").innerHTML=`
 <h2>IB Créditos — Comprobante</h2>
 <p class="muted">Emitido: ${new Date().toLocaleString("es-AR")}</p>
 <p><strong>Cliente:</strong> ${esc(loan.clientName)}</p>
-<p><strong>DNI:</strong> ${esc(loan.clientDni)}</p>
+<p><strong>DNI:</strong> ${esc(loan.clientDni||"Sin DNI")}</p>
 <hr>
 <p><strong>Capital:</strong> ${fmtMoney(loan.capital)}</p>
 <p><strong>Interés:</strong> ${loan.interestRate??"—"}%</p>
@@ -1925,7 +1966,7 @@ $("receipt-content").innerHTML=`
 <p><strong>Cuotas pagadas:</strong> ${paid}/${list.length}</p>
 <p><strong>Saldo pendiente:</strong> ${fmtMoney(loanBalance(loan))}</p>
 `;
-currentWaText=`*IB Créditos - Comprobante*\nCliente: ${loan.clientName}\nDNI: ${loan.clientDni}\nCapital: ${fmtMoney(loan.capital)}\nTotal: ${fmtMoney(loan.totalAmount)}\nCuotas pagadas: ${paid}/${list.length}\nSaldo pendiente: ${fmtMoney(loanBalance(loan))}`;
+currentWaText=`*IB Créditos - Comprobante*\nCliente: ${loan.clientName}\nDNI: ${loan.clientDni||"Sin DNI"}\nCapital: ${fmtMoney(loan.capital)}\nTotal: ${fmtMoney(loan.totalAmount)}\nCuotas pagadas: ${paid}/${list.length}\nSaldo pendiente: ${fmtMoney(loanBalance(loan))}`;
 openModal("receipt-modal");
 }
 
