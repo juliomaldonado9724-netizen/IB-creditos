@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,119 +7,350 @@
 
 <style>
 :root{
---bg:#0b1220;--surface:#111c2e;--card:#172438;--card2:#0e192a;
---text:#f1f5f9;--muted:#91a1b7;--green:#22c55e;--green2:#14532d;
---red:#ef4444;--orange:#f59e0b;--blue:#60a5fa;--border:#26364b;
+--bg:#f4f6f8;
+--surface:#ffffff;
+--card:#f9fafb;
+--card2:#f3f5f7;
+--text:#111827;
+--muted:#6b7280;
+--border:#e5e7eb;
+--green:#16a34a;
+--green-dark:#0f766e;
+--green-strong:#146c43;
+--green-soft:#dcfce7;
+--green-text:#15803d;
+--red:#dc2626;
+--red-soft:#fee2e2;
+--orange:#d97706;
+--orange-soft:#fef3c7;
+--blue:#2563eb;
+--blue-soft:#dbeafe;
+--shadow:0 1px 3px rgba(15,23,42,.04),0 8px 24px rgba(15,23,42,.03);
 }
-*{box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
-body{margin:0;background:var(--bg);color:var(--text)}
+
+html[data-theme="dark"]{
+--bg:#0b1220;
+--surface:#111c2e;
+--card:#172438;
+--card2:#0e192a;
+--text:#f1f5f9;
+--muted:#94a3b8;
+--border:#26364b;
+--green:#22c55e;
+--green-dark:#34d399;
+--green-strong:#22c55e;
+--green-soft:rgba(34,197,94,.16);
+--green-text:#4ade80;
+--red:#f87171;
+--red-soft:rgba(239,68,68,.16);
+--orange:#fbbf24;
+--orange-soft:rgba(245,158,11,.16);
+--blue:#60a5fa;
+--blue-soft:rgba(96,165,250,.16);
+--shadow:0 10px 28px rgba(0,0,0,.28);
+}
+
+*{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+body{margin:0;background:var(--bg);color:var(--text);transition:background-color .2s ease,color .2s ease;-webkit-font-smoothing:antialiased}
 button,input,select,textarea{font:inherit}
-button{cursor:pointer;border:0;border-radius:9px;padding:10px 14px;font-weight:650;background:var(--green);color:#052e16}
+button{cursor:pointer;border:0;border-radius:10px;padding:10px 16px;font-weight:600;background:var(--green-strong);color:#ffffff;transition:filter .15s ease,background-color .15s ease,transform .12s ease}
+button:hover:not(:disabled){filter:brightness(1.05)}
+button:active:not(:disabled){transform:scale(.99)}
 button:disabled{opacity:.45;cursor:not-allowed}
-.secondary{background:#293b52;color:var(--text)}
-.danger{background:#7f1d1d;color:white}
-.icon-btn{padding:6px 10px;line-height:1;font-size:.9rem}
-.warning{background:#78350f;color:#fde68a}
-.blue{background:#1e3a8a;color:#dbeafe}
+.secondary{background:var(--card2);color:var(--text);border:1px solid var(--border)}
+.danger{background:var(--red-soft);color:var(--red);border:1px solid transparent}
+.danger-solid{background:var(--red);color:#ffffff}
+.icon-btn{padding:6px 10px;line-height:1;font-size:.9rem;border-radius:8px}
 .hidden{display:none!important}
-.muted{color:var(--muted);font-size:.87rem}
+.muted{color:var(--muted);font-size:.875rem}
 small{color:var(--muted)}
 h1,h2,h3,p{margin-top:0}
-h2{font-size:1.25rem}
-h3{font-size:1rem}
-input,select,textarea{width:100%;padding:11px;background:var(--card2);border:1px solid var(--border);border-radius:9px;color:var(--text);outline:none;min-width:0}
-input:focus,select:focus,textarea:focus{border-color:var(--green)}
-label{display:block;color:var(--muted);font-size:.84rem;margin-bottom:6px}
-.container{max-width:1250px;margin:auto;padding:20px}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
-.brand{display:flex;align-items:center;gap:11px}
-.brand-icon{width:43px;height:43px;background:var(--green);color:#052e16;border-radius:12px;display:grid;place-items:center;font-weight:900;font-size:19px}
-.brand-trigger{background:transparent;padding:0;border-radius:12px;display:grid;place-items:center;color:#052e16}
-.brand-trigger:hover .brand-icon{filter:brightness(1.06)}
-.brand-trigger:focus-visible{outline:2px solid var(--green);outline-offset:2px}
-.brand h1{font-size:1.15rem;margin:0}
-.brand small{display:block;margin-top:2px}
-.drawer-backdrop{position:fixed;inset:0;background:#000a;z-index:90;opacity:0;pointer-events:none;transition:opacity .2s ease}
+h2{font-size:1.25rem;letter-spacing:-.015em}
+h3{font-size:1rem;letter-spacing:-.01em}
+
+input,select,textarea{
+width:100%;
+padding:11px 13px;
+background:var(--surface);
+border:1px solid var(--border);
+border-radius:10px;
+color:var(--text);
+outline:none;
+min-width:0;
+transition:border-color .15s ease,background-color .15s ease
+}
+input:focus,select:focus,textarea:focus{border-color:var(--green-strong)}
+label{display:block;color:var(--muted);font-size:.83rem;font-weight:500;margin-bottom:6px}
+
+.container{max-width:920px;margin:auto;padding:24px 18px 48px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand-icon{
+width:44px;height:44px;
+background:var(--green-soft);
+color:var(--green-strong);
+border:1px solid var(--border);
+border-radius:12px;
+display:grid;place-items:center;
+font-weight:800;font-size:17px;letter-spacing:-.02em;flex-shrink:0
+}
+.brand-trigger{background:transparent;padding:0;border-radius:12px;display:grid;place-items:center}
+.brand-trigger:hover .brand-icon{border-color:var(--green-strong)}
+.brand-trigger:focus-visible{outline:2px solid var(--green-strong);outline-offset:3px}
+.brand h1{font-size:1.15rem;margin:0;font-weight:700;letter-spacing:-.02em}
+.brand small{display:block;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Menú deslizante */
+.drawer-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.38);backdrop-filter:blur(2px);z-index:90;opacity:0;pointer-events:none;transition:opacity .2s ease}
 .drawer-backdrop.open{opacity:1;pointer-events:auto}
-.drawer{position:fixed;top:0;left:0;bottom:0;width:min(290px,84vw);background:var(--surface);border-right:1px solid var(--border);z-index:95;padding:18px;display:flex;flex-direction:column;gap:14px;transform:translateX(-100%);transition:transform .24s ease;overflow-y:auto}
+.drawer{
+position:fixed;top:0;left:0;bottom:0;
+width:min(290px,84vw);
+background:var(--surface);
+border-right:1px solid var(--border);
+z-index:95;padding:20px;
+display:flex;flex-direction:column;gap:16px;
+transform:translateX(-100%);
+transition:transform .24s ease;
+overflow-y:auto
+}
 .drawer.open{transform:translateX(0)}
-.drawer-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--border)}
-.nav{display:flex;flex-direction:column;gap:6px}
-.nav button{background:transparent;color:var(--muted);border:1px solid transparent;text-align:left;width:100%;display:flex;align-items:center;justify-content:space-between;padding:11px 13px}
-.nav button.active{background:var(--green2);color:#bbf7d0;border-color:#166534}
-.nav button:hover{background:var(--card);color:var(--text)}
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.nav{display:flex;flex-direction:column;gap:4px}
+.nav button{
+background:transparent;
+color:var(--muted);
+border:1px solid transparent;
+text-align:left;width:100%;
+display:flex;align-items:center;justify-content:space-between;
+padding:11px 13px;border-radius:10px;font-weight:500
+}
+.nav button:hover{background:var(--card2);color:var(--text)}
+.nav button.active{background:var(--green-soft);color:var(--green-strong);font-weight:650}
+
+/* Tarjetas y secciones */
+.panel{
+background:var(--surface);
+border:1px solid var(--border);
+border-radius:18px;
+padding:26px;
+margin-bottom:18px;
+box-shadow:var(--shadow)
+}
+.cash-hero-card{padding:32px 28px}
+.cash-eyebrow{
+font-size:.75rem;
+font-weight:700;
+letter-spacing:.08em;
+text-transform:uppercase;
+color:var(--muted);
+margin-bottom:10px
+}
+.cash-balance-amount{
+font-size:clamp(2.25rem,6vw,3.35rem);
+font-weight:800;
+color:var(--green-strong);
+letter-spacing:-.03em;
+line-height:1.1;
+font-variant-numeric:tabular-nums;
+margin-bottom:12px;
+overflow-wrap:anywhere
+}
+.cash-shared-pill{
+display:inline-flex;
+align-items:center;
+gap:6px;
+background:var(--green-soft);
+color:var(--green-strong);
+font-size:.8rem;
+font-weight:600;
+padding:5px 12px;
+border-radius:999px
+}
+
+/* Botones de operaciones lado a lado */
+.cash-ops-grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:14px;
+margin-top:26px
+}
+.cash-op-box{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:14px;
+padding:18px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+min-height:76px
+}
+.cash-op-label{
+font-size:.95rem;
+font-weight:600;
+color:var(--text)
+}
+.cash-op-btn{
+border-radius:999px;
+padding:10px 18px;
+font-size:.9rem;
+font-weight:650;
+white-space:nowrap;
+flex-shrink:0
+}
+.cash-op-btn.in{background:var(--green-strong);color:#ffffff}
+.cash-op-btn.out{background:var(--red-soft);color:var(--red)}
+
+/* Historial de movimientos */
+.cash-history-title{
+font-size:1rem;
+font-weight:700;
+color:var(--text);
+margin:30px 0 6px
+}
+.movement-row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:14px;
+padding:16px 0;
+border-bottom:1px solid var(--border)
+}
+.movement-row:last-child{border-bottom:0;padding-bottom:4px}
+.movement-main{min-width:0;flex:1}
+.movement-title{
+font-size:.98rem;
+font-weight:650;
+color:var(--text);
+margin-bottom:4px;
+overflow-wrap:anywhere
+}
+.movement-meta{
+font-size:.82rem;
+color:var(--muted);
+display:flex;
+align-items:center;
+flex-wrap:wrap;
+gap:8px
+}
+.movement-right{
+display:flex;
+align-items:center;
+gap:10px;
+flex-shrink:0;
+text-align:right
+}
+.movement-amount{
+font-size:1rem;
+font-weight:750;
+font-variant-numeric:tabular-nums;
+white-space:nowrap
+}
+.income-text{color:var(--green-text)}
+.expense-text{color:var(--red)}
+.link-action{
+background:transparent;
+color:var(--muted);
+padding:4px 8px;
+font-size:.78rem;
+font-weight:600;
+border-radius:8px
+}
+.link-action:hover:not(:disabled){background:var(--card2);color:var(--text);filter:none}
+
+/* Resto de secciones */
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
-.stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px;min-width:0}
-.stat .value{font-size:1.45rem;font-weight:750;margin-top:8px;overflow-wrap:anywhere}
-.stat .sub{font-size:.76rem;color:var(--muted);margin-top:5px}
-.stat.green{border-left:3px solid var(--green)}
-.stat.orange{border-left:3px solid var(--orange)}
-.stat.red{border-left:3px solid var(--red)}
-.stat.blue-border{border-left:3px solid var(--blue)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:16px 0}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;min-width:0}
+.stat .value{font-size:1.4rem;font-weight:750;margin-top:6px;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.stat .sub{font-size:.76rem;color:var(--muted);margin-top:4px}
 .section{display:none}
 .section.active{display:block}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px}
-.badge{display:inline-block;border-radius:30px;padding:4px 9px;font-size:.74rem;background:#263b56;color:#bfdbfe}
-.badge.ok{background:#14532d;color:#bbf7d0}
-.badge.warn{background:#78350f;color:#fde68a}
-.badge.bad{background:#7f1d1d;color:#fecaca}
-.item{background:var(--card2);border:1px solid var(--border);padding:14px;border-radius:11px;margin-top:10px}
-.item p{margin:7px 0}
-.item-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
-.item-actions button{font-size:.82rem}
-.divider{border:0;border-top:1px solid var(--border);margin:17px 0}
-.search{margin:12px 0}
-.empty{text-align:center;color:var(--muted);padding:25px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.badge{display:inline-block;border-radius:999px;padding:4px 10px;font-size:.75rem;font-weight:600;background:var(--blue-soft);color:var(--blue)}
+.badge.ok{background:var(--green-soft);color:var(--green-strong)}
+.badge.warn{background:var(--orange-soft);color:var(--orange)}
+.badge.bad{background:var(--red-soft);color:var(--red)}
+.item{background:var(--card);border:1px solid var(--border);padding:16px;border-radius:14px;margin-top:12px}
+.item p{margin:6px 0}
+.item-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.item-actions button{font-size:.82rem;padding:8px 12px}
+.divider{border:0;border-top:1px solid var(--border);margin:20px 0}
+.search{margin:14px 0}
+.empty{text-align:center;color:var(--muted);padding:28px 16px;font-size:.92rem}
 .money{font-weight:750;font-variant-numeric:tabular-nums}
-.green-text{color:#86efac}
-.red-text{color:#fca5a5}
-.orange-text{color:#fcd34d}
+.green-text{color:var(--green-text)}
+.red-text{color:var(--red)}
+.orange-text{color:var(--orange)}
 .calendar-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-top:14px}
-.weekday{text-align:center;color:var(--muted);font-size:.75rem;padding:7px 0}
-.day{min-height:85px;padding:7px;background:var(--card2);border:1px solid var(--border);border-radius:8px;cursor:pointer;min-width:0}
-.day.selected{border:2px solid var(--green)}
-.day.today{background:#1c3044}
+.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-top:14px}
+.weekday{text-align:center;color:var(--muted);font-size:.75rem;font-weight:600;padding:6px 0}
+.day{min-height:82px;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:10px;cursor:pointer;min-width:0;transition:border-color .15s ease}
+.day:hover{border-color:var(--green-strong)}
+.day.selected{border:2px solid var(--green-strong)}
+.day.today{background:var(--green-soft)}
 .day.empty{background:transparent;border:0;cursor:default}
-.day-total{font-size:.68rem;color:#86efac;margin-top:7px;overflow-wrap:anywhere}
+.day-total{font-size:.68rem;font-weight:650;color:var(--green-strong);margin-top:6px;overflow-wrap:anywhere}
 .day-count{font-size:.65rem;color:var(--muted)}
-.month-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:9px}
-.month-card{background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:12px}
+.month-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px}
+.month-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}
 .month-card strong{display:block;margin-top:6px}
-.bar-chart{display:flex;align-items:flex-end;gap:8px;height:210px;padding:15px 4px 0;border-bottom:1px solid var(--border);overflow-x:auto}
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:210px;padding:16px 6px 0;border-bottom:1px solid var(--border);overflow-x:auto}
 .bar-column{flex:1;min-width:38px;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:7px}
-.bar{width:70%;max-width:48px;background:var(--green);border-radius:6px 6px 0 0;min-height:2px}
+.bar{width:70%;max-width:44px;background:var(--green-strong);border-radius:7px 7px 0 0;min-height:3px}
 .bar-label{font-size:.68rem;color:var(--muted);white-space:nowrap}
 .bar-value{font-size:.65rem;color:var(--text);white-space:nowrap}
 .payment-row{padding:12px 0;border-bottom:1px solid var(--border)}
 .payment-row:last-child{border-bottom:0}
-.notice{padding:13px;border:1px solid var(--border);border-radius:10px;background:var(--card2);margin-top:10px}
+.notice{padding:14px;border:1px solid var(--border);border-radius:12px;background:var(--card);margin-top:10px}
 .notice.warning-notice{border-left:3px solid var(--orange)}
 .notice.danger-notice{border-left:3px solid var(--red)}
-.modal-backdrop{position:fixed;inset:0;background:#000b;z-index:100;display:flex;align-items:center;justify-content:center;padding:12px}
-.modal{width:100%;max-width:650px;max-height:92vh;overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:20px}
-.thumb{width:100px;height:75px;object-fit:cover;border-radius:7px;margin:5px}
-details summary{cursor:pointer;color:#86efac;padding:9px 0}
-.login{max-width:420px;margin:12vh auto}
-.footer-note{font-size:.75rem;color:var(--muted);line-height:1.5}
-@media(max-width:650px){
-.container{padding:11px}
-.panel{padding:13px}
-.topbar{align-items:flex-start}
-.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.stat{padding:11px}
-.stat .value{font-size:1.12rem}
-.day{min-height:65px;padding:4px}
-.day-total{font-size:.59rem}
-.day-count{font-size:.56rem}
+
+/* Configuración tema */
+.theme-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:10px}
+.theme-choice{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:14px;
+padding:16px;
+text-align:left;
+color:var(--text);
+display:flex;
+flex-direction:column;
+gap:4px
 }
+.theme-choice.active{border-color:var(--green-strong);background:var(--green-soft);color:var(--text)}
+
+/* Modales */
+.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.48);backdrop-filter:blur(2px);z-index:100;display:flex;align-items:center;justify-content:center;padding:14px}
+.modal{width:100%;max-width:560px;max-height:92vh;overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px;box-shadow:var(--shadow)}
+details summary{cursor:pointer;color:var(--green-strong);font-weight:600;padding:8px 0}
+.login{max-width:420px;margin:10vh auto}
+.footer-note{font-size:.78rem;color:var(--muted);line-height:1.55;margin-top:10px}
+
+@media(max-width:650px){
+.container{padding:14px 12px 40px}
+.panel{padding:18px;border-radius:16px}
+.cash-hero-card{padding:22px 18px}
+.cash-ops-grid{grid-template-columns:1fr;gap:10px;margin-top:20px}
+.cash-op-box{padding:14px 16px;min-height:66px}
+.movement-row{align-items:flex-start;flex-direction:column;gap:8px}
+.movement-right{width:100%;justify-content:space-between}
+.theme-options{grid-template-columns:1fr}
+.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stat{padding:13px}
+.stat .value{font-size:1.15rem}
+.day{min-height:66px;padding:5px}
+.day-total{font-size:.6rem}
+.day-count{font-size:.58rem}
+}
+
 @media print{
 body{background:white;color:black}
 .no-print{display:none!important}
-.panel,.item{background:white;color:black}
+.panel,.item{background:white;color:black;box-shadow:none}
 }
 </style>
 </head>
@@ -128,7 +359,7 @@ body{background:white;color:black}
 <div class="container">
 
 <div id="auth-section" class="panel login">
-<div class="brand" style="margin-bottom:22px">
+<div class="brand" style="margin-bottom:24px">
 <div class="brand-icon">IB</div>
 <div><h1>IB Créditos</h1><small>Gestión financiera</small></div>
 </div>
@@ -139,7 +370,7 @@ body{background:white;color:black}
 <label>Contraseña</label>
 <input id="login-password" type="password" required autocomplete="current-password">
 <br><br>
-<button type="submit" style="width:100%">Ingresar</button>  
+<button type="submit" style="width:100%">Ingresar</button>
 <p id="auth-error" class="red-text" style="margin-top:12px"></p>
 </form>
 </div>
@@ -150,7 +381,10 @@ body{background:white;color:black}
 <button type="button" class="brand-trigger no-print" id="menu-toggle" aria-label="Abrir menú de secciones" aria-expanded="false" aria-controls="nav-drawer" title="Abrir menú">
 <span class="brand-icon">IB</span>
 </button>
-<div><h1>IB Créditos</h1><small id="current-section-label">Inicio · <span id="user-info">Panel de gestión</span></small></div>
+<div>
+<h1>IB Créditos</h1>
+<small id="current-section-label">Inicio · <span id="user-info">Panel de gestión</span></small>
+</div>
 </div>
 <button class="secondary no-print" id="logout-btn">Salir</button>
 </header>
@@ -170,38 +404,43 @@ body{background:white;color:black}
 <button data-page="collections">Calendario</button>
 <button data-page="statistics">Estadísticas</button>
 <button data-page="commissions">Comisiones</button>
-<button data-page="cash">Caja disponible</button>
 <button data-page="notifications"><span>Avisos</span><span id="notification-count"></span></button>
+<button data-page="settings">Configuración</button>
 </nav>
 </aside>
 
+<!-- INICIO: CAJA DISPONIBLE COMO PANTALLA PRINCIPAL -->
 <section id="page-home" class="section active">
-<div class="row" style="margin-bottom:14px">
-<div><h2 style="margin-bottom:4px">Resumen general</h2><p class="muted" id="today-label"></p></div>
-<div class="row no-print">
-<button id="open-client-form">+ Cliente</button>
-<button id="open-loan-form">+ Préstamo</button>
+<div class="panel cash-hero-card">
+<div class="cash-eyebrow">CAJA DISPONIBLE</div>
+<div class="cash-balance-amount" id="cash-balance">$0,00</div>
+<div class="cash-shared-pill">Saldo compartido</div>
+
+<div class="cash-ops-grid no-print">
+<div class="cash-op-box">
+<span class="cash-op-label">Ingresar dinero</span>
+<button type="button" class="cash-op-btn in" id="cash-in-button">+ Ingreso</button>
+</div>
+<div class="cash-op-box">
+<span class="cash-op-label">Retirar dinero</span>
+<button type="button" class="cash-op-btn out" id="cash-out-button">− Egreso</button>
 </div>
 </div>
-<div class="stats">
-<div class="stat green"><div class="muted">Cartera pendiente</div><div class="value" id="home-balance">$0</div><div class="sub">Capital e intereses por cobrar</div></div>
-<div class="stat blue-border"><div class="muted">Cobros de hoy</div><div class="value" id="home-today">$0</div><div class="sub" id="home-today-count">0 cuotas</div></div>
-<div class="stat orange"><div class="muted">Cuotas en mora</div><div class="value" id="home-overdue">$0</div><div class="sub" id="home-overdue-count">0 cuotas vencidas</div></div>
-<div class="stat"><div class="muted">Préstamos activos</div><div class="value" id="home-active">0</div><div class="sub">Créditos sin cancelar</div></div>
-</div>
-<div class="panel">
-<div class="row"><div><h3>Próximos cobros</h3><p class="muted">Cuotas que vencen hoy y mañana.</p></div><button class="secondary no-print" onclick="navigate('collections')">Ver calendario</button></div>
-<div id="home-upcoming"></div>
-</div>
-<div class="panel">
-<div class="row"><div><h3>Notificaciones</h3><p class="muted">Avisos de vencimientos próximos.</p></div><button class="secondary no-print" onclick="navigate('notifications')">Ver avisos</button></div>
-<div id="home-notifications"></div>
+
+<h3 class="cash-history-title">Últimos movimientos</h3>
+<div id="cash-movements-list"></div>
 </div>
 </section>
 
 <section id="page-clients" class="section">
 <div class="panel">
-<div class="row"><div><h2>Clientes</h2><p class="muted">Directorio e historial crediticio.</p></div><button id="open-client-form-2">+ Nuevo cliente</button></div>
+<div class="row">
+<div><h2>Clientes</h2><p class="muted">Directorio e historial crediticio.</p></div>
+<div class="row">
+<button id="open-client-form">+ Nuevo cliente</button>
+<button class="secondary" id="open-loan-form">+ Préstamo</button>
+</div>
+</div>
 <div class="stats">
 <div class="stat"><div class="muted">Clientes</div><div class="value" id="client-count">0</div></div>
 <div class="stat"><div class="muted">Con créditos activos</div><div class="value" id="client-active-count">0</div></div>
@@ -209,6 +448,7 @@ body{background:white;color:black}
 <input class="search" id="client-search" placeholder="Buscar nombre o DNI...">
 <div id="clients-list"></div>
 </div>
+
 <div id="profile-panel" class="panel hidden">
 <div class="row"><div><h2 id="profile-name">Cliente</h2><p class="muted" id="profile-dni"></p></div><button class="secondary" id="close-profile">Cerrar perfil</button></div>
 <div id="profile-info"></div>
@@ -228,8 +468,8 @@ body{background:white;color:black}
 <h2>Calendario</h2>
 <p class="muted">Vencimientos e importes diarios de cuotas pendientes.</p>
 <div class="stats">
-<div class="stat green"><div class="muted">Total del mes</div><div class="value" id="calendar-month-total">$0</div></div>
-<div class="stat blue-border"><div class="muted">Total del día</div><div class="value" id="calendar-day-total">$0</div></div>
+<div class="stat"><div class="muted">Total del mes</div><div class="value" id="calendar-month-total">$0,00</div></div>
+<div class="stat"><div class="muted">Total del día</div><div class="value" id="calendar-day-total">$0,00</div></div>
 <div class="stat"><div class="muted">Cuotas pendientes del mes</div><div class="value" id="calendar-month-count">0</div></div>
 </div>
 <div class="calendar-head">
@@ -249,12 +489,12 @@ body{background:white;color:black}
 <h2>Estadísticas del negocio</h2>
 <p class="muted">Indicadores de cartera, cobranzas y rendimiento.</p>
 <div class="stats">
-<div class="stat green"><div class="muted">Capital prestado histórico</div><div class="value" id="stat-capital">$0</div></div>
-<div class="stat"><div class="muted">Intereses pactados</div><div class="value" id="stat-interest">$0</div></div>
-<div class="stat blue-border"><div class="muted">Dinero cobrado</div><div class="value" id="stat-collected">$0</div></div>
-<div class="stat orange"><div class="muted">Dinero pendiente</div><div class="value" id="stat-pending">$0</div></div>
+<div class="stat"><div class="muted">Capital prestado histórico</div><div class="value" id="stat-capital">$0,00</div></div>
+<div class="stat"><div class="muted">Intereses pactados</div><div class="value" id="stat-interest">$0,00</div></div>
+<div class="stat"><div class="muted">Dinero cobrado</div><div class="value" id="stat-collected">$0,00</div></div>
+<div class="stat"><div class="muted">Dinero pendiente</div><div class="value" id="stat-pending">$0,00</div></div>
 <div class="stat"><div class="muted">Créditos finalizados</div><div class="value" id="stat-paid-loans">0</div></div>
-<div class="stat red"><div class="muted">Créditos con mora</div><div class="value" id="stat-late-loans">0</div></div>
+<div class="stat"><div class="muted">Créditos con mora</div><div class="value" id="stat-late-loans">0</div></div>
 </div>
 </div>
 <div class="panel">
@@ -274,16 +514,12 @@ body{background:white;color:black}
 
 <section id="page-commissions" class="section">
 <div class="panel">
-<div class="row">
-<div>
 <h2>Comisiones del empleado</h2>
 <p class="muted">Comisión del 5% del total del préstamo (capital + intereses), habilitada al pagar la primera cuota en préstamos con comisión.</p>
-</div>
-</div>
 <div class="stats">
-<div class="stat orange"><div class="muted">Comisiones pendientes</div><div class="value" id="commission-pending">$0</div></div>
-<div class="stat green"><div class="muted">Comisiones pagadas</div><div class="value" id="commission-paid">$0</div></div>
-<div class="stat"><div class="muted">Total generado</div><div class="value" id="commission-total">$0</div></div>
+<div class="stat"><div class="muted">Comisiones pendientes</div><div class="value orange-text" id="commission-pending">$0,00</div></div>
+<div class="stat"><div class="muted">Comisiones pagadas</div><div class="value green-text" id="commission-paid">$0,00</div></div>
+<div class="stat"><div class="muted">Total generado</div><div class="value" id="commission-total">$0,00</div></div>
 </div>
 <h3>Comisiones pendientes de entrega</h3>
 <div id="commission-pending-list"></div>
@@ -293,59 +529,56 @@ body{background:white;color:black}
 </div>
 </section>
 
-<section id="page-cash" class="section">
-<div class="panel">
-<div class="row">
-<div>
-<h2>Caja disponible</h2>
-<p class="muted">Monto disponible para prestar, dividido entre Transferencia (a tu cargo) y Efectivo (a cargo del empleado). Independiente de los cobros de cuotas.</p>
-</div>
-<span class="badge ok">Transferencia + Efectivo</span>
-</div>
-<div class="stats" style="margin-top:15px">
-<div class="stat green"><div class="muted">Total disponible para prestar</div><div class="value" id="cash-balance">$0</div><div class="sub">Suma de transferencia y efectivo</div></div>
-<div class="stat blue-border"><div class="muted">Transferencia (vos)</div><div class="value" id="cash-transfer-balance">$0</div><div class="sub">Saldo disponible en transferencia</div></div>
-<div class="stat orange"><div class="muted">Efectivo (empleado)</div><div class="value" id="cash-cash-balance">$0</div><div class="sub">Saldo disponible en efectivo</div></div>
-</div>
-<div class="grid">
-<button id="cash-in-button">+ Ingreso a caja</button>
-<button class="danger" id="cash-out-button">− Egreso de caja</button>
-<button class="secondary" id="cash-initial-button">Configurar saldo inicial</button>
-</div>
-<hr class="divider">
-<div class="stats">
-<div class="stat green"><div class="muted">Total ingresado</div><div class="value" id="cash-income">$0</div></div>
-<div class="stat red"><div class="muted">Total egresado</div><div class="value" id="cash-expenses">$0</div></div>
-</div>
-<div class="row"><h3>Historial de movimientos</h3></div>
-<input id="cash-search" class="search" placeholder="Buscar por descripción, canal (transferencia/efectivo) o usuario...">
-<div id="cash-movements-list"></div>
-</div>
-</section>
-
 <section id="page-notifications" class="section">
 <div class="panel">
 <div class="row">
 <div><h2>Centro de notificaciones</h2><p class="muted">Avisos un día antes del vencimiento de cada cuota.</p></div>
 <button class="secondary" id="enable-notifications">Activar avisos</button>
 </div>
-<div id="notification-permission" class="muted"></div>
+<div id="notification-permission" class="muted" style="margin-top:8px"></div>
 <hr class="divider">
 <h3>Cuotas que vencen mañana</h3>
 <div id="tomorrow-notifications"></div>
-<h3 style="margin-top:24px">Cuotas vencidas</h3>
+<h3 style="margin-top:22px">Cuotas vencidas</h3>
 <div id="overdue-notifications"></div>
-<h3 style="margin-top:24px">Próximos vencimientos</h3>
+<h3 style="margin-top:22px">Próximos vencimientos</h3>
 <div id="next-notifications"></div>
+</div>
+</section>
+
+<section id="page-settings" class="section">
+<div class="panel">
+<h2>Configuración</h2>
+<p class="muted">Apariencia visual y ajustes de la cuenta.</p>
+
+<label style="margin-top:16px">Tema de la plataforma</label>
+<div class="theme-options">
+<button type="button" class="theme-choice" id="theme-light-btn" data-theme-choice="light">
+<strong>Modo claro</strong>
+<span class="muted">Fondo claro minimalista con bordes finos.</span>
+</button>
+<button type="button" class="theme-choice" id="theme-dark-btn" data-theme-choice="dark">
+<strong>Modo oscuro</strong>
+<span class="muted">Fondo oscuro de bajo cansancio visual.</span>
+</button>
+</div>
+
+<hr class="divider">
+
+<h3>Saldo inicial de caja</h3>
+<p class="muted">Disponible exclusivamente para el usuario administrador.</p>
+<button type="button" class="secondary" id="cash-initial-button">Configurar saldo inicial</button>
+<p id="admin-initial-note" class="footer-note"></p>
 </div>
 </section>
 </div>
 </div>
 
+<!-- MODAL CLIENTE -->
 <div class="modal-backdrop hidden" id="client-modal">
 <div class="modal">
-<div class="row"><h2>Nuevo cliente</h2><button class="secondary" data-close="client-modal">Cerrar</button></div>
-<form id="client-form">
+<div class="row"><h2>Nuevo cliente</h2><button type="button" class="secondary" data-close="client-modal">Cancelar</button></div>
+<form id="client-form" style="margin-top:14px">
 <div class="form-grid">
 <div><label>Nombre y apellido *</label><input id="new-name" required></div>
 <div><label>DNI *</label><input id="new-dni" required></div>
@@ -355,16 +588,20 @@ body{background:white;color:black}
 <div><label>Observaciones</label><textarea id="new-notes" rows="2"></textarea></div>
 </div>
 <br>
+<div class="row">
 <button type="submit">Guardar cliente</button>
-<span id="client-status" class="muted"></span>
+<button type="button" class="secondary" data-close="client-modal">Cancelar</button>
+</div>
+<p id="client-status" class="muted" style="margin-top:10px"></p>
 </form>
 </div>
 </div>
 
+<!-- MODAL PRÉSTAMO -->
 <div class="modal-backdrop hidden" id="loan-modal">
 <div class="modal">
-<div class="row"><h2>Nuevo préstamo</h2><button class="secondary" data-close="loan-modal">Cerrar</button></div>
-<form id="loan-form">
+<div class="row"><h2>Nuevo préstamo</h2><button type="button" class="secondary" data-close="loan-modal">Cancelar</button></div>
+<form id="loan-form" style="margin-top:14px">
 <div class="form-grid">
 <div><label>Cliente *</label><select id="loan-client" required><option value="">Seleccionar cliente...</option></select></div>
 <div><label>Fecha de inicio *</label><input id="start-date" type="date" required></div>
@@ -379,48 +616,59 @@ body{background:white;color:black}
 </div>
 <div id="selected-client-info" class="notice hidden"></div>
 <div id="calc-preview" class="notice" style="line-height:1.8;margin:15px 0">Ingresá los datos del crédito.</div>
+<div class="row">
 <button type="submit" id="save-loan">Guardar préstamo</button>
-<span id="form-status" class="muted"></span>
+<button type="button" class="secondary" data-close="loan-modal">Cancelar</button>
+</div>
+<p id="form-status" class="muted" style="margin-top:10px"></p>
 </form>
 </div>
 </div>
 
+<!-- MODAL MOVIMIENTO DE CAJA -->
 <div class="modal-backdrop hidden" id="cash-modal">
 <div class="modal">
-<div class="row"><h2 id="cash-modal-title">Movimiento de caja</h2><button class="secondary" data-close="cash-modal">Cerrar</button></div>
-<form id="cash-form">
+<div class="row"><h2 id="cash-modal-title">Movimiento de caja</h2><button type="button" class="secondary" data-close="cash-modal">Cancelar</button></div>
+<form id="cash-form" style="margin-top:14px">
 <input type="hidden" id="cash-edit-id">
-<label>Canal de caja</label>
-<select id="cash-channel" required>
-<option value="transfer">Transferencia (vos)</option>
-<option value="cash">Efectivo (empleado)</option>
-</select>
-<br><br>
-<label>Tipo de movimiento</label>
+<input type="hidden" id="cash-is-initial" value="false">
+
+<label>Tipo de operación</label>
 <select id="cash-type" required>
 <option value="income">Ingreso</option>
 <option value="expense">Egreso</option>
 </select>
 <br><br>
+
 <label>Importe ($)</label>
-<input id="cash-amount" type="number" min="0.01" step="0.01" required>
+<input id="cash-amount" type="number" min="0.01" step="0.01" required placeholder="0,00">
 <br><br>
-<label>Descripción</label>
-<input id="cash-description" maxlength="200" required placeholder="Ej. Disponible para prestar esta semana">
+
+<label>Descripción o motivo</label>
+<input id="cash-description" maxlength="200" required placeholder="Ej. Aporte de capital o retiro de efectivo">
 <br><br>
+
+<label>Fecha</label>
+<input id="cash-date" type="date" required>
+<br><br>
+
+<div class="row">
 <button type="submit" id="cash-save-button">Guardar movimiento</button>
-<span id="cash-status" class="muted"></span>
+<button type="button" class="secondary" data-close="cash-modal">Cancelar</button>
+</div>
+<p id="cash-status" class="red-text" style="margin-top:12px"></p>
 </form>
 </div>
 </div>
 
+<!-- MODAL COMPROBANTE -->
 <div class="modal-backdrop hidden" id="receipt-modal">
 <div class="modal">
 <div id="receipt-content"></div>
-<div class="row no-print" style="margin-top:15px">
-<button onclick="window.print()">Imprimir / PDF</button>
-<button class="secondary" id="copy-wa">Copiar WhatsApp</button>
-<button class="danger" data-close="receipt-modal">Cerrar</button>
+<div class="row no-print" style="margin-top:16px">
+<button type="button" onclick="window.print()">Imprimir / PDF</button>
+<button type="button" class="secondary" id="copy-wa">Copiar WhatsApp</button>
+<button type="button" class="danger" data-close="receipt-modal">Cerrar</button>
 </div>
 </div>
 </div>
@@ -443,6 +691,9 @@ const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
 const db=getFirestore(app);
 
+const ADMIN_EMAILS=[];
+const THEME_STORAGE_KEY="ib-creditos-theme";
+
 let allClients=[];
 let allLoans=[];
 let cashMovements=[];
@@ -463,12 +714,22 @@ clients:"Clientes",
 collections:"Calendario",
 statistics:"Estadísticas",
 commissions:"Comisiones",
-cash:"Caja disponible",
-notifications:"Avisos"
+notifications:"Avisos",
+settings:"Configuración"
 };
 
 const $=id=>document.getElementById(id);
-const fmtMoney=n=>Number(n||0).toLocaleString("es-AR",{style:"currency",currency:"ARS",minimumFractionDigits:2,maximumFractionDigits:2});
+
+function fmtMoney(n){
+const num=Number(n||0);
+return "$"+num.toLocaleString("es-AR",{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+function fmtSignedMoney(n,isExpense){
+const abs=Math.abs(Number(n||0));
+const formatted="$"+abs.toLocaleString("es-AR",{minimumFractionDigits:2,maximumFractionDigits:2});
+return isExpense?`−${formatted}`:`+${formatted}`;
+}
 
 function esc(value){
 return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -480,8 +741,12 @@ return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${Str
 
 function parseDate(value){
 if(!value)return null;
-const [y,m,d]=String(value).split("-").map(Number);
-return y&&m&&d?new Date(y,m-1,d):null;
+if(typeof value==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(value)){
+const [y,m,d]=value.split("-").map(Number);
+return new Date(y,m-1,d);
+}
+const parsed=new Date(value);
+return Number.isNaN(parsed.getTime())?null:parsed;
 }
 
 function addMonths(date,months){
@@ -496,6 +761,54 @@ function fmtDate(value){
 const d=parseDate(value);
 return d?d.toLocaleDateString("es-AR"):"Sin fecha";
 }
+
+function formatRelativeDate(value){
+const d=parseDate(value);
+if(!d)return"Sin fecha";
+const dayStr=localDateString(d);
+const today=new Date();
+const todayStr=localDateString(today);
+const yesterday=new Date(today.getFullYear(),today.getMonth(),today.getDate()-1);
+const yesterdayStr=localDateString(yesterday);
+if(dayStr===todayStr)return"Hoy";
+if(dayStr===yesterdayStr)return"Ayer";
+return d.toLocaleDateString("es-AR");
+}
+
+function formatActorName(emailOrName){
+const raw=String(emailOrName||"").trim();
+if(!raw)return"Usuario";
+if(raw.includes("@")){
+const prefix=raw.split("@")[0];
+return prefix.charAt(0).toUpperCase()+prefix.slice(1);
+}
+return raw;
+}
+
+function isCurrentUserAdmin(){
+const email=(auth.currentUser?.email||"").trim().toLowerCase();
+if(!email)return false;
+if(!ADMIN_EMAILS.length)return true;
+return ADMIN_EMAILS.map(x=>x.trim().toLowerCase()).includes(email);
+}
+
+// TEMA CLARO / OSCURO
+function applyTheme(theme){
+const chosen=theme==="dark"?"dark":"light";
+document.documentElement.setAttribute("data-theme",chosen);
+try{localStorage.setItem(THEME_STORAGE_KEY,chosen)}catch(e){}
+$("theme-light-btn")?.classList.toggle("active",chosen==="light");
+$("theme-dark-btn")?.classList.toggle("active",chosen==="dark");
+}
+
+(function initTheme(){
+let saved="light";
+try{saved=localStorage.getItem(THEME_STORAGE_KEY)||"light"}catch(e){}
+applyTheme(saved);
+})();
+
+$("theme-light-btn").addEventListener("click",()=>applyTheme("light"));
+$("theme-dark-btn").addEventListener("click",()=>applyTheme("dark"));
 
 function setDrawerOpen(open){
 const drawer=$("nav-drawer");
@@ -521,11 +834,12 @@ $("page-"+page).classList.add("active");
 document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
 updateSectionHeader(page);
 setDrawerOpen(false);
+if(page==="home")renderCash();
 if(page==="collections")renderCalendar();
 if(page==="statistics")renderStatistics();
 if(page==="commissions")renderCommissions();
-if(page==="cash")renderCash();
 if(page==="notifications")renderNotifications();
+if(page==="settings")updateAdminSettingsUI();
 }
 window.navigate=navigate;
 
@@ -545,7 +859,6 @@ function openModal(id){$(id).classList.remove("hidden")}
 function closeModal(id){$(id).classList.add("hidden")}
 
 $("open-client-form").onclick=()=>openModal("client-modal");
-$("open-client-form-2").onclick=()=>openModal("client-modal");
 $("open-loan-form").onclick=()=>openModal("loan-modal");
 
 document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>closeModal(b.dataset.close)));
@@ -563,6 +876,14 @@ $("auth-error").textContent="No se pudo iniciar sesión. Revisá tus datos.";
 
 $("logout-btn").onclick=()=>signOut(auth);
 
+function updateAdminSettingsUI(){
+const admin=isCurrentUserAdmin();
+$("cash-initial-button").disabled=!admin;
+$("admin-initial-note").textContent=admin
+?"Tu usuario tiene permiso para configurar el saldo inicial de caja."
+:"Solo el usuario administrador puede configurar el saldo inicial.";
+}
+
 onAuthStateChanged(auth,user=>{
 if(user){
 currentUserEmail=user.email||"Panel de gestión";
@@ -570,6 +891,7 @@ $("auth-section").classList.add("hidden");
 $("app-section").classList.remove("hidden");
 updateSectionHeader("home");
 $("start-date").valueAsDate=new Date();
+updateAdminSettingsUI();
 subscribeData();
 subscribeCash();
 startNotificationChecks();
@@ -595,18 +917,16 @@ allClients=snapshot.docs.map(d=>({id:d.id,...d.data()}));
 renderClients();
 updateClientSelector();
 if(profileDni)renderProfile(profileDni);
-renderDashboard();
-renderCommissions();
-renderNotifications();
 renderCalendar();
 renderStatistics();
+renderCommissions();
+renderNotifications();
 },error=>console.error("Clientes:",error));
 
 unsubscribeLoans=onSnapshot(query(collection(db,"loans"),orderBy("createdAt","desc")),snapshot=>{
 allLoans=snapshot.docs.map(d=>({id:d.id,...d.data()}));
 renderClients();
 renderLoansForProfile();
-renderDashboard();
 renderCalendar();
 renderStatistics();
 renderCommissions();
@@ -739,8 +1059,8 @@ return`
 <p class="muted">📍 ${esc([c.address,c.city].filter(Boolean).join(", ")||"Sin dirección")}</p>
 <div class="row"><span class="muted">${loans.length} créditos históricos</span><strong>${fmtMoney(balance)}</strong></div>
 <div class="item-actions">
-<button class="secondary" data-profile="${esc(c.dni)}">Ver perfil e historial</button>
-<button data-loan="${esc(c.dni)}">Nuevo préstamo</button>
+<button type="button" class="secondary" data-profile="${esc(c.dni)}">Ver perfil e historial</button>
+<button type="button" data-loan="${esc(c.dni)}">Nuevo préstamo</button>
 </div>
 </div>`;
 }).join("");
@@ -933,7 +1253,7 @@ btn.disabled=false;
 }
 });
 
-// REGISTRAR CUOTA Y GENERAR COMISIÓN
+// REGISTRAR CUOTA Y GENERAR COMISIÓN (INDEPENDIENTE DE CAJA)
 async function payInstallment(loan,index){
 const list=loan.installments||[];
 if(!list[index]||list[index].paid)return;
@@ -941,8 +1261,6 @@ if(!list[index]||list[index].paid)return;
 const updated=list.map((c,i)=>i===index?{...c,paid:true,paidAt:new Date().toISOString()}:c);
 const changes={installments:updated};
 
-// Comisión del 5% sobre el total pactado (capital + intereses),
-// habilitada al registrar la primera cuota solo si el préstamo tiene comisión.
 if(index===0&&loanHasCommission(loan)&&loan.commissionStatus!=="paid"){
 const totalLoan=Number(loan.totalAmount||(
 Number(loan.capital||0)+Number(loan.interestTotal||0)
@@ -1031,23 +1349,6 @@ function monthlyTotal(year,month){
 return monthlyPayments(year,month).reduce((s,p)=>s+Number(p.c.amount||0),0);
 }
 
-function renderFutureMonths(){
-const now=new Date();
-let html="";
-for(let i=0;i<12;i++){
-const d=new Date(now.getFullYear(),now.getMonth()+i,1);
-const total=monthlyTotal(d.getFullYear(),d.getMonth());
-const count=monthlyPayments(d.getFullYear(),d.getMonth()).length;
-html+=`
-<div class="month-card">
-<small>${d.toLocaleDateString("es-AR",{month:"long",year:"numeric"})}</small>
-<strong class="money">${fmtMoney(total)}</strong>
-<small>${count} cuotas pendientes</small>
-</div>`;
-}
-$("future-months").innerHTML=html;
-}
-
 function renderCalendar(){
 const year=calendarDate.getFullYear();
 const month=calendarDate.getMonth();
@@ -1093,7 +1394,7 @@ ${items.map(p=>`
 <div class="payment-row">
 <div class="row">
 <div><strong>${esc(p.loan.clientName)}</strong><div class="muted">DNI ${esc(p.loan.clientDni)}</div><div class="muted">Cuota ${p.c.number} de ${p.loan.months}</div><span class="badge ${p.late?"bad":"warn"}">${p.late?"En mora":"Pendiente"}</span></div>
-<div style="text-align:right"><strong class="money">${fmtMoney(p.c.amount)}</strong><br><button data-pay="${p.loan.id}" data-index="${p.index}" style="margin-top:8px">Registrar pago</button></div>
+<div style="text-align:right"><strong class="money">${fmtMoney(p.c.amount)}</strong><br><button type="button" data-pay="${p.loan.id}" data-index="${p.index}" style="margin-top:8px">Registrar pago</button></div>
 </div>
 </div>`).join("")}
 `;
@@ -1107,31 +1408,6 @@ if(loan)payInstallment(loan,Number(b.dataset.index));
 
 $("prev-month").onclick=()=>{calendarDate=new Date(calendarDate.getFullYear(),calendarDate.getMonth()-1,1);renderCalendar()};
 $("next-month").onclick=()=>{calendarDate=new Date(calendarDate.getFullYear(),calendarDate.getMonth()+1,1);renderCalendar()};
-
-function renderDashboard(){
-const today=localDateString(new Date());
-const tomorrow=localDateString(new Date(Date.now()+86400000));
-const todayPayments=paymentsForDate(today);
-const overdue=allLoans.flatMap(l=>installments(l).filter(isLate));
-const active=allLoans.filter(l=>!isLoanPaid(l));
-$("today-label").textContent=new Date().toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
-$("home-balance").textContent=fmtMoney(allLoans.reduce((s,l)=>s+loanBalance(l),0));
-$("home-today").textContent=fmtMoney(todayPayments.reduce((s,p)=>s+Number(p.c.amount||0),0));
-$("home-today-count").textContent=todayPayments.length+" cuotas";
-$("home-overdue").textContent=fmtMoney(overdue.reduce((s,c)=>s+Number(c.amount||0),0));
-$("home-overdue-count").textContent=overdue.length+" cuotas vencidas";
-$("home-active").textContent=active.length;
-
-const upcoming=[...todayPayments.map(p=>({...p,label:"Vence hoy"})),...paymentsForDate(tomorrow).map(p=>({...p,label:"Vence mañana"}))];
-$("home-upcoming").innerHTML=upcoming.length?upcoming.map(p=>`
-<div class="payment-row row"><div><strong>${esc(p.loan.clientName)}</strong><div class="muted">${p.label} · Cuota ${p.c.number}</div></div><strong>${fmtMoney(p.c.amount)}</strong></div>
-`).join(""):'<div class="empty">No hay cobros previstos para hoy ni mañana.</div>';
-
-const notices=getNoticeItems();
-$("home-notifications").innerHTML=notices.length?notices.slice(0,4).map(n=>`
-<div class="notice ${n.type==="late"?"danger-notice":"warning-notice"}"><strong>${esc(n.title)}</strong><div class="muted">${esc(n.detail)}</div></div>
-`).join(""):'<div class="empty">No hay avisos pendientes.</div>';
-}
 
 function renderStatistics(){
 const capital=allLoans.reduce((s,l)=>s+Number(l.capital||0),0);
@@ -1186,7 +1462,7 @@ function overdueAmount(){
 return allLoans.reduce((s,l)=>s+installments(l).filter(isLate).reduce((a,c)=>a+Number(c.amount||0),0),0);
 }
 
-// COMISIONES: 5% SOBRE CAPITAL + INTERESES (SI EL PRÉSTAMO TIENE COMISIÓN)
+// COMISIONES
 function loanHasCommission(loan){
 if(loan?.hasCommission===false||loan?.commissionStatus==="none")return false;
 return true;
@@ -1230,7 +1506,7 @@ $("commission-pending-list").innerHTML=pending.length?pending.map(l=>`
 </div>
 <p class="muted">Total del préstamo (capital + intereses): ${fmtMoney(commissionBase(l))}</p>
 <p class="muted">Comisión: 5% · Primera cuota abonada: ${l.installments?.[0]?.paidAt?new Date(l.installments[0].paidAt).toLocaleDateString("es-AR"):"Sí"}</p>
-<button data-commission-paid="${l.id}">Marcar comisión pagada</button>
+<button type="button" data-commission-paid="${l.id}">Marcar comisión pagada</button>
 </div>
 `).join(""):'<div class="empty">No hay comisiones pendientes.</div>';
 
@@ -1262,23 +1538,21 @@ alert("No se pudo actualizar la comisión: "+err.message);
 });
 }
 
-// CAJA DISPONIBLE PARA PRESTAR (TRANSFERENCIA + EFECTIVO)
-function movementChannel(m){
-return m?.channel==="cash"?"cash":"transfer";
+// CAJA DISPONIBLE (COLECCIÓN cash_movements, INDEPENDIENTE DE PRÉSTAMOS Y COBROS)
+function movementEffect(m){
+return m?.type==="expense"?-Number(m.amount||0):Number(m.amount||0);
 }
 
-function channelLabel(channel){
-return channel==="cash"?"Efectivo (empleado)":"Transferencia (vos)";
-}
-
-function channelBalance(channel){
+function cashBalance(excludeId=null){
 return cashMovements
-.filter(m=>movementChannel(m)===channel)
-.reduce((total,m)=>total+(m.type==="expense"?-Number(m.amount||0):Number(m.amount||0)),0);
+.filter(m=>!excludeId||m.id!==excludeId)
+.reduce((total,m)=>total+movementEffect(m),0);
 }
 
-function cashBalance(){
-return channelBalance("transfer")+channelBalance("cash");
+function movementDateValue(m){
+if(m?.movementDate)return m.movementDate;
+if(m?.createdAt)return localDateString(new Date(m.createdAt));
+return localDateString(new Date());
 }
 
 function subscribeCash(){
@@ -1288,84 +1562,70 @@ cashMovements=snapshot.docs.map(d=>({id:d.id,...d.data()}));
 renderCash();
 },error=>{
 console.error("Error de caja:",error);
-$("cash-movements-list").innerHTML='<div class="empty">No se pudo cargar la caja. Revisá las reglas de Firestore para cash_movements.</div>';
+$("cash-balance").textContent=fmtMoney(0);
+$("cash-movements-list").innerHTML='<div class="empty">No se pudieron cargar los movimientos de caja.</div>';
 });
 }
 
 function renderCash(){
-const transferBal=channelBalance("transfer");
-const cashBal=channelBalance("cash");
-const totalBal=transferBal+cashBal;
-const income=cashMovements.filter(m=>m.type==="income").reduce((s,m)=>s+Number(m.amount||0),0);
-const expenses=cashMovements.filter(m=>m.type==="expense").reduce((s,m)=>s+Number(m.amount||0),0);
+const balance=cashBalance();
+$("cash-balance").textContent=fmtMoney(balance);
 
-$("cash-balance").textContent=fmtMoney(totalBal);
-$("cash-transfer-balance").textContent=fmtMoney(transferBal);
-$("cash-cash-balance").textContent=fmtMoney(cashBal);
-$("cash-income").textContent=fmtMoney(income);
-$("cash-expenses").textContent=fmtMoney(expenses);
-
-const term=$("cash-search").value.trim().toLowerCase();
-const filtered=cashMovements.filter(m=>{
-const ch=movementChannel(m);
-const chText=ch==="cash"?"efectivo empleado":"transferencia vos";
-return String(m.description||"").toLowerCase().includes(term)
-||String(m.createdBy||"").toLowerCase().includes(term)
-||String(m.type||"").toLowerCase().includes(term)
-||chText.includes(term);
-});
-
-if(!filtered.length){
-$("cash-movements-list").innerHTML='<div class="empty">Todavía no hay movimientos registrados en caja.</div>';
+if(!cashMovements.length){
+$("cash-movements-list").innerHTML='<div class="empty">Todavía no hay movimientos registrados.</div>';
 return;
 }
 
-$("cash-movements-list").innerHTML=filtered.map(m=>{
-const expense=m.type==="expense";
-const ch=movementChannel(m);
+$("cash-movements-list").innerHTML=cashMovements.map(m=>{
+const isExpense=m.type==="expense";
+const dateLabel=formatRelativeDate(movementDateValue(m));
+const actorLabel=formatActorName(m.createdBy);
 const history=Array.isArray(m.editHistory)?m.editHistory:[];
 return`
-<div class="item">
-<div class="row">
-<div>
-<strong>${esc(m.description||"Movimiento")}</strong> <span class="badge ${ch==="cash"?"warn":""}">${esc(channelLabel(ch))}</span>
-<div class="muted">${m.isInitial?"Saldo inicial · ":""}${m.createdAt?new Date(m.createdAt).toLocaleString("es-AR"):"Fecha no disponible"}</div>
+<div class="movement-row">
+<div class="movement-main">
+<div class="movement-title">${esc(m.description||"Movimiento")}</div>
+<div class="movement-meta">
+<span>${esc(dateLabel)} · ${esc(actorLabel)}</span>
+${m.isInitial?'<span class="badge ok">Saldo inicial</span>':""}
+${history.length?`<button type="button" class="link-action" data-toggle-history="${m.id}">Historial (${history.length})</button>`:""}
 </div>
-<strong class="${expense?"red-text":"green-text"}">${expense?"−":"+"}${fmtMoney(m.amount)}</strong>
-</div>
-<p class="muted">Registrado por: ${esc(m.createdBy||"Usuario desconocido")}</p>
-<div class="item-actions">
-<button class="secondary" data-cash-edit="${m.id}">Modificar movimiento</button>
-</div>
-${history.length?`
-<details>
-<summary>Ver historial de modificaciones (${history.length})</summary>
+<div class="hidden" id="cash-hist-${m.id}" style="margin-top:8px">
 ${history.slice().reverse().map(h=>`
-<div class="payment-row">
-<strong>Modificación</strong>
-<div class="muted">${h.editedAt?new Date(h.editedAt).toLocaleString("es-AR"):"Fecha no disponible"}</div>
-<div class="muted">Antes: ${esc(channelLabel(h.oldChannel||"transfer"))} · ${h.oldType==="expense"?"Egreso":"Ingreso"} · ${fmtMoney(h.oldAmount)}</div>
-<div class="muted">Después: ${esc(channelLabel(h.newChannel||"transfer"))} · ${h.newType==="expense"?"Egreso":"Ingreso"} · ${fmtMoney(h.newAmount)}</div>
-<div class="muted">Descripción anterior: ${esc(h.oldDescription)}</div>
-<div class="muted">Descripción nueva: ${esc(h.newDescription)}</div>
-<div class="muted">Modificado por: ${esc(h.editedBy)}</div>
+<div class="notice" style="margin-top:6px;padding:10px 12px">
+<div class="muted"><strong>${h.oldType==="expense"?"Egreso":"Ingreso"}</strong> · ${fmtMoney(h.oldAmount)} → <strong>${h.newType==="expense"?"Egreso":"Ingreso"}</strong> · ${fmtMoney(h.newAmount)}</div>
+<div class="muted">Motivo: "${esc(h.oldDescription)}" → "${esc(h.newDescription)}"</div>
+<div class="muted">Por ${esc(formatActorName(h.editedBy))} · ${h.editedAt?new Date(h.editedAt).toLocaleString("es-AR"):""}</div>
 </div>`).join("")}
-</details>`:""}
+</div>
+</div>
+<div class="movement-right">
+<span class="movement-amount ${isExpense?"expense-text":"income-text"}">${fmtSignedMoney(m.amount,isExpense)}</span>
+<button type="button" class="link-action" data-cash-edit="${m.id}">Editar</button>
+</div>
 </div>`;
 }).join("");
 
 $("cash-movements-list").querySelectorAll("[data-cash-edit]").forEach(b=>{
 b.onclick=()=>editCashMovement(b.dataset.cashEdit);
 });
+
+$("cash-movements-list").querySelectorAll("[data-toggle-history]").forEach(b=>{
+b.onclick=()=>{
+const box=$("cash-hist-"+b.dataset.toggleHistory);
+if(box)box.classList.toggle("hidden");
+};
+});
 }
 
 function openCashModal(type){
 $("cash-form").reset();
 $("cash-edit-id").value="";
-$("cash-channel").value="transfer";
+$("cash-is-initial").value="false";
 $("cash-type").disabled=false;
 $("cash-type").value=type;
-$("cash-modal-title").textContent=type==="income"?"Registrar ingreso a caja":"Registrar egreso de caja";
+$("cash-date").value=localDateString(new Date());
+$("cash-modal-title").textContent=type==="income"?"Registrar ingreso":"Registrar egreso";
 $("cash-status").textContent="";
 openModal("cash-modal");
 }
@@ -1374,13 +1634,18 @@ $("cash-in-button").onclick=()=>openCashModal("income");
 $("cash-out-button").onclick=()=>openCashModal("expense");
 
 $("cash-initial-button").onclick=()=>{
+if(!isCurrentUserAdmin()){
+alert("Solo el administrador puede configurar el saldo inicial.");
+return;
+}
 $("cash-form").reset();
 $("cash-edit-id").value="";
-$("cash-channel").value="transfer";
+$("cash-is-initial").value="true";
 $("cash-type").value="income";
 $("cash-type").disabled=true;
-$("cash-modal-title").textContent="Configurar saldo inicial";
+$("cash-date").value=localDateString(new Date());
 $("cash-description").value="Saldo inicial";
+$("cash-modal-title").textContent="Configurar saldo inicial";
 $("cash-status").textContent="";
 openModal("cash-modal");
 };
@@ -1389,11 +1654,12 @@ function editCashMovement(id){
 const m=cashMovements.find(x=>x.id===id);
 if(!m)return;
 $("cash-edit-id").value=id;
-$("cash-channel").value=movementChannel(m);
-$("cash-type").value=m.type;
-$("cash-type").disabled=false;
-$("cash-amount").value=m.amount;
+$("cash-is-initial").value=m.isInitial?"true":"false";
+$("cash-type").value=m.type||"income";
+$("cash-type").disabled=Boolean(m.isInitial);
+$("cash-amount").value=Number(m.amount||0);
 $("cash-description").value=m.description||"";
+$("cash-date").value=movementDateValue(m);
 $("cash-modal-title").textContent=m.isInitial?"Modificar saldo inicial":"Modificar movimiento";
 $("cash-status").textContent="";
 openModal("cash-modal");
@@ -1402,23 +1668,35 @@ openModal("cash-modal");
 $("cash-form").addEventListener("submit",async e=>{
 e.preventDefault();
 const id=$("cash-edit-id").value;
-const channel=$("cash-channel").value;
-const type=$("cash-type").value;
+const isInitial=$("cash-is-initial").value==="true";
+const type=isInitial?"income":$("cash-type").value;
 const amount=Number($("cash-amount").value);
 const description=$("cash-description").value.trim();
+const movementDate=$("cash-date").value||localDateString(new Date());
 const status=$("cash-status");
 const button=$("cash-save-button");
 
+if(isInitial&&!id&&!isCurrentUserAdmin()){
+status.textContent="Solo el administrador puede configurar el saldo inicial.";
+return;
+}
 if(!Number.isFinite(amount)||amount<=0){
-status.textContent="Ingresá un importe válido.";
+status.textContent="Ingresá un importe mayor a cero.";
 return;
 }
 if(!description){
-status.textContent="Ingresá una descripción.";
+status.textContent="Ingresá una descripción o motivo.";
 return;
 }
 
-const user=auth.currentUser?.email||"Usuario desconocido";
+const availableWithoutCurrent=cashBalance(id||null);
+const projectedBalance=availableWithoutCurrent+(type==="expense"?-amount:amount);
+if(projectedBalance<-0.0001){
+status.textContent=`El egreso supera el saldo disponible (${fmtMoney(availableWithoutCurrent)}).`;
+return;
+}
+
+const user=auth.currentUser?.email||"Usuario";
 const now=new Date().toISOString();
 button.disabled=true;
 status.textContent="Guardando...";
@@ -1432,34 +1710,33 @@ if(!snap.exists())throw new Error("El movimiento ya no existe.");
 const old=snap.data();
 const history=Array.isArray(old.editHistory)?old.editHistory:[];
 history.push({
-oldChannel:movementChannel(old),
-newChannel:channel,
 oldType:old.type,
 oldAmount:Number(old.amount||0),
 oldDescription:old.description||"",
+oldMovementDate:movementDateValue(old),
 newType:type,
 newAmount:amount,
 newDescription:description,
+newMovementDate:movementDate,
 editedAt:now,
 editedBy:user
 });
 transaction.update(ref,{
-channel,
 type,
 amount,
 description,
+movementDate,
 editHistory:history,
 updatedAt:now,
 updatedBy:user
 });
 });
 }else{
-const isInitial=$("cash-type").disabled;
 await addDoc(collection(db,"cash_movements"),{
-channel,
 type,
 amount,
 description,
+movementDate,
 isInitial,
 createdAt:now,
 createdBy:user,
@@ -1472,28 +1749,13 @@ closeModal("cash-modal");
 $("cash-form").reset();
 }catch(err){
 console.error(err);
-status.textContent="Error al guardar: "+err.message;
+status.textContent="No se pudo guardar: "+err.message;
 }finally{
 button.disabled=false;
 }
 });
 
-$("cash-search").addEventListener("input",renderCash);
-
-function getNoticeItems(){
-const today=localDateString(new Date());
-const tomorrow=localDateString(new Date(Date.now()+86400000));
-const out=[];
-allLoans.forEach(loan=>{
-installments(loan).forEach(c=>{
-if(c.paid||!c.dueDate)return;
-if(c.dueDate===tomorrow)out.push({type:"tomorrow",title:"Cobro para mañana",detail:`${loan.clientName} · Cuota ${c.number} · ${fmtMoney(c.amount)}`});
-if(c.dueDate<today)out.push({type:"late",title:"Cuota vencida",detail:`${loan.clientName} · Cuota ${c.number} · ${fmtMoney(c.amount)} · Venció ${fmtDate(c.dueDate)}`});
-});
-});
-return out;
-}
-
+// NOTIFICACIONES
 function renderNotifications(){
 const tomorrow=localDateString(new Date(Date.now()+86400000));
 const tomorrowItems=allLoans.flatMap(l=>installments(l).filter(c=>!c.paid&&c.dueDate===tomorrow).map(c=>({loan:l,c})));
@@ -1585,7 +1847,6 @@ setTimeout(()=>$("copy-wa").textContent="Copiar WhatsApp",1600);
 
 $("start-date").valueAsDate=new Date();
 updatePreview();
-
 </script>
 </body>
 </html>
