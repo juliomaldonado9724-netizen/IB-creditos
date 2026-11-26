@@ -152,6 +152,7 @@ body{background:white;color:black}
 <button data-page="collections">Cobros</button>
 <button data-page="statistics">Estadísticas</button>
 <button data-page="commissions">Comisiones</button>
+<button data-page="cash">Caja disponible</button>
 <button data-page="notifications">Avisos <span id="notification-count"></span></button>
 </nav>
 
@@ -276,6 +277,36 @@ body{background:white;color:black}
 </div>
 </section>
 
+<section id="page-cash" class="section">
+<div class="panel">
+<div class="row">
+<div>
+<h2>Caja disponible</h2>
+<p class="muted">Monto disponible para prestar, dividido entre Transferencia (a tu cargo) y Efectivo (a cargo del empleado). Independiente de los cobros de cuotas.</p>
+</div>
+<span class="badge ok">Transferencia + Efectivo</span>
+</div>
+<div class="stats" style="margin-top:15px">
+<div class="stat green"><div class="muted">Total disponible para prestar</div><div class="value" id="cash-balance">$0</div><div class="sub">Suma de transferencia y efectivo</div></div>
+<div class="stat blue-border"><div class="muted">Transferencia (vos)</div><div class="value" id="cash-transfer-balance">$0</div><div class="sub">Saldo disponible en transferencia</div></div>
+<div class="stat orange"><div class="muted">Efectivo (empleado)</div><div class="value" id="cash-cash-balance">$0</div><div class="sub">Saldo disponible en efectivo</div></div>
+</div>
+<div class="grid">
+<button id="cash-in-button">+ Ingreso a caja</button>
+<button class="danger" id="cash-out-button">− Egreso de caja</button>
+<button class="secondary" id="cash-initial-button">Configurar saldo inicial</button>
+</div>
+<hr class="divider">
+<div class="stats">
+<div class="stat green"><div class="muted">Total ingresado</div><div class="value" id="cash-income">$0</div></div>
+<div class="stat red"><div class="muted">Total egresado</div><div class="value" id="cash-expenses">$0</div></div>
+</div>
+<div class="row"><h3>Historial de movimientos</h3></div>
+<input id="cash-search" class="search" placeholder="Buscar por descripción, canal (transferencia/efectivo) o usuario...">
+<div id="cash-movements-list"></div>
+</div>
+</section>
+
 <section id="page-notifications" class="section">
 <div class="panel">
 <div class="row">
@@ -337,6 +368,35 @@ body{background:white;color:black}
 </div>
 </div>
 
+<div class="modal-backdrop hidden" id="cash-modal">
+<div class="modal">
+<div class="row"><h2 id="cash-modal-title">Movimiento de caja</h2><button class="secondary" data-close="cash-modal">Cerrar</button></div>
+<form id="cash-form">
+<input type="hidden" id="cash-edit-id">
+<label>Canal de caja</label>
+<select id="cash-channel" required>
+<option value="transfer">Transferencia (vos)</option>
+<option value="cash">Efectivo (empleado)</option>
+</select>
+<br><br>
+<label>Tipo de movimiento</label>
+<select id="cash-type" required>
+<option value="income">Ingreso</option>
+<option value="expense">Egreso</option>
+</select>
+<br><br>
+<label>Importe ($)</label>
+<input id="cash-amount" type="number" min="0.01" step="0.01" required>
+<br><br>
+<label>Descripción</label>
+<input id="cash-description" maxlength="200" required placeholder="Ej. Disponible para prestar esta semana">
+<br><br>
+<button type="submit" id="cash-save-button">Guardar movimiento</button>
+<span id="cash-status" class="muted"></span>
+</form>
+</div>
+</div>
+
 <div class="modal-backdrop hidden" id="receipt-modal">
 <div class="modal">
 <div id="receipt-content"></div>
@@ -351,7 +411,7 @@ body{background:white;color:black}
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import{getFirestore,collection,addDoc,updateDoc,doc,onSnapshot,query,orderBy}from"https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import{getFirestore,collection,addDoc,updateDoc,doc,onSnapshot,query,orderBy,runTransaction}from"https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 const firebaseConfig={
 apiKey:"AIzaSyAJHmfSW2gu3wdjcPWJkQ2jTFNI90Odl9A",
@@ -368,8 +428,10 @@ const db=getFirestore(app);
 
 let allClients=[];
 let allLoans=[];
+let cashMovements=[];
 let unsubscribeClients=null;
 let unsubscribeLoans=null;
+let unsubscribeCash=null;
 let calendarDate=new Date();
 let selectedDate=localDateString(new Date());
 let profileDni=null;
@@ -414,6 +476,7 @@ document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",
 if(page==="collections")renderCalendar();
 if(page==="statistics")renderStatistics();
 if(page==="commissions")renderCommissions();
+if(page==="cash")renderCash();
 if(page==="notifications")renderNotifications();
 }
 window.navigate=navigate;
@@ -449,12 +512,15 @@ $("app-section").classList.remove("hidden");
 $("user-info").textContent=user.email;
 $("start-date").valueAsDate=new Date();
 subscribeData();
+subscribeCash();
 startNotificationChecks();
 }else{
 $("auth-section").classList.remove("hidden");
 $("app-section").classList.add("hidden");
 if(unsubscribeClients)unsubscribeClients();
 if(unsubscribeLoans)unsubscribeLoans();
+if(unsubscribeCash)unsubscribeCash();
+cashMovements=[];
 if(notificationTimer)clearInterval(notificationTimer);
 }
 });
@@ -1076,6 +1142,224 @@ alert("No se pudo actualizar la comisión: "+err.message);
 };
 });
 }
+
+// CAJA DISPONIBLE PARA PRESTAR (TRANSFERENCIA + EFECTIVO)
+function movementChannel(m){
+return m?.channel==="cash"?"cash":"transfer";
+}
+
+function channelLabel(channel){
+return channel==="cash"?"Efectivo (empleado)":"Transferencia (vos)";
+}
+
+function channelBalance(channel){
+return cashMovements
+.filter(m=>movementChannel(m)===channel)
+.reduce((total,m)=>total+(m.type==="expense"?-Number(m.amount||0):Number(m.amount||0)),0);
+}
+
+function cashBalance(){
+return channelBalance("transfer")+channelBalance("cash");
+}
+
+function subscribeCash(){
+if(unsubscribeCash)unsubscribeCash();
+unsubscribeCash=onSnapshot(query(collection(db,"cash_movements"),orderBy("createdAt","desc")),snapshot=>{
+cashMovements=snapshot.docs.map(d=>({id:d.id,...d.data()}));
+renderCash();
+},error=>{
+console.error("Error de caja:",error);
+$("cash-movements-list").innerHTML='<div class="empty">No se pudo cargar la caja. Revisá las reglas de Firestore para cash_movements.</div>';
+});
+}
+
+function renderCash(){
+const transferBal=channelBalance("transfer");
+const cashBal=channelBalance("cash");
+const totalBal=transferBal+cashBal;
+const income=cashMovements.filter(m=>m.type==="income").reduce((s,m)=>s+Number(m.amount||0),0);
+const expenses=cashMovements.filter(m=>m.type==="expense").reduce((s,m)=>s+Number(m.amount||0),0);
+
+$("cash-balance").textContent=fmtMoney(totalBal);
+$("cash-transfer-balance").textContent=fmtMoney(transferBal);
+$("cash-cash-balance").textContent=fmtMoney(cashBal);
+$("cash-income").textContent=fmtMoney(income);
+$("cash-expenses").textContent=fmtMoney(expenses);
+
+const term=$("cash-search").value.trim().toLowerCase();
+const filtered=cashMovements.filter(m=>{
+const ch=movementChannel(m);
+const chText=ch==="cash"?"efectivo empleado":"transferencia vos";
+return String(m.description||"").toLowerCase().includes(term)
+||String(m.createdBy||"").toLowerCase().includes(term)
+||String(m.type||"").toLowerCase().includes(term)
+||chText.includes(term);
+});
+
+if(!filtered.length){
+$("cash-movements-list").innerHTML='<div class="empty">Todavía no hay movimientos registrados en caja.</div>';
+return;
+}
+
+$("cash-movements-list").innerHTML=filtered.map(m=>{
+const expense=m.type==="expense";
+const ch=movementChannel(m);
+const history=Array.isArray(m.editHistory)?m.editHistory:[];
+return`
+<div class="item">
+<div class="row">
+<div>
+<strong>${esc(m.description||"Movimiento")}</strong> <span class="badge ${ch==="cash"?"warn":""}">${esc(channelLabel(ch))}</span>
+<div class="muted">${m.isInitial?"Saldo inicial · ":""}${m.createdAt?new Date(m.createdAt).toLocaleString("es-AR"):"Fecha no disponible"}</div>
+</div>
+<strong class="${expense?"red-text":"green-text"}">${expense?"−":"+"}${fmtMoney(m.amount)}</strong>
+</div>
+<p class="muted">Registrado por: ${esc(m.createdBy||"Usuario desconocido")}</p>
+<div class="item-actions">
+<button class="secondary" data-cash-edit="${m.id}">Modificar movimiento</button>
+</div>
+${history.length?`
+<details>
+<summary>Ver historial de modificaciones (${history.length})</summary>
+${history.slice().reverse().map(h=>`
+<div class="payment-row">
+<strong>Modificación</strong>
+<div class="muted">${h.editedAt?new Date(h.editedAt).toLocaleString("es-AR"):"Fecha no disponible"}</div>
+<div class="muted">Antes: ${esc(channelLabel(h.oldChannel||"transfer"))} · ${h.oldType==="expense"?"Egreso":"Ingreso"} · ${fmtMoney(h.oldAmount)}</div>
+<div class="muted">Después: ${esc(channelLabel(h.newChannel||"transfer"))} · ${h.newType==="expense"?"Egreso":"Ingreso"} · ${fmtMoney(h.newAmount)}</div>
+<div class="muted">Descripción anterior: ${esc(h.oldDescription)}</div>
+<div class="muted">Descripción nueva: ${esc(h.newDescription)}</div>
+<div class="muted">Modificado por: ${esc(h.editedBy)}</div>
+</div>`).join("")}
+</details>`:""}
+</div>`;
+}).join("");
+
+$("cash-movements-list").querySelectorAll("[data-cash-edit]").forEach(b=>{
+b.onclick=()=>editCashMovement(b.dataset.cashEdit);
+});
+}
+
+function openCashModal(type){
+$("cash-form").reset();
+$("cash-edit-id").value="";
+$("cash-channel").value="transfer";
+$("cash-type").disabled=false;
+$("cash-type").value=type;
+$("cash-modal-title").textContent=type==="income"?"Registrar ingreso a caja":"Registrar egreso de caja";
+$("cash-status").textContent="";
+openModal("cash-modal");
+}
+
+$("cash-in-button").onclick=()=>openCashModal("income");
+$("cash-out-button").onclick=()=>openCashModal("expense");
+
+$("cash-initial-button").onclick=()=>{
+$("cash-form").reset();
+$("cash-edit-id").value="";
+$("cash-channel").value="transfer";
+$("cash-type").value="income";
+$("cash-type").disabled=true;
+$("cash-modal-title").textContent="Configurar saldo inicial";
+$("cash-description").value="Saldo inicial";
+$("cash-status").textContent="";
+openModal("cash-modal");
+};
+
+function editCashMovement(id){
+const m=cashMovements.find(x=>x.id===id);
+if(!m)return;
+$("cash-edit-id").value=id;
+$("cash-channel").value=movementChannel(m);
+$("cash-type").value=m.type;
+$("cash-type").disabled=false;
+$("cash-amount").value=m.amount;
+$("cash-description").value=m.description||"";
+$("cash-modal-title").textContent=m.isInitial?"Modificar saldo inicial":"Modificar movimiento";
+$("cash-status").textContent="";
+openModal("cash-modal");
+}
+
+$("cash-form").addEventListener("submit",async e=>{
+e.preventDefault();
+const id=$("cash-edit-id").value;
+const channel=$("cash-channel").value;
+const type=$("cash-type").value;
+const amount=Number($("cash-amount").value);
+const description=$("cash-description").value.trim();
+const status=$("cash-status");
+const button=$("cash-save-button");
+
+if(!Number.isFinite(amount)||amount<=0){
+status.textContent="Ingresá un importe válido.";
+return;
+}
+if(!description){
+status.textContent="Ingresá una descripción.";
+return;
+}
+
+const user=auth.currentUser?.email||"Usuario desconocido";
+const now=new Date().toISOString();
+button.disabled=true;
+status.textContent="Guardando...";
+
+try{
+if(id){
+const ref=doc(db,"cash_movements",id);
+await runTransaction(db,async transaction=>{
+const snap=await transaction.get(ref);
+if(!snap.exists())throw new Error("El movimiento ya no existe.");
+const old=snap.data();
+const history=Array.isArray(old.editHistory)?old.editHistory:[];
+history.push({
+oldChannel:movementChannel(old),
+newChannel:channel,
+oldType:old.type,
+oldAmount:Number(old.amount||0),
+oldDescription:old.description||"",
+newType:type,
+newAmount:amount,
+newDescription:description,
+editedAt:now,
+editedBy:user
+});
+transaction.update(ref,{
+channel,
+type,
+amount,
+description,
+editHistory:history,
+updatedAt:now,
+updatedBy:user
+});
+});
+}else{
+const isInitial=$("cash-type").disabled;
+await addDoc(collection(db,"cash_movements"),{
+channel,
+type,
+amount,
+description,
+isInitial,
+createdAt:now,
+createdBy:user,
+updatedAt:null,
+updatedBy:null,
+editHistory:[]
+});
+}
+closeModal("cash-modal");
+$("cash-form").reset();
+}catch(err){
+console.error(err);
+status.textContent="Error al guardar: "+err.message;
+}finally{
+button.disabled=false;
+}
+});
+
+$("cash-search").addEventListener("input",renderCash);
 
 function getNoticeItems(){
 const today=localDateString(new Date());
