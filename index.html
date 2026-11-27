@@ -12,6 +12,7 @@
 --card:#f9fafb;
 --card2:#f3f5f7;
 --text:#111827;
+--subtext:#374151;
 --muted:#6b7280;
 --border:#e5e7eb;
 --green:#16a34a;
@@ -34,6 +35,7 @@ html[data-theme="dark"]{
 --card:#172438;
 --card2:#0e192a;
 --text:#f1f5f9;
+--subtext:#cbd5e1;
 --muted:#94a3b8;
 --border:#26364b;
 --green:#22c55e;
@@ -62,11 +64,46 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .danger-solid{background:var(--red);color:#ffffff}
 .icon-btn{padding:6px 10px;line-height:1;font-size:.9rem;border-radius:8px}
 .hidden{display:none!important}
-.muted{color:var(--muted);font-size:.875rem}
+.muted{color:var(--muted);font-size:.875rem;line-height:1.45}
+.body-copy{color:var(--subtext);font-size:.92rem;line-height:1.5}
 small{color:var(--muted)}
 h1,h2,h3,p{margin-top:0}
-h2{font-size:1.25rem;letter-spacing:-.015em}
-h3{font-size:1rem;letter-spacing:-.01em}
+
+/* Jerarquía tipográfica clara y marcadores */
+.section-title{
+display:flex;
+align-items:center;
+gap:10px;
+font-size:1.3rem;
+font-weight:800;
+letter-spacing:-.02em;
+color:var(--text);
+margin-bottom:6px
+}
+.section-title::before{
+content:"";
+width:5px;
+height:22px;
+border-radius:999px;
+background:var(--green-strong);
+flex-shrink:0
+}
+.subtitle{
+display:flex;
+align-items:center;
+gap:8px;
+font-size:.98rem;
+font-weight:700;
+letter-spacing:-.01em;
+color:var(--text);
+margin:22px 0 10px
+}
+.subtitle::before{
+content:"▪";
+color:var(--green-strong);
+font-size:.9rem;
+line-height:1
+}
 
 input,select,textarea{
 width:100%;
@@ -80,7 +117,7 @@ min-width:0;
 transition:border-color .15s ease,background-color .15s ease
 }
 input:focus,select:focus,textarea:focus{border-color:var(--green-strong)}
-label{display:block;color:var(--muted);font-size:.83rem;font-weight:500;margin-bottom:6px}
+label{display:block;color:var(--subtext);font-size:.82rem;font-weight:600;margin-bottom:6px}
 
 .container{max-width:920px;margin:auto;padding:24px 18px 48px}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
@@ -239,28 +276,22 @@ flex-shrink:0
 .cash-op-btn.in{background:var(--green-strong);color:#ffffff}
 .cash-op-btn.out{background:var(--red-soft);color:var(--red)}
 
-/* Historial de movimientos */
-.cash-history-title{
-font-size:1rem;
-font-weight:700;
-color:var(--text);
-margin:30px 0 6px
-}
+/* Historial de movimientos y agenda */
 .movement-row{
 display:flex;
 align-items:center;
 justify-content:space-between;
 gap:14px;
-padding:16px 0;
+padding:15px 0;
 border-bottom:1px solid var(--border)
 }
 .movement-row:last-child{border-bottom:0;padding-bottom:4px}
 .movement-main{min-width:0;flex:1}
 .movement-title{
 font-size:.98rem;
-font-weight:650;
+font-weight:700;
 color:var(--text);
-margin-bottom:4px;
+margin-bottom:3px;
 overflow-wrap:anywhere
 }
 .movement-meta{
@@ -296,11 +327,87 @@ border-radius:8px
 }
 .link-action:hover:not(:disabled){background:var(--card2);color:var(--text);filter:none}
 
+/* Agenda de clientes A-Z */
+.contact-group-letter{
+font-size:.78rem;
+font-weight:800;
+letter-spacing:.06em;
+text-transform:uppercase;
+color:var(--green-strong);
+padding:14px 0 6px;
+border-bottom:1px solid var(--border);
+margin-top:6px
+}
+.contact-row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+padding:13px 4px;
+border-bottom:1px solid var(--border)
+}
+.contact-row:last-child{border-bottom:0}
+.contact-main{min-width:0;flex:1}
+.contact-name{
+font-size:1rem;
+font-weight:700;
+color:var(--text);
+overflow-wrap:anywhere
+}
+.contact-sub{
+font-size:.82rem;
+color:var(--muted);
+margin-top:2px;
+overflow-wrap:anywhere
+}
+.contact-actions{
+display:flex;
+align-items:center;
+gap:6px;
+flex-wrap:wrap;
+justify-content:flex-end
+}
+.contact-actions button{
+font-size:.78rem;
+padding:7px 11px;
+border-radius:8px
+}
+
+/* Pagos semanales */
+.payment-hero{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:16px;
+padding:22px;
+margin-top:14px
+}
+.payment-base-amount{
+font-size:clamp(1.9rem,5vw,2.75rem);
+font-weight:800;
+color:var(--green-strong);
+letter-spacing:-.025em;
+font-variant-numeric:tabular-nums;
+margin:6px 0
+}
+.payment-summary-strip{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:12px;
+margin-top:14px
+}
+.discount-form-box{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:14px;
+padding:18px;
+margin-top:10px
+}
+
 /* Resto de secciones */
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:16px 0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:14px 0}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;min-width:0}
-.stat .value{font-size:1.4rem;font-weight:750;margin-top:6px;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.stat .value{font-size:1.35rem;font-weight:750;margin-top:6px;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
 .stat .sub{font-size:.76rem;color:var(--muted);margin-top:4px}
 .section{display:none}
 .section.active{display:block}
@@ -316,7 +423,7 @@ border-radius:8px
 .item-actions button{font-size:.82rem;padding:8px 12px}
 .divider{border:0;border-top:1px solid var(--border);margin:20px 0}
 .search{margin:14px 0}
-.empty{text-align:center;color:var(--muted);padding:28px 16px;font-size:.92rem}
+.empty{text-align:center;color:var(--muted);padding:24px 16px;font-size:.9rem}
 .money{font-weight:750;font-variant-numeric:tabular-nums}
 .green-text{color:var(--green-text)}
 .red-text{color:var(--red)}
@@ -334,7 +441,7 @@ border-radius:8px
 .month-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px}
 .month-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}
 .month-card strong{display:block;margin-top:6px}
-.bar-chart{display:flex;align-items:flex-end;gap:8px;height:210px;padding:16px 6px 0;border-bottom:1px solid var(--border);overflow-x:auto}
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:190px;padding:16px 6px 0;border-bottom:1px solid var(--border);overflow-x:auto}
 .bar-column{flex:1;min-width:38px;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:7px}
 .bar{width:70%;max-width:44px;background:var(--green-strong);border-radius:7px 7px 0 0;min-height:3px}
 .bar-label{font-size:.68rem;color:var(--muted);white-space:nowrap}
@@ -342,8 +449,6 @@ border-radius:8px
 .payment-row{padding:12px 0;border-bottom:1px solid var(--border)}
 .payment-row:last-child{border-bottom:0}
 .notice{padding:14px;border:1px solid var(--border);border-radius:12px;background:var(--card);margin-top:10px}
-.notice.warning-notice{border-left:3px solid var(--orange)}
-.notice.danger-notice{border-left:3px solid var(--red)}
 
 /* Configuración tema */
 .theme-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:10px}
@@ -362,7 +467,7 @@ gap:4px
 
 /* Modales */
 .modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.48);backdrop-filter:blur(2px);z-index:100;display:flex;align-items:center;justify-content:center;padding:14px}
-.modal{width:100%;max-width:560px;max-height:92vh;overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px;box-shadow:var(--shadow)}
+.modal{width:100%;max-width:600px;max-height:92vh;overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px;box-shadow:var(--shadow)}
 details summary{cursor:pointer;color:var(--green-strong);font-weight:600;padding:8px 0}
 .login{max-width:420px;margin:10vh auto}
 .footer-note{font-size:.78rem;color:var(--muted);line-height:1.55;margin-top:10px}
@@ -371,12 +476,12 @@ details summary{cursor:pointer;color:var(--green-strong);font-weight:600;padding
 .container{padding:14px 12px 40px}
 .panel{padding:18px;border-radius:16px}
 .cash-hero-card{padding:22px 18px}
-.cash-channels-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}
+.cash-channels-grid,.payment-summary-strip{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .cash-channel-card{padding:13px 14px}
 .cash-ops-grid{grid-template-columns:1fr;gap:10px;margin-top:12px}
 .cash-op-box{padding:14px 16px;min-height:66px}
-.movement-row{align-items:flex-start;flex-direction:column;gap:8px}
-.movement-right{width:100%;justify-content:space-between}
+.movement-row,.contact-row{align-items:flex-start;flex-direction:column;gap:8px}
+.movement-right,.contact-actions{width:100%;justify-content:space-between}
 .theme-options{grid-template-columns:1fr}
 .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .stat{padding:13px}
@@ -433,7 +538,7 @@ body{background:white;color:black}
 <div class="drawer-head">
 <div>
 <strong>IB Créditos</strong>
-<div class="muted">Apartados</div>
+<div class="muted">Menú principal</div>
 </div>
 <button type="button" class="secondary" id="close-drawer">Cerrar</button>
 </div>
@@ -443,6 +548,7 @@ body{background:white;color:black}
 <button data-page="collections">Calendario</button>
 <button data-page="statistics">Estadísticas</button>
 <button data-page="commissions">Comisiones</button>
+<button data-page="payments">Pagos</button>
 <button data-page="notifications"><span>Avisos</span><span id="notification-count"></span></button>
 <button data-page="settings">Configuración</button>
 </nav>
@@ -483,45 +589,38 @@ body{background:white;color:black}
 </div>
 </div>
 
-<h3 class="cash-history-title">Últimos movimientos</h3>
+<h3 class="subtitle">Últimos movimientos</h3>
 <div id="cash-movements-list"></div>
 </div>
 </section>
 
+<!-- CLIENTES: AGENDA ORDENADA DE LA A A LA Z -->
 <section id="page-clients" class="section">
 <div class="panel">
 <div class="row">
-<div><h2>Clientes</h2><p class="muted">Directorio e historial crediticio.</p></div>
+<div>
+<h2 class="section-title">Clientes</h2>
+<p class="muted">Agenda de contactos ordenada de la A a la Z.</p>
+</div>
 <div class="row">
 <button id="open-client-form">+ Nuevo cliente</button>
 <button class="secondary" id="open-loan-form">+ Préstamo</button>
 </div>
 </div>
 <div class="stats">
-<div class="stat"><div class="muted">Clientes</div><div class="value" id="client-count">0</div></div>
+<div class="stat"><div class="muted">Contactos</div><div class="value" id="client-count">0</div></div>
 <div class="stat"><div class="muted">Con créditos activos</div><div class="value" id="client-active-count">0</div></div>
 </div>
-<input class="search" id="client-search" placeholder="Buscar nombre o DNI...">
+<input class="search" id="client-search" placeholder="Buscar por nombre o DNI...">
+<h3 class="subtitle">Lista de contactos (A – Z)</h3>
 <div id="clients-list"></div>
-</div>
-
-<div id="profile-panel" class="panel hidden">
-<div class="row"><div><h2 id="profile-name">Cliente</h2><p class="muted" id="profile-dni"></p></div><button class="secondary" id="close-profile">Cerrar perfil</button></div>
-<div id="profile-info"></div>
-<div class="stats" style="margin-top:15px">
-<div class="stat"><div class="muted">Créditos</div><div class="value" id="history-count">0</div></div>
-<div class="stat"><div class="muted">Pagados</div><div class="value" id="history-paid">0</div></div>
-<div class="stat"><div class="muted">Activos</div><div class="value" id="history-active">0</div></div>
-<div class="stat"><div class="muted">Con mora</div><div class="value" id="history-overdue">0</div></div>
-</div>
-<div class="row"><h3>Historial crediticio</h3><button id="profile-new-loan">+ Nuevo crédito</button></div>
-<div id="credit-history"></div>
 </div>
 </section>
 
+<!-- CALENDARIO -->
 <section id="page-collections" class="section">
 <div class="panel">
-<h2>Calendario</h2>
+<h2 class="section-title">Calendario</h2>
 <p class="muted">Vencimientos e importes diarios de cuotas pendientes.</p>
 <div class="stats">
 <div class="stat"><div class="muted">Total del mes</div><div class="value" id="calendar-month-total">$0,00</div></div>
@@ -534,80 +633,127 @@ body{background:white;color:black}
 <button class="secondary" id="next-month">Siguiente ›</button>
 </div>
 <div class="calendar" id="calendar-grid"></div>
-<hr class="divider">
-<h3 id="selected-date-title">Detalle de cobros</h3>
+<h3 class="subtitle" id="selected-date-title">Detalle de cobros</h3>
 <div id="calendar-payments"></div>
 </div>
 </section>
 
+<!-- ESTADÍSTICAS -->
 <section id="page-statistics" class="section">
 <div class="panel">
-<h2>Estadísticas del negocio</h2>
-<p class="muted">Indicadores de cartera, cobranzas y rendimiento.</p>
+<h2 class="section-title">Estadísticas</h2>
+<p class="muted">Resumen general de cartera, cobranzas y proyección.</p>
 <div class="stats">
-<div class="stat"><div class="muted">Capital prestado histórico</div><div class="value" id="stat-capital">$0,00</div></div>
+<div class="stat"><div class="muted">Capital prestado</div><div class="value" id="stat-capital">$0,00</div></div>
 <div class="stat"><div class="muted">Intereses pactados</div><div class="value" id="stat-interest">$0,00</div></div>
 <div class="stat"><div class="muted">Dinero cobrado</div><div class="value" id="stat-collected">$0,00</div></div>
 <div class="stat"><div class="muted">Dinero pendiente</div><div class="value" id="stat-pending">$0,00</div></div>
 <div class="stat"><div class="muted">Créditos finalizados</div><div class="value" id="stat-paid-loans">0</div></div>
 <div class="stat"><div class="muted">Créditos con mora</div><div class="value" id="stat-late-loans">0</div></div>
 </div>
-</div>
-<div class="panel">
-<h3>Indicadores de cartera</h3>
+
+<h3 class="subtitle">Indicadores clave</h3>
 <div id="portfolio-indicators"></div>
-</div>
-<div class="panel">
-<h3>Proyección de cobros por mes</h3>
-<p class="muted">Importes de cuotas pendientes según sus fechas de vencimiento.</p>
+
+<h3 class="subtitle">Proyección mensual de cobros</h3>
 <div id="annual-chart" class="bar-chart"></div>
-</div>
-<div class="panel">
-<h3>Resumen de los próximos 12 meses</h3>
-<div id="annual-table" class="month-list"></div>
+<div id="annual-table" class="month-list" style="margin-top:14px"></div>
 </div>
 </section>
 
+<!-- COMISIONES -->
 <section id="page-commissions" class="section">
 <div class="panel">
-<h2>Comisiones del empleado</h2>
-<p class="muted">Comisión del 5% del total del préstamo (capital + intereses), habilitada al pagar la primera cuota en préstamos con comisión.</p>
+<h2 class="section-title">Comisiones</h2>
+<p class="muted">5% del total del préstamo (capital + intereses), habilitada al pagar la primera cuota en préstamos con comisión.</p>
 <div class="stats">
-<div class="stat"><div class="muted">Comisiones pendientes</div><div class="value orange-text" id="commission-pending">$0,00</div></div>
-<div class="stat"><div class="muted">Comisiones pagadas</div><div class="value green-text" id="commission-paid">$0,00</div></div>
+<div class="stat"><div class="muted">Pendientes</div><div class="value orange-text" id="commission-pending">$0,00</div></div>
+<div class="stat"><div class="muted">Pagadas</div><div class="value green-text" id="commission-paid">$0,00</div></div>
 <div class="stat"><div class="muted">Total generado</div><div class="value" id="commission-total">$0,00</div></div>
 </div>
-<h3>Comisiones pendientes de entrega</h3>
+<h3 class="subtitle">Pendientes de entrega</h3>
 <div id="commission-pending-list"></div>
-<hr class="divider">
-<h3>Historial de comisiones pagadas</h3>
+<h3 class="subtitle">Historial pagado</h3>
 <div id="commission-paid-list"></div>
 </div>
 </section>
 
+<!-- PAGOS SEMANALES -->
+<section id="page-payments" class="section">
+<div class="panel">
+<h2 class="section-title">Pagos</h2>
+<p class="muted">Liquidación semanal principal y control de descuentos aplicados.</p>
+
+<div class="payment-hero">
+<div class="cash-eyebrow">PAGO SEMANAL PRINCIPAL</div>
+<div class="payment-base-amount">$50.000,00</div>
+<p class="muted" style="margin-bottom:0">Monto base semanal a liquidar.</p>
+
+<div class="payment-summary-strip">
+<div class="stat" style="margin:0">
+<div class="muted">Total descuentos</div>
+<div class="value red-text" id="weekly-discounts-total">$0,00</div>
+</div>
+<div class="stat" style="margin:0">
+<div class="muted">Neto a pagar esta semana</div>
+<div class="value green-text" id="weekly-net-total">$50.000,00</div>
+</div>
+</div>
+</div>
+
+<h3 class="subtitle">Descuentos</h3>
+<form id="weekly-discount-form" class="discount-form-box">
+<div class="form-grid">
+<div>
+<label>Monto a descontar ($) *</label>
+<input id="discount-amount" type="number" min="0.01" step="0.01" required placeholder="0,00">
+</div>
+<div>
+<label>Aclaración *</label>
+<input id="discount-note" maxlength="200" required placeholder="Ej. Adelanto, falta, ajuste...">
+</div>
+</div>
+<div class="row" style="margin-top:14px">
+<button type="submit" id="save-discount-btn">Agregar descuento</button>
+<span id="discount-status" class="muted"></span>
+</div>
+</form>
+
+<h3 class="subtitle">Detalle de descuentos registrados</h3>
+<div id="weekly-discounts-list"></div>
+</div>
+</section>
+
+<!-- NOTIFICACIONES -->
 <section id="page-notifications" class="section">
 <div class="panel">
 <div class="row">
-<div><h2>Centro de notificaciones</h2><p class="muted">Avisos un día antes del vencimiento de cada cuota.</p></div>
+<div>
+<h2 class="section-title">Avisos</h2>
+<p class="muted">Vencimientos de cuotas y alertas del navegador.</p>
+</div>
 <button class="secondary" id="enable-notifications">Activar avisos</button>
 </div>
 <div id="notification-permission" class="muted" style="margin-top:8px"></div>
-<hr class="divider">
-<h3>Cuotas que vencen mañana</h3>
+
+<h3 class="subtitle">Vencen mañana</h3>
 <div id="tomorrow-notifications"></div>
-<h3 style="margin-top:22px">Cuotas vencidas</h3>
+
+<h3 class="subtitle">Vencidas</h3>
 <div id="overdue-notifications"></div>
-<h3 style="margin-top:22px">Próximos vencimientos</h3>
+
+<h3 class="subtitle">Próximos vencimientos</h3>
 <div id="next-notifications"></div>
 </div>
 </section>
 
+<!-- CONFIGURACIÓN -->
 <section id="page-settings" class="section">
 <div class="panel">
-<h2>Configuración</h2>
-<p class="muted">Apariencia visual y ajustes de la cuenta.</p>
+<h2 class="section-title">Configuración</h2>
+<p class="muted">Tema visual de la plataforma y parámetros de caja.</p>
 
-<label style="margin-top:16px">Tema de la plataforma</label>
+<h3 class="subtitle">Apariencia</h3>
 <div class="theme-options">
 <button type="button" class="theme-choice" id="theme-light-btn" data-theme-choice="light">
 <strong>Modo claro</strong>
@@ -619,14 +765,37 @@ body{background:white;color:black}
 </button>
 </div>
 
-<hr class="divider">
-
-<h3>Saldo inicial de caja</h3>
-<p class="muted">Disponible exclusivamente para el usuario administrador.</p>
+<h3 class="subtitle">Saldo inicial de caja</h3>
+<p class="body-copy">Disponible exclusivamente para el usuario administrador.</p>
 <button type="button" class="secondary" id="cash-initial-button">Configurar saldo inicial</button>
 <p id="admin-initial-note" class="footer-note"></p>
 </div>
 </section>
+</div>
+</div>
+
+<!-- VENTANA DEDICADA: PERFIL E HISTORIAL DEL CLIENTE -->
+<div class="modal-backdrop hidden" id="profile-modal">
+<div class="modal">
+<div class="row">
+<div>
+<h2 class="section-title" id="profile-name">Cliente</h2>
+<p class="muted" id="profile-dni" style="margin-bottom:0"></p>
+</div>
+<button type="button" class="secondary" data-close="profile-modal">Cerrar</button>
+</div>
+<div id="profile-info" style="margin-top:14px"></div>
+<div class="stats" style="margin-top:14px">
+<div class="stat"><div class="muted">Créditos</div><div class="value" id="history-count">0</div></div>
+<div class="stat"><div class="muted">Pagados</div><div class="value" id="history-paid">0</div></div>
+<div class="stat"><div class="muted">Activos</div><div class="value" id="history-active">0</div></div>
+<div class="stat"><div class="muted">Con mora</div><div class="value" id="history-overdue">0</div></div>
+</div>
+<div class="row" style="margin-top:16px">
+<h3 class="subtitle" style="margin:0">Historial crediticio</h3>
+<button type="button" id="profile-new-loan">+ Nuevo crédito</button>
+</div>
+<div id="credit-history"></div>
 </div>
 </div>
 
@@ -757,13 +926,16 @@ const db=getFirestore(app);
 
 const ADMIN_EMAILS=[];
 const THEME_STORAGE_KEY="ib-creditos-theme";
+const WEEKLY_BASE_PAYMENT=50000;
 
 let allClients=[];
 let allLoans=[];
 let cashMovements=[];
+let weeklyDiscounts=[];
 let unsubscribeClients=null;
 let unsubscribeLoans=null;
 let unsubscribeCash=null;
+let unsubscribeDiscounts=null;
 let calendarDate=new Date();
 let selectedDate=localDateString(new Date());
 let profileDni=null;
@@ -779,6 +951,7 @@ clients:"Clientes",
 collections:"Calendario",
 statistics:"Estadísticas",
 commissions:"Comisiones",
+payments:"Pagos",
 notifications:"Avisos",
 settings:"Configuración"
 };
@@ -900,9 +1073,11 @@ document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",
 updateSectionHeader(page);
 setDrawerOpen(false);
 if(page==="home")renderCash();
+if(page==="clients")renderClients();
 if(page==="collections")renderCalendar();
 if(page==="statistics")renderStatistics();
 if(page==="commissions")renderCommissions();
+if(page==="payments")renderWeeklyPayments();
 if(page==="notifications")renderNotifications();
 if(page==="settings")updateAdminSettingsUI();
 }
@@ -915,7 +1090,14 @@ setDrawerOpen(!isOpen);
 $("close-drawer").addEventListener("click",()=>setDrawerOpen(false));
 $("nav-backdrop").addEventListener("click",()=>setDrawerOpen(false));
 document.addEventListener("keydown",e=>{
-if(e.key==="Escape")setDrawerOpen(false);
+if(e.key==="Escape"){
+setDrawerOpen(false);
+closeModal("profile-modal");
+closeModal("client-modal");
+closeModal("loan-modal");
+closeModal("cash-modal");
+closeModal("receipt-modal");
+}
 });
 
 document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.page)));
@@ -934,7 +1116,7 @@ openModal("client-modal");
 
 function openEditClientModal(key){
 const clients=getClients();
-const client=clients.find((c,i)=>clientKey(c,i)===key);
+const client=clients.find(c=>clientKey(c)===key);
 if(!client)return;
 if(!client.id||client.legacy){
 alert("Este cliente proviene de préstamos históricos y no tiene una ficha editable en clientes.");
@@ -990,6 +1172,7 @@ $("start-date").valueAsDate=new Date();
 updateAdminSettingsUI();
 subscribeData();
 subscribeCash();
+subscribeWeeklyDiscounts();
 startNotificationChecks();
 }else{
 currentUserEmail="Panel de gestión";
@@ -999,7 +1182,9 @@ $("app-section").classList.add("hidden");
 if(unsubscribeClients)unsubscribeClients();
 if(unsubscribeLoans)unsubscribeLoans();
 if(unsubscribeCash)unsubscribeCash();
+if(unsubscribeDiscounts)unsubscribeDiscounts();
 cashMovements=[];
+weeklyDiscounts=[];
 if(notificationTimer)clearInterval(notificationTimer);
 }
 });
@@ -1031,11 +1216,11 @@ checkBrowserNotifications();
 },error=>console.error("Préstamos:",error));
 }
 
-function clientKey(c,index=0){
+function clientKey(c){
 if(c?.id)return `id:${c.id}`;
 const dni=String(c?.dni||"").trim();
 if(dni)return `dni:${dni}`;
-return `name:${String(c?.name||"").trim()}:${index}`;
+return `name:${String(c?.name||"").trim()}`;
 }
 
 function getClients(){
@@ -1053,7 +1238,7 @@ seenDnis.add(dni);
 list.push({id:`legacy-${dni}-${idx}`,name:l.clientName||"Sin nombre",dni,phone:l.clientPhone||"",address:"",city:"",notes:"",legacy:true});
 }
 });
-return list;
+return list.sort((a,b)=>String(a.name||"").localeCompare(String(b.name||""),"es",{sensitivity:"base"}));
 }
 
 function loansForClient(client){
@@ -1133,7 +1318,7 @@ saveBtn.disabled=false;
 
 async function deleteClient(key){
 const clients=getClients();
-const client=clients.find((c,i)=>clientKey(c,i)===key);
+const client=clients.find(c=>clientKey(c)===key);
 if(!client)return;
 const loans=loansForClient(client);
 const dniLabel=client.dni?`DNI ${client.dni}`:"sin DNI";
@@ -1146,7 +1331,7 @@ await Promise.all(loans.map(l=>deleteDoc(doc(db,"loans",l.id))));
 if(profileClientId===key||(client.dni&&String(profileDni)===String(client.dni))){
 profileDni=null;
 profileClientId=null;
-$("profile-panel").classList.add("hidden");
+closeModal("profile-modal");
 }
 }catch(err){
 alert("No se pudieron eliminar los préstamos: "+err.message);
@@ -1169,7 +1354,7 @@ await Promise.all(loans.map(l=>deleteDoc(doc(db,"loans",l.id))));
 if(profileClientId===key||(client.dni&&String(profileDni)===String(client.dni))){
 profileDni=null;
 profileClientId=null;
-$("profile-panel").classList.add("hidden");
+closeModal("profile-modal");
 }
 }catch(err){
 alert("No se pudo eliminar el cliente: "+err.message);
@@ -1180,18 +1365,12 @@ function openProfile(key,dni){
 profileClientId=key||null;
 profileDni=dni?String(dni):null;
 renderProfile(profileDni,profileClientId);
-$("profile-panel").classList.remove("hidden");
-$("profile-panel").scrollIntoView({behavior:"smooth"});
+openModal("profile-modal");
 }
-
-$("close-profile").onclick=()=>{
-profileDni=null;
-profileClientId=null;
-$("profile-panel").classList.add("hidden");
-};
 
 $("profile-new-loan").onclick=()=>{
 if(!profileClientId&&!profileDni)return;
+closeModal("profile-modal");
 openLoanForClient(profileClientId||profileDni);
 };
 
@@ -1203,33 +1382,38 @@ $("client-active-count").textContent=clients.filter(c=>loansForClient(c).some(l=
 
 const filtered=clients.filter(c=>(c.name||"").toLowerCase().includes(term)||String(c.dni||"").toLowerCase().includes(term));
 if(!filtered.length){
-$("clients-list").innerHTML='<div class="empty">No se encontraron clientes.</div>';
+$("clients-list").innerHTML='<div class="empty">No se encontraron contactos.</div>';
 return;
 }
 
-$("clients-list").innerHTML=filtered.map((c,i)=>{
-const key=clientKey(c,i);
+let lastLetter="";
+const rowsHtml=filtered.map(c=>{
+const key=clientKey(c);
+const firstRaw=(c.name||"#").trim().charAt(0).toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+const letter=/[A-Z]/.test(firstRaw)?firstRaw:"#";
+const letterHeader=letter!==lastLetter?`<div class="contact-group-letter">${esc(letter)}</div>`:"";
+lastLetter=letter;
+
 const loans=loansForClient(c);
 const active=loans.filter(l=>!isLoanPaid(l)).length;
-const balance=loans.reduce((s,l)=>s+loanBalance(l),0);
-const dniText=c.dni?`DNI ${esc(c.dni)}`:"Sin DNI";
 const canEdit=Boolean(c.id&&!c.legacy);
-return`
-<div class="item">
-<div class="row">
-<div><strong>${esc(c.name)}</strong><div class="muted">${dniText}</div></div>
-<div class="row"><span class="badge">${active} activos</span><button type="button" class="danger icon-btn" data-delete-client="${esc(key)}" aria-label="Eliminar cliente ${esc(c.name)}" title="Eliminar cliente">✕</button></div>
+
+return`${letterHeader}
+<div class="contact-row">
+<div class="contact-main">
+<div class="contact-name">${esc(c.name||"Sin nombre")}</div>
+<div class="contact-sub">${c.dni?`DNI ${esc(c.dni)}`:"Sin DNI"}${c.phone?` · ${esc(c.phone)}`:""}${active?` · ${active} activo(s)`:""}</div>
 </div>
-<p class="muted">📞 ${esc(c.phone||"Sin teléfono")}</p>
-<p class="muted">📍 ${esc([c.address,c.city].filter(Boolean).join(", ")||"Sin dirección")}</p>
-<div class="row"><span class="muted">${loans.length} créditos históricos</span><strong>${fmtMoney(balance)}</strong></div>
-<div class="item-actions">
-<button type="button" class="secondary" data-profile="${esc(key)}" data-dni="${esc(c.dni||"")}">Ver perfil e historial</button>
+<div class="contact-actions">
+<button type="button" class="secondary" data-profile="${esc(key)}" data-dni="${esc(c.dni||"")}">Perfil</button>
 ${canEdit?`<button type="button" class="secondary" data-edit-client="${esc(key)}">Editar</button>`:""}
-<button type="button" data-loan="${esc(key)}">Nuevo préstamo</button>
+<button type="button" data-loan="${esc(key)}">+ Crédito</button>
+<button type="button" class="danger icon-btn" data-delete-client="${esc(key)}" aria-label="Eliminar cliente ${esc(c.name)}" title="Eliminar cliente">✕</button>
 </div>
 </div>`;
 }).join("");
+
+$("clients-list").innerHTML=rowsHtml;
 
 $("clients-list").querySelectorAll("[data-profile]").forEach(b=>b.onclick=()=>openProfile(b.dataset.profile,b.dataset.dni));
 $("clients-list").querySelectorAll("[data-edit-client]").forEach(b=>b.onclick=()=>openEditClientModal(b.dataset.editClient));
@@ -1243,22 +1427,22 @@ const select=$("loan-client");
 const current=select.value;
 const clients=getClients();
 select.innerHTML='<option value="">Seleccionar cliente...</option>';
-clients.forEach((c,i)=>{
-const key=clientKey(c,i);
+clients.forEach(c=>{
+const key=clientKey(c);
 const o=document.createElement("option");
 o.value=key;
 o.textContent=c.dni?`${c.name} — DNI ${c.dni}`:`${c.name} — Sin DNI`;
 select.appendChild(o);
 });
-if(clients.some((c,i)=>clientKey(c,i)===current))select.value=current;
+if(clients.some(c=>clientKey(c)===current))select.value=current;
 updateSelectedClient();
 }
 
 function openLoanForClient(keyOrDni){
 updateClientSelector();
 const clients=getClients();
-const match=clients.find((c,i)=>clientKey(c,i)===keyOrDni||(c.dni&&String(c.dni)===String(keyOrDni)));
-$("loan-client").value=match?clientKey(match,clients.indexOf(match)):"";
+const match=clients.find(c=>clientKey(c)===keyOrDni||(c.dni&&String(c.dni)===String(keyOrDni)));
+$("loan-client").value=match?clientKey(match):"";
 updateSelectedClient();
 $("form-status").textContent="";
 openModal("loan-modal");
@@ -1268,7 +1452,7 @@ $("loan-client").onchange=updateSelectedClient;
 
 function updateSelectedClient(){
 const clients=getClients();
-const c=clients.find((x,i)=>clientKey(x,i)===$("loan-client").value);
+const c=clients.find(x=>clientKey(x)===$("loan-client").value);
 const el=$("selected-client-info");
 if(!c){el.classList.add("hidden");return}
 el.classList.remove("hidden");
@@ -1365,7 +1549,7 @@ status.textContent="Guardando...";
 btn.disabled=true;
 try{
 const clients=getClients();
-const client=clients.find((c,i)=>clientKey(c,i)===$("loan-client").value);
+const client=clients.find(c=>clientKey(c)===$("loan-client").value);
 const calc=calculateLoan($("capital").value,$("months").value,$("interest-rate").value);
 if(!client||!calc)throw new Error("Revisá los datos del préstamo.");
 const start=parseDate($("start-date").value);
@@ -1457,7 +1641,7 @@ if(profileDni||profileClientId)renderProfile(profileDni,profileClientId);
 
 function renderProfile(dni,key){
 const clients=getClients();
-const client=clients.find((c,i)=>(key&&clientKey(c,i)===key)||(dni&&String(c.dni)===String(dni)));
+const client=clients.find(c=>(key&&clientKey(c)===key)||(dni&&String(c.dni)===String(dni)));
 if(!client)return;
 const loans=loansForClient(client);
 const paid=loans.filter(isLoanPaid);
@@ -1467,7 +1651,7 @@ const late=loans.filter(l=>loanStatus(l)==="late");
 $("profile-name").textContent=client.name;
 $("profile-dni").textContent=client.dni?`DNI: ${client.dni}`:"DNI: Sin DNI";
 $("profile-info").innerHTML=`
-<p class="muted">📞 ${esc(client.phone||"Sin teléfono")} · 📍 ${esc(client.address||"Sin dirección")} ${esc(client.city||"")}</p>
+<p class="body-copy">📞 ${esc(client.phone||"Sin teléfono")} · 📍 ${esc([client.address,client.city].filter(Boolean).join(", ")||"Sin dirección")}</p>
 <p class="muted">${esc(client.notes||"Sin observaciones")}</p>
 `;
 $("history-count").textContent=loans.length;
@@ -1483,11 +1667,11 @@ return`
 <div class="item">
 <div class="row"><strong>Crédito · ${fmtDate(l.startDate)}</strong><span class="badge ${status==="paid"?"ok":status==="late"?"bad":"warn"}">${status==="paid"?"Pagado":status==="late"?"Con mora":"Activo"}</span></div>
 <p class="muted">Capital: ${fmtMoney(l.capital)} · Interés: ${l.interestRate??"—"}% · ${loanHasCommission(l)?"Con comisión (5%)":"Sin comisión"}</p>
-<p>Total: <strong>${fmtMoney(l.totalAmount)}</strong> · Saldo: <strong>${fmtMoney(balance)}</strong></p>
+<p class="body-copy">Total: <strong>${fmtMoney(l.totalAmount)}</strong> · Saldo: <strong>${fmtMoney(balance)}</strong></p>
 <p class="muted">Cuotas: ${list.filter(c=>c.paid).length}/${list.length}</p>
 <details>
 <summary>Ver cuotas</summary>
-${list.map((c,i)=>`
+${list.map(c=>`
 <div class="payment-row">
 <div class="row"><strong>Cuota ${c.number}</strong><strong>${fmtMoney(c.amount)}</strong></div>
 <div class="muted">Vence: ${fmtDate(c.dueDate)} · ${c.paid?"Pagada":isLate(c)?"En mora":"Pendiente"}</div>
@@ -1605,7 +1789,7 @@ months.push({date:d,total:monthlyTotal(d.getFullYear(),d.getMonth())});
 }
 const max=Math.max(...months.map(x=>x.total),1);
 $("annual-chart").innerHTML=months.map(m=>{
-const height=Math.max(2,m.total/max*135);
+const height=Math.max(2,m.total/max*120);
 return`
 <div class="bar-column">
 <div class="bar-value">${m.total?fmtMoney(m.total).replace(",00",""):"-"}</div>
@@ -1623,13 +1807,11 @@ const paidInstallments=allLoans.reduce((s,l)=>s+(l.installments||[]).filter(c=>c
 const rate=totalInstallments?paidInstallments/totalInstallments*100:0;
 $("portfolio-indicators").innerHTML=`
 <div class="stats">
-<div class="stat"><div class="muted">Clientes registrados</div><div class="value">${getClients().length}</div></div>
+<div class="stat"><div class="muted">Clientes</div><div class="value">${getClients().length}</div></div>
 <div class="stat"><div class="muted">Cuotas cobradas</div><div class="value">${paidInstallments}/${totalInstallments}</div></div>
-<div class="stat"><div class="muted">Cumplimiento de cuotas</div><div class="value">${rate.toFixed(1)}%</div></div>
+<div class="stat"><div class="muted">Cumplimiento</div><div class="value">${rate.toFixed(1)}%</div></div>
 <div class="stat"><div class="muted">Cartera vencida</div><div class="value">${fmtMoney(overdueAmount())}</div></div>
-</div>
-<p class="footer-note">El cumplimiento se calcula sobre la cantidad de cuotas abonadas respecto del total de cuotas registradas. La cartera vencida corresponde a cuotas impagas con fecha de vencimiento anterior a hoy.</p>
-`;
+</div>`;
 }
 
 function overdueAmount(){
@@ -1678,8 +1860,7 @@ $("commission-pending-list").innerHTML=pending.length?pending.map(l=>`
 <div><strong>${esc(l.clientName)}</strong><div class="muted">${l.clientDni?`DNI ${esc(l.clientDni)}`:"Sin DNI"}</div></div>
 <strong class="orange-text">${fmtMoney(commissionAmount(l))}</strong>
 </div>
-<p class="muted">Total del préstamo (capital + intereses): ${fmtMoney(commissionBase(l))}</p>
-<p class="muted">Comisión: 5% · Primera cuota abonada: ${l.installments?.[0]?.paidAt?new Date(l.installments[0].paidAt).toLocaleDateString("es-AR"):"Sí"}</p>
+<p class="muted">Total préstamo: ${fmtMoney(commissionBase(l))} · 5% comisión</p>
 <button type="button" data-commission-paid="${l.id}">Marcar comisión pagada</button>
 </div>
 `).join(""):'<div class="empty">No hay comisiones pendientes.</div>';
@@ -1690,9 +1871,7 @@ $("commission-paid-list").innerHTML=paid.length?paid.map(l=>`
 <div><strong>${esc(l.clientName)}</strong><div class="muted">${l.clientDni?`DNI ${esc(l.clientDni)}`:"Sin DNI"}</div></div>
 <strong class="green-text">${fmtMoney(commissionAmount(l))}</strong>
 </div>
-<div class="muted">Base de cálculo (capital + intereses): ${fmtMoney(commissionBase(l))}</div>
-<div class="muted">Comisión del 5% · Crédito ${fmtDate(l.startDate)}</div>
-<div class="muted">Fecha de entrega: ${l.commissionPaidAt?new Date(l.commissionPaidAt).toLocaleDateString("es-AR"):"No registrada"}</div>
+<div class="muted">Entregada: ${l.commissionPaidAt?new Date(l.commissionPaidAt).toLocaleDateString("es-AR"):"Registrada"}</div>
 </div>
 `).join(""):'<div class="empty">Todavía no hay comisiones pagadas.</div>';
 
@@ -1712,6 +1891,93 @@ alert("No se pudo actualizar la comisión: "+err.message);
 });
 }
 
+// PAGOS SEMANALES Y DESCUENTOS
+function subscribeWeeklyDiscounts(){
+if(unsubscribeDiscounts)unsubscribeDiscounts();
+unsubscribeDiscounts=onSnapshot(query(collection(db,"weekly_payment_discounts"),orderBy("createdAt","desc")),snapshot=>{
+weeklyDiscounts=snapshot.docs.map(d=>({id:d.id,...d.data()}));
+renderWeeklyPayments();
+},error=>{
+console.error("Error de descuentos:",error);
+$("weekly-discounts-list").innerHTML='<div class="empty">No se pudieron cargar los descuentos.</div>';
+});
+}
+
+function renderWeeklyPayments(){
+const totalDiscounts=weeklyDiscounts.reduce((sum,d)=>sum+Number(d.amount||0),0);
+const netPayment=Math.max(0,WEEKLY_BASE_PAYMENT-totalDiscounts);
+
+$("weekly-discounts-total").textContent=fmtMoney(totalDiscounts);
+$("weekly-net-total").textContent=fmtMoney(netPayment);
+
+if(!weeklyDiscounts.length){
+$("weekly-discounts-list").innerHTML='<div class="empty">No hay descuentos cargados esta semana.</div>';
+return;
+}
+
+$("weekly-discounts-list").innerHTML=weeklyDiscounts.map(d=>`
+<div class="movement-row">
+<div class="movement-main">
+<div class="movement-title">${esc(d.note||"Descuento")}</div>
+<div class="movement-meta">
+<span>${d.createdAt?new Date(d.createdAt).toLocaleDateString("es-AR"):"Hoy"}</span>
+<span>·</span>
+<span>${esc(formatActorName(d.createdBy))}</span>
+</div>
+</div>
+<div class="movement-right">
+<span class="movement-amount expense-text">−${fmtMoney(d.amount)}</span>
+<button type="button" class="danger icon-btn" data-delete-discount="${esc(d.id)}" aria-label="Eliminar descuento" title="Eliminar descuento">✕</button>
+</div>
+</div>
+`).join("");
+
+$("weekly-discounts-list").querySelectorAll("[data-delete-discount]").forEach(btn=>{
+btn.onclick=async()=>{
+if(!confirm("¿Eliminar este descuento?"))return;
+try{
+await deleteDoc(doc(db,"weekly_payment_discounts",btn.dataset.deleteDiscount));
+}catch(err){
+alert("No se pudo eliminar el descuento: "+err.message);
+}
+};
+});
+}
+
+$("weekly-discount-form").addEventListener("submit",async e=>{
+e.preventDefault();
+const amount=Number($("discount-amount").value);
+const note=$("discount-note").value.trim();
+const status=$("discount-status");
+const btn=$("save-discount-btn");
+
+if(!Number.isFinite(amount)||amount<=0){
+status.textContent="Ingresá un monto mayor a cero.";
+return;
+}
+if(!note){
+status.textContent="Ingresá una aclaración.";
+return;
+}
+
+btn.disabled=true;
+status.textContent="Guardando...";
+try{
+await addDoc(collection(db,"weekly_payment_discounts"),{
+amount,
+note,
+createdAt:Date.now(),
+createdBy:auth.currentUser?.email||"Usuario"
+});
+$("weekly-discount-form").reset();
+status.textContent="";
+}catch(err){
+status.textContent="Error: "+err.message;
+}finally{
+btn.disabled=false;
+}
+});
+
 // CAJA DISPONIBLE: TRANSFERENCIA + EFECTIVO = TOTAL (INDEPENDIENTE DE PRÉSTAMOS Y COBROS)
 function movementChannel(m){
 return m?.channel==="cash"?"cash":"transfer";
@@ -1729,10 +1995,6 @@ function channelBalance(channel,excludeId=null){
 return cashMovements
 .filter(m=>(!excludeId||m.id!==excludeId)&&movementChannel(m)===channel)
 .reduce((total,m)=>total+movementEffect(m),0);
-}
-
-function cashBalance(excludeId=null){
-return channelBalance("transfer",excludeId)+channelBalance("cash",excludeId);
 }
 
 function movementDateValue(m){
